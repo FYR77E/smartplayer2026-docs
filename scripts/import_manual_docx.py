@@ -5,17 +5,20 @@ import argparse
 import re
 from collections import OrderedDict
 from dataclasses import dataclass, field
+from io import BytesIO
 from pathlib import Path
 from typing import Iterable
 
 from docx import Document
 from docx.oxml.ns import qn
+from PIL import Image
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = ROOT_DIR / "docs-source.docx"
 DEFAULT_OUTPUT_DIR = ROOT_DIR / "docs" / "generated"
 DEFAULT_ASSETS_DIR = ROOT_DIR / "static" / "img" / "manual"
+WEBP_SOURCE_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 
 MAJOR_RE = re.compile(r"^(?P<number>\d+)\.\s+(?P<title>.+)$")
 SUB_RE = re.compile(r"^(?P<number>\d+\.\d+)\.\s+(?P<title>.+)$")
@@ -80,6 +83,7 @@ class HeadingSplit:
 @dataclass
 class ImageRef:
     rel_id: str
+    source_name: str
     target_name: str
     size: int
 
@@ -182,9 +186,22 @@ def paragraph_images(document: Document, paragraph) -> list[ImageRef]:
             if not rel_id or rel_id not in document.part.rels:
                 continue
             rel = document.part.rels[rel_id]
-            target_name = Path(rel.target_ref).name
+            source_name = Path(rel.target_ref).name
+            source_path = Path(source_name)
+            target_name = (
+                f"{source_path.stem}.webp"
+                if source_path.suffix.lower() in WEBP_SOURCE_EXTENSIONS
+                else source_name
+            )
             size = len(rel.target_part.blob)
-            images.append(ImageRef(rel_id=rel_id, target_name=target_name, size=size))
+            images.append(
+                ImageRef(
+                    rel_id=rel_id,
+                    source_name=source_name,
+                    target_name=target_name,
+                    size=size,
+                )
+            )
     return images
 
 
@@ -341,7 +358,19 @@ def build_preface_docs(entries: list[ParaEntry], toc_start: int, body_start: int
 
 def extract_image_ref(document: Document, rel_id: str) -> ImageRef:
     rel = document.part.rels[rel_id]
-    return ImageRef(rel_id=rel_id, target_name=Path(rel.target_ref).name, size=len(rel.target_part.blob))
+    source_name = Path(rel.target_ref).name
+    source_path = Path(source_name)
+    target_name = (
+        f"{source_path.stem}.webp"
+        if source_path.suffix.lower() in WEBP_SOURCE_EXTENSIONS
+        else source_name
+    )
+    return ImageRef(
+        rel_id=rel_id,
+        source_name=source_name,
+        target_name=target_name,
+        size=len(rel.target_part.blob),
+    )
 
 
 def is_decorative(image_ref: ImageRef, caption: str | None, text: str) -> bool:
@@ -450,10 +479,21 @@ def copy_used_assets(document: Document, used_targets: set[str], assets_dir: Pat
     for rel in document.part.rels.values():
         if not hasattr(rel, "target_ref"):
             continue
-        target_name = Path(rel.target_ref).name
+        source_name = Path(rel.target_ref).name
+        source_path = Path(source_name)
+        target_name = (
+            f"{source_path.stem}.webp"
+            if source_path.suffix.lower() in WEBP_SOURCE_EXTENSIONS
+            else source_name
+        )
         if target_name not in used_targets:
             continue
-        (assets_dir / target_name).write_bytes(rel.target_part.blob)
+        output_path = assets_dir / target_name
+        if source_path.suffix.lower() in WEBP_SOURCE_EXTENSIONS:
+            image = Image.open(BytesIO(rel.target_part.blob))
+            image.save(output_path, "WEBP", lossless=True, method=6)
+        else:
+            output_path.write_bytes(rel.target_part.blob)
 
 
 def write_docs(docs: dict[str, DocFile], output_dir: Path, asset_prefix: str) -> None:
