@@ -23,6 +23,32 @@
       "destination": "/generated/smartplayer-руководство",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/manual-common.css",
+      "destination": "/quickstart-site/manual-common.css"
+    },
+    {
+      "source": "/manual-common.js",
+      "destination": "/quickstart-site/manual-common.js"
+    },
+    {
+      "source": "/sw.js",
+      "destination": "/quickstart-site/sw.js"
+    },
+    {
+      "source": "/favicon.svg",
+      "destination": "/quickstart-site/favicon.svg"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/quickstart-site/favicon.ico"
+    },
+    {
+      "source": "/image/:path*",
+      "destination": "/quickstart-site/image/:path*"
+    }
   ]
 }
 

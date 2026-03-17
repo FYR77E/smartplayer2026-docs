@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru" dir="ltr">
 <head>
   <meta charset="utf-8">
@@ -25,9 +25,9 @@
   
   <!-- Канонический URL -->
   <link rel="canonical" href="https://smartplayer2026-docs.vercel.app/sp2026.html">
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="apple-touch-icon" href="image/png/Лого SP.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/image/png/Лого SP.png">
   
   <!-- Предзагрузка критических ресурсов -->
   <link rel="preconnect" href="https://wiki.smartplayer.org">
@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="manual-common.css">
+  <link rel="stylesheet" href="/manual-common.css">
   <link rel="preload" href="image/png/Лого SP.webp" as="image" type="image/webp">
   <link rel="preload" href="image/png/Авторизация.webp" as="image" type="image/webp">
   <link rel="preload" href="image/png/ЛК - Обзор (5).webp" as="image" type="image/webp">
@@ -3443,8 +3443,8 @@
         </div>
         <div class="search-status" id="search-status" aria-live="polite"></div>
         <div class="manual-switch-links" aria-label="Переключение версий руководства">
-          <a href="/generated/smartplayer-руководство">Руководство</a>
-          <a href="/quickstart/" class="current" aria-current="page">Быстрый старт</a>
+          <a href="/wtf.html">Новая версия</a>
+          <a href="/sp2026.html" class="current" aria-current="page">SP2026</a>
         </div>
       </div>
       <ul class="toc-list" id="toc-list"></ul>
@@ -4874,7 +4874,7 @@
   <a class="hint-next" id="section-hint-next" href="#auth">Далее →</a>
 </div>
 
-<script src="manual-common.js"></script>
+<script src="/manual-common.js"></script>
 <script>
   // ====== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ======
   let previousFocus = null;
@@ -6444,11 +6444,11 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       if (window.SmartManual && window.SmartManual.registerSafeServiceWorker) {
-        window.SmartManual.registerSafeServiceWorker('sw.js');
+        window.SmartManual.registerSafeServiceWorker('/sw.js');
         return;
       }
 
-      navigator.serviceWorker.register('sw.js').catch(err => {
+      navigator.serviceWorker.register('/sw.js').catch(err => {
         debugLog('ServiceWorker skipped:', err);
       });
     });
