@@ -15,5 +15,3 @@ legacy-static/.vite/
 .env*
 .env.*
 .DS_Store
-.DS_Store
-
