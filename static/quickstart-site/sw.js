@@ -1,6 +1,6 @@
 /* SmartPlayer Quickstart Service Worker (scoped to /quickstart-site/). */
 
-const CACHE_NAME = 'sp-quickstart-site-v2';
+const CACHE_NAME = 'sp-quickstart-site-v3';
 const CORE = [
   './',
   './index.html',
@@ -40,6 +40,23 @@ self.addEventListener('fetch', (event) => {
     url.origin === self.location.origin &&
     (url.pathname.startsWith('/quickstart-site/') || url.pathname.startsWith('/image/'));
   if (!inScope) return;
+
+  const isHtmlRequest =
+    req.mode === 'navigate' || req.destination === 'document' || url.pathname.endsWith('/index.html');
+
+  if (isHtmlRequest) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(req, copy)).catch(() => {});
+          return res;
+        })
+        .catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;
@@ -53,4 +70,3 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-

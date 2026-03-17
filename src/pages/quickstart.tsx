@@ -1,10 +1,13 @@
 import {useEffect} from 'react';
 import Layout from '@theme/Layout';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 export default function QuickstartRedirect() {
+  const redirectUrl = useBaseUrl('/quickstart-site/index.html');
+
   useEffect(() => {
-    window.location.replace('/quickstart-site/index.html');
-  }, []);
+    window.location.replace(redirectUrl);
+  }, [redirectUrl]);
 
   return (
     <Layout title="SmartPlayer — Быстрый старт" description="Быстрый старт SmartPlayer.">
@@ -13,10 +16,9 @@ export default function QuickstartRedirect() {
         <p>Открываю страницу быстрого старта…</p>
         <p>
           Если редирект не сработал, открой вручную:{' '}
-          <a href="/quickstart-site/index.html">/quickstart-site/index.html</a>
+          <a href={redirectUrl}>{redirectUrl}</a>
         </p>
       </main>
     </Layout>
   );
 }
-
