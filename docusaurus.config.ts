@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'SmartPlayer — Документация',
-  tagline: 'Руководство и быстрый старт',
+  tagline: 'Актуальное руководство по запуску, контенту и эксплуатации SmartPlayer',
   favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -19,6 +19,12 @@ const config: Config = {
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
+  stylesheets: [
+    {
+      href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap',
+      type: 'text/css',
+    },
+  ],
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -53,12 +59,31 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+  themes: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: 'filename',
+        docsRouteBasePath: '/',
+        indexBlog: false,
+        indexPages: true,
+        language: ['ru', 'en'],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        searchResultLimits: 8,
+        searchBarShortcut: true,
+        searchBarShortcutKeymap: 'mod+k',
+        searchBarPosition: 'right',
+      },
+    ],
+  ],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/social-card.svg',
     colorMode: {
-      respectPrefersColorScheme: true,
+      defaultMode: 'light',
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
     },
     navbar: {
       title: 'SmartPlayer',
@@ -71,12 +96,21 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'manualSidebar',
           position: 'left',
-          label: 'Руководство',
+          label: 'Документация',
         },
         {
           to: '/quickstart/',
           label: 'Быстрый старт',
           position: 'left',
+        },
+        {
+          to: '/generated/17-13-чек-лист-запуска',
+          label: 'Чек-лист запуска',
+          position: 'left',
+        },
+        {
+          type: 'search',
+          position: 'right',
         },
         {href: 'https://wiki.smartplayer.org', label: 'База знаний', position: 'right'},
       ],
@@ -85,8 +119,20 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Документация',
-          items: [{label: 'Открыть руководство', to: '/generated/smartplayer-руководство'}],
+          title: 'Старт',
+          items: [
+            {label: 'Полное руководство', to: '/generated/smartplayer-руководство'},
+            {label: 'Быстрый старт', to: '/generated/быстрый-старт'},
+            {label: 'Чек-лист запуска', to: '/generated/17-13-чек-лист-запуска'},
+          ],
+        },
+        {
+          title: 'Эксплуатация',
+          items: [
+            {label: 'Мониторинг и устройства', to: '/generated/09-4-разделы-мониторинга-и-устройств'},
+            {label: 'Контент и трансляции', to: '/generated/10-5-работа-с-контентом'},
+            {label: 'Типовые ошибки', to: '/generated/16-12-типовые-ошибки-и-решения'},
+          ],
         },
         {
           title: 'Ссылки',

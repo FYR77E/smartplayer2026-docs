@@ -1,25 +1,323 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
+  padding: 5rem 0 3rem;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.heroBanner::before,
+.heroBanner::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(16px);
+  pointer-events: none;
+}
+
+.heroBanner::before {
+  top: -8rem;
+  right: -4rem;
+  width: 22rem;
+  height: 22rem;
+  background: rgba(199, 96, 24, 0.14);
+}
+
+.heroBanner::after {
+  left: -6rem;
+  bottom: -9rem;
+  width: 20rem;
+  height: 20rem;
+  background: rgba(27, 96, 92, 0.14);
+}
+
+.heroGrid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.9fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.heroCopy {
+  padding: 0.75rem 0;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.4rem 0.78rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(34, 33, 29, 0.08);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary-darkest);
+}
+
+.heroTitle {
+  margin: 1rem 0 1rem;
+  font-size: clamp(3rem, 5vw, 5rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+  max-width: 11ch;
+}
+
+.heroSubtitle {
+  max-width: 40rem;
+  margin: 0;
+  color: var(--smartplayer-muted);
+  font-size: 1.08rem;
+  line-height: 1.7;
 }
 
 .buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
   flex-wrap: wrap;
+  margin-top: 1.75rem;
+}
+
+.primaryButton,
+.secondaryButton,
+.ghostLink,
+.inlineLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.9rem 1.2rem;
+  text-decoration: none;
+  font-weight: 800;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #c76018, #de8546);
+  color: #fffaf2;
+  box-shadow: 0 18px 36px rgba(120, 62, 18, 0.22);
+}
+
+.secondaryButton,
+.ghostLink,
+.inlineLink {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(34, 33, 29, 0.08);
+  color: var(--smartplayer-ink);
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.ghostLink:hover,
+.inlineLink:hover {
+  color: inherit;
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.signalGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+}
+
+.signalCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(34, 33, 29, 0.08);
+  box-shadow: 0 18px 32px rgba(58, 41, 21, 0.05);
+}
+
+.signalCard strong {
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.signalCard span {
+  color: var(--smartplayer-muted);
+  font-size: 0.95rem;
+}
+
+.heroPanel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 1.75rem;
+  border: 1px solid rgba(34, 33, 29, 0.08);
+  background:
+    linear-gradient(165deg, rgba(28, 28, 25, 0.96), rgba(42, 39, 32, 0.94)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent);
+  color: #f7efe2;
+  box-shadow: 0 30px 64px rgba(25, 22, 17, 0.24);
+}
+
+.heroPanel h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.panelLabel {
+  color: #f0b17d;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panelList {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  color: rgba(247, 239, 226, 0.86);
+}
+
+.panelActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.ghostLink {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f7efe2;
+}
+
+.modeSection {
+  padding: 0 0 5rem;
+}
+
+.sectionLead {
+  max-width: 52rem;
+}
+
+.sectionLead h2 {
+  margin: 0.5rem 0 1rem;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  line-height: 1.08;
+}
+
+.sectionLead p {
+  margin: 0;
+  color: var(--smartplayer-muted);
+  font-size: 1.03rem;
+  line-height: 1.7;
+}
+
+.sectionKicker {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: rgba(27, 96, 92, 0.12);
+  color: #1b605c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.modeCard {
+  padding: 1.4rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(34, 33, 29, 0.08);
+  background: rgba(255, 252, 246, 0.88);
+  box-shadow: 0 24px 48px rgba(58, 41, 21, 0.07);
+}
+
+.modeCard h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.3rem;
+}
+
+.modeCard p {
+  margin: 0;
+  color: var(--smartplayer-muted);
+  line-height: 1.65;
+}
+
+.supportStrip {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, rgba(199, 96, 24, 0.1), rgba(27, 96, 92, 0.1));
+  border: 1px solid rgba(34, 33, 29, 0.08);
+}
+
+.supportStrip h3 {
+  margin: 0.5rem 0 0;
+  max-width: 34rem;
+  font-size: 1.55rem;
+  line-height: 1.15;
+}
+
+.supportLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.inlineLink {
+  background: rgba(255, 255, 255, 0.74);
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 0 2rem;
+  }
+
+  .heroGrid,
+  .modeGrid,
+  .signalGrid,
+  .supportStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .heroGrid,
+  .supportStrip {
+    display: grid;
+  }
+
+  .heroTitle {
+    max-width: none;
+  }
+
+  .supportLinks {
+    align-items: stretch;
+  }
+
+  .primaryButton,
+  .secondaryButton,
+  .ghostLink,
+  .inlineLink {
+    width: 100%;
+  }
 }

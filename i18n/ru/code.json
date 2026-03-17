@@ -1,0 +1,42 @@
+{
+  "theme.SearchBar.label": {
+    "message": "Поиск",
+    "description": "Подпись поля поиска"
+  },
+  "theme.SearchBar.seeAll": {
+    "message": "Показать все результаты",
+    "description": "Ссылка на все результаты поиска"
+  },
+  "theme.SearchBar.noResultsText": {
+    "message": "Ничего не найдено",
+    "description": "Текст при отсутствии результатов поиска"
+  },
+  "theme.SearchBar.searchInContext": {
+    "message": "Показать все результаты внутри \"{context}\"",
+    "description": "Показать результаты внутри выбранного контекста"
+  },
+  "theme.SearchBar.seeAllOutsideContext": {
+    "message": "Показать все результаты вне \"{context}\"",
+    "description": "Показать результаты вне выбранного контекста"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Результаты поиска по запросу \"{query}\"",
+    "description": "Заголовок страницы результатов поиска"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Поиск по документации",
+    "description": "Заголовок пустой страницы поиска"
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "Найден {count} документ|Найдено {count} документа|Найдено {count} документов",
+    "description": "Количество найденных документов"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "По вашему запросу документов не найдено",
+    "description": "Текст при отсутствии результатов на странице поиска"
+  },
+  "theme.SearchPage.searchContext.everywhere": {
+    "message": "Везде",
+    "description": "Поиск по всем контекстам"
+  }
+}

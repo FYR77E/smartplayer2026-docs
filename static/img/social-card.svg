@@ -1,0 +1,23 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="32" fill="#F5EFE7"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="url(#bg)"/>
+  <circle cx="1010" cy="138" r="142" fill="#E6A16E" fill-opacity="0.28"/>
+  <circle cx="190" cy="510" r="160" fill="#2A7B76" fill-opacity="0.18"/>
+  <rect x="88" y="88" width="168" height="52" rx="26" fill="#FFF7EE"/>
+  <text x="120" y="122" fill="#A54F14" font-family="Manrope, Arial, sans-serif" font-size="26" font-weight="800" letter-spacing="1.2">SMARTPLAYER</text>
+  <text x="88" y="238" fill="#1F1B16" font-family="Manrope, Arial, sans-serif" font-size="76" font-weight="800">Документация</text>
+  <text x="88" y="316" fill="#1F1B16" font-family="Manrope, Arial, sans-serif" font-size="76" font-weight="800">по запуску и эксплуатации</text>
+  <text x="88" y="392" fill="#5F574D" font-family="Manrope, Arial, sans-serif" font-size="32" font-weight="500">Актуальный manual, быстрый старт, трансляции, расписания и сопровождение SmartPlayer.</text>
+  <rect x="88" y="462" width="232" height="62" rx="31" fill="#C76018"/>
+  <text x="128" y="501" fill="#FFF8F0" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="700">Word 12.03.2026</text>
+  <rect x="338" y="462" width="212" height="62" rx="31" fill="#FFF7EE"/>
+  <text x="378" y="501" fill="#1F1B16" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="700">Docusaurus</text>
+  <rect x="568" y="462" width="204" height="62" rx="31" fill="#FFF7EE"/>
+  <text x="608" y="501" fill="#1F1B16" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="700">Quickstart</text>
+  <defs>
+    <linearGradient id="bg" x1="40" y1="40" x2="1160" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F0"/>
+      <stop offset="1" stop-color="#F0E6D8"/>
+    </linearGradient>
+  </defs>
+</svg>

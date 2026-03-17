@@ -1,68 +1,97 @@
 import type {ReactNode} from 'react';
-import clsx from 'clsx';
+import Link from '@docusaurus/Link';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
-type FeatureItem = {
+type TrackItem = {
+  badge: string;
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
-  description: ReactNode;
+  description: string;
+  bullets: string[];
+  links: Array<{
+    href: string;
+    label: string;
+  }>;
 };
 
-const FeatureList: FeatureItem[] = [
+const tracks: TrackItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
+    badge: 'Старт',
+    title: 'Запуск и подключение',
+    description:
+      'Быстрый путь для команды, которая поднимает SmartPlayer, выдает доступы и подключает первые устройства.',
+    bullets: ['авторизация и лицензии', 'добавление устройств', 'чек-лист перед запуском'],
+    links: [
+      {href: '/generated/быстрый-старт', label: 'Открыть быстрый старт'},
+      {href: '/generated/08-3-начало-работы', label: 'Начало работы'},
+      {href: '/generated/17-13-чек-лист-запуска', label: 'Чек-лист запуска'},
+    ],
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
+    badge: 'Операции',
+    title: 'Контент и эфир',
+    description:
+      'Документация для редакторов и операторов: библиотека контента, пошаговые публикации, трансляции и расписания.',
+    bullets: ['библиотека контента', 'интерактивные трансляции', 'расписания и отчеты'],
+    links: [
+      {href: '/generated/10-5-работа-с-контентом', label: 'Работа с контентом'},
+      {href: '/generated/10-6-работа-с-трансляциями', label: 'Работа с трансляциями'},
+      {href: '/generated/11-7-расписания', label: 'Раздел расписаний'},
+    ],
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    badge: 'Поддержка',
+    title: 'Мониторинг и администрирование',
+    description:
+      'Контур сопровождения для тех, кто отвечает за эксплуатацию: мониторинг устройств, настройки, рекомендации и разбор ошибок.',
+    bullets: ['обзор и устройства', 'администрирование', 'типовые ошибки и решения'],
+    links: [
+      {href: '/generated/09-4-разделы-мониторинга-и-устройств', label: 'Мониторинг и устройства'},
+      {href: '/generated/14-10-администрирование', label: 'Администрирование'},
+      {href: '/generated/16-12-типовые-ошибки-и-решения', label: 'Типовые ошибки'},
+    ],
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function TrackCard({badge, title, description, bullets, links}: TrackItem) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
+    <article className={styles.card}>
+      <span className={styles.badge}>{badge}</span>
+      <div className={styles.cardHeader}>
         <Heading as="h3">{title}</Heading>
         <p>{description}</p>
       </div>
-    </div>
+      <ul className={styles.list}>
+        {bullets.map((bullet) => (
+          <li key={bullet}>{bullet}</li>
+        ))}
+      </ul>
+      <div className={styles.linkRow}>
+        {links.map((link) => (
+          <Link key={link.href} className={styles.docLink} to={link.href}>
+            {link.label}
+          </Link>
+        ))}
+      </div>
+    </article>
   );
 }
 
 export default function HomepageFeatures(): ReactNode {
   return (
-    <section className={styles.features}>
+    <section className={styles.section}>
       <div className="container">
-        <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
+        <div className={styles.sectionHeader}>
+          <span className={styles.kicker}>Рабочие контуры</span>
+          <Heading as="h2">Документация собрана по реальным сценариям работы</Heading>
+          <p>
+            Вместо шаблонной витрины сайт теперь ведет по трем основным потокам:
+            запуск, операционная работа с контентом и сопровождение платформы.
+          </p>
+        </div>
+        <div className={styles.cards}>
+          {tracks.map((track) => (
+            <TrackCard key={track.title} {...track} />
           ))}
         </div>
       </div>
