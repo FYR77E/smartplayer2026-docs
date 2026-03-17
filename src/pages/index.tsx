@@ -24,7 +24,7 @@ function HomepageHeader() {
             Открыть руководство
           </Link>
           <Link className="button button--primary button--lg" to="/quickstart/">
-            Быстрый старт (HTML)
+            Быстрый старт
           </Link>
         </div>
       </div>
