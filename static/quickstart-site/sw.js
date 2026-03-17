@@ -1,6 +1,6 @@
-/* SmartPlayer Quickstart Service Worker (scoped to /quickstart/). */
+/* SmartPlayer Quickstart Service Worker (scoped to /quickstart-site/). */
 
-const CACHE_NAME = 'sp-quickstart-v1';
+const CACHE_NAME = 'sp-quickstart-site-v2';
 const CORE = [
   './',
   './index.html',
@@ -34,16 +34,19 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  // Only handle requests within quickstart-site (avoid affecting Docusaurus).
+  const inScope =
+    url.origin === self.location.origin &&
+    (url.pathname.startsWith('/quickstart-site/') || url.pathname.startsWith('/image/'));
+  if (!inScope) return;
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;
       return fetch(req)
         .then((res) => {
-          const url = new URL(req.url);
-          if (url.origin === self.location.origin && url.pathname.startsWith('/quickstart/')) {
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then((c) => c.put(req, copy)).catch(() => {});
-          }
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(req, copy)).catch(() => {});
           return res;
         })
         .catch(() => cached)
