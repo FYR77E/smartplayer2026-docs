@@ -12,6 +12,16 @@
       "source": "/quickstart/",
       "destination": "/quickstart-site/index.html",
       "permanent": false
+    },
+    {
+      "source": "/sp2026.html",
+      "destination": "/quickstart/",
+      "permanent": false
+    },
+    {
+      "source": "/wtf.html",
+      "destination": "/generated/smartplayer-руководство",
+      "permanent": false
     }
   ]
 }
