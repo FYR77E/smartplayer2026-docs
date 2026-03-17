@@ -23,6 +23,9 @@ function HomepageHeader() {
             to="/generated/smartplayer-руководство">
             Открыть руководство
           </Link>
+          <Link className="button button--primary button--lg" to="/quickstart/">
+            Быстрый старт (HTML)
+          </Link>
         </div>
       </div>
     </header>

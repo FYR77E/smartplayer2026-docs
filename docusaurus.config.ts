@@ -73,6 +73,11 @@ const config: Config = {
           position: 'left',
           label: 'Руководство',
         },
+        {
+          to: '/quickstart/',
+          label: 'Быстрый старт (HTML)',
+          position: 'left',
+        },
         {href: 'https://wiki.smartplayer.org', label: 'База знаний', position: 'right'},
       ],
     },
