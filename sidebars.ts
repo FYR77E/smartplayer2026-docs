@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
         'generated/руководство-пользователя',
         'generated/быстрый-старт',
         'generated/17-13-чек-лист-запуска',
+        'operations/регламент-запуска-и-приемки',
         'generated/история-изменений',
         'generated/оглавление',
       ],
@@ -63,6 +64,7 @@ const sidebars: SidebarsConfig = {
         'generated/14-10-администрирование',
         'admin/пользователи-и-роли',
         'admin/история-и-аудит-действий',
+        'admin/операционный-регламент-администратора',
       ],
     },
     {
