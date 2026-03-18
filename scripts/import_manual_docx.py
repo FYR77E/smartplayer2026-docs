@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from collections import OrderedDict
 from dataclasses import dataclass, field
@@ -134,18 +135,47 @@ class DocFile:
         self.flush_list()
         self.blocks.append(("img", BlockImage(image_ref=image_ref, caption=caption, alt=alt)))
 
+    def description(self) -> str | None:
+        for kind, value in self.blocks:
+            if kind == "p":
+                return shorten_text(value)
+            if kind in {"ul", "ol"} and value:
+                return shorten_text("; ".join(value[:2]))
+        return None
+
     def render(self, asset_prefix: str) -> str:
+        description = self.description()
         lines = [
             "---",
-            f'title: "{self.title}"',
+            f"title: {json.dumps(self.title, ensure_ascii=False)}",
+        ]
+        if description:
+            lines.append(f"description: {json.dumps(description, ensure_ascii=False)}")
+        lines.extend(
+            [
             f"sidebar_position: {self.sidebar_position}",
             "---",
             "",
-        ]
+            "import {ManualCallout, ManualFigure, ManualLead} from '@site/src/components/ManualContent';",
+            "",
+            ]
+        )
 
+        lead_rendered = False
         for kind, value in self.blocks:
             if kind == "p":
-                lines.extend([value, ""])
+                if value.startswith("Ориентировочное время"):
+                    lines.extend(
+                        [
+                            f'<ManualCallout tone="tip" title="Оценка запуска" text={json.dumps(value, ensure_ascii=False)} />',
+                            "",
+                        ]
+                    )
+                elif not lead_rendered:
+                    lines.extend([f"<ManualLead text={json.dumps(value, ensure_ascii=False)} />", ""])
+                    lead_rendered = True
+                else:
+                    lines.extend([value, ""])
             elif kind == "ul":
                 lines.extend([f"- {item}" for item in value])
                 lines.append("")
@@ -159,9 +189,15 @@ class DocFile:
                 image: BlockImage = value
                 alt = normalize_text(image.alt or image.caption or self.title)
                 image_path = f"{asset_prefix}/{image.image_ref.target_name}"
-                lines.extend([f"![{alt}]({image_path})", ""])
+                figure_props = [
+                    f"src={json.dumps(image_path, ensure_ascii=False)}",
+                    f"alt={json.dumps(alt, ensure_ascii=False)}",
+                ]
                 if image.caption:
-                    lines.extend([f"*{normalize_text(image.caption)}*", ""])
+                    figure_props.append(
+                        f"caption={json.dumps(normalize_text(image.caption), ensure_ascii=False)}"
+                    )
+                lines.extend([f"<ManualFigure {' '.join(figure_props)} />", ""])
 
         while lines and not lines[-1]:
             lines.pop()
@@ -172,6 +208,14 @@ def normalize_text(text: str) -> str:
     text = text.replace("\xa0", " ").replace("\u200b", " ")
     text = re.sub(r"\s+", " ", text)
     return text.strip()
+
+
+def shorten_text(text: str, limit: int = 170) -> str:
+    normalized = normalize_text(text)
+    if len(normalized) <= limit:
+        return normalized
+    clipped = normalized[:limit].rsplit(" ", 1)[0].rstrip(".,;: ")
+    return f"{clipped}..."
 
 
 def strip_number_prefix(text: str) -> str:
