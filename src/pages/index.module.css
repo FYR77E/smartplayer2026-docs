@@ -248,6 +248,106 @@
   color: #f7efe2;
 }
 
+.workflowSection {
+  position: relative;
+  padding: 0.5rem 0 4rem;
+}
+
+.workflowLead {
+  max-width: 52rem;
+  margin-bottom: 1.7rem;
+}
+
+.workflowLead h2 {
+  margin: 0.5rem 0 1rem;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  line-height: 1.08;
+}
+
+.workflowLead p {
+  margin: 0;
+  color: var(--smartplayer-muted);
+  font-size: 1.03rem;
+  line-height: 1.75;
+}
+
+.workflowGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+}
+
+.workflowCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-height: 100%;
+  padding: 1.35rem;
+  border-radius: 1.55rem;
+  border: 1px solid rgba(34, 33, 29, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 247, 236, 0.9));
+  box-shadow: 0 24px 50px rgba(58, 41, 21, 0.07);
+}
+
+.workflowStep {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.38rem 0.72rem;
+  background: rgba(199, 96, 24, 0.12);
+  color: var(--ifm-color-primary-darkest);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.workflowTitle {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.workflowDescription {
+  margin: 0;
+  color: var(--smartplayer-muted);
+  line-height: 1.65;
+}
+
+.workflowLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: auto;
+}
+
+.workflowLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.7rem 0.95rem;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(34, 33, 29, 0.08);
+  color: var(--smartplayer-ink);
+  text-decoration: none;
+  font-weight: 700;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.workflowLink:hover {
+  color: var(--ifm-color-primary-darkest);
+  text-decoration: none;
+  transform: translateY(-2px);
+  border-color: rgba(199, 96, 24, 0.32);
+  box-shadow: 0 12px 26px rgba(58, 41, 21, 0.08);
+}
+
 .modeSection {
   position: relative;
   padding: 0 0 5rem;
@@ -344,6 +444,7 @@
   }
 
   .heroGrid,
+  .workflowGrid,
   .modeGrid,
   .signalGrid,
   .supportStrip {
@@ -366,7 +467,8 @@
   .primaryButton,
   .secondaryButton,
   .ghostLink,
-  .inlineLink {
+  .inlineLink,
+  .workflowLink {
     width: 100%;
   }
 }

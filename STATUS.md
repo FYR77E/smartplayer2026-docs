@@ -29,6 +29,7 @@ What was completed in this session:
 - Unified the homepage background layers so the gradient transition feels smoother while scrolling the landing page.
 - Cleaned short generated sections (`Reports`, `Additional sections`, `Administration`, `Launch checklist`) and removed page-source mentions from figure captions in longer docs.
 - Rewrote the descriptions and lead blocks of the main working generated sections (`Getting started`, `Monitoring`, `Content`, `Broadcasts`, `Schedules`, `Recommendations`, `Common issues`) into a consistent user-facing tone.
+- Added a new step-by-step launch route on the homepage so users can move through the docs as a real workflow, not only as separate section cards.
 
 ## Important scope note
 

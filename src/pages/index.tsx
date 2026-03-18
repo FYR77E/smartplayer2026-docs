@@ -7,10 +7,79 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
 import styles from './index.module.css';
 
+type WorkflowStep = {
+  step: string;
+  title: string;
+  description: string;
+  links: Array<{
+    href: string;
+    label: string;
+  }>;
+};
+
 const readinessSignals = [
   {value: '13', label: 'ключевых разделов'},
   {value: '3', label: 'основных сценария работы'},
   {value: '2026', label: 'актуальная версия документации'},
+];
+
+const workflowSteps: WorkflowStep[] = [
+  {
+    step: '01',
+    title: 'Вход и доступы',
+    description:
+      'Проверьте авторизацию, роли и базовые административные права перед первым запуском.',
+    links: [
+      {href: '/generated/08-3-начало-работы', label: 'Начало работы'},
+      {href: '/admin/пользователи-и-роли', label: 'Роли и доступы'},
+    ],
+  },
+  {
+    step: '02',
+    title: 'Устройства и контур',
+    description:
+      'Добавьте устройства, соберите тестовую группу и убедитесь, что мониторинг видит систему.',
+    links: [
+      {
+        href: '/generated/09-4-разделы-мониторинга-и-устройств',
+        label: 'Мониторинг и устройства',
+      },
+      {
+        href: '/operations/регламент-запуска-и-приемки',
+        label: 'Регламент запуска',
+      },
+    ],
+  },
+  {
+    step: '03',
+    title: 'Контент и трансляция',
+    description:
+      'Загрузите материалы, соберите сценарий показа и проверьте зоны перед публикацией.',
+    links: [
+      {href: '/generated/10-5-работа-с-контентом', label: 'Контент'},
+      {href: '/generated/10-6-работа-с-трансляциями', label: 'Трансляции'},
+    ],
+  },
+  {
+    step: '04',
+    title: 'Расписание и пилот',
+    description:
+      'Назначьте расписание, прогоните пилотную группу и проверьте загрузки на устройства.',
+    links: [
+      {href: '/generated/11-7-расписания', label: 'Расписания'},
+      {href: '/generated/17-13-чек-лист-запуска', label: 'Чек-лист запуска'},
+    ],
+  },
+  {
+    step: '05',
+    title: 'Контроль после старта',
+    description:
+      'Сверяйте историю действий, типовые ошибки и операционные регламенты после запуска.',
+    links: [
+      {href: '/admin/история-и-аудит-действий', label: 'История и аудит'},
+      {href: '/generated/16-12-типовые-ошибки-и-решения', label: 'Типовые ошибки'},
+    ],
+  },
 ];
 
 const deploymentModes = [
@@ -85,6 +154,43 @@ function HomepageHeader() {
   );
 }
 
+function WorkflowSection() {
+  return (
+    <section className={styles.workflowSection}>
+      <div className="container">
+        <div className={styles.workflowLead}>
+          <span className={styles.sectionKicker}>Последовательность действий</span>
+          <Heading as="h2">Запуск удобнее вести по шагам, а не по разрозненным разделам</Heading>
+          <p>
+            Если команда внедряет SmartPlayer с нуля, удобнее проходить документацию по
+            рабочей цепочке: от доступа и устройств до пилота, расписания и контроля
+            после запуска.
+          </p>
+        </div>
+
+        <div className={styles.workflowGrid}>
+          {workflowSteps.map((item) => (
+            <article key={item.step} className={styles.workflowCard}>
+              <span className={styles.workflowStep}>Шаг {item.step}</span>
+              <Heading as="h3" className={styles.workflowTitle}>
+                {item.title}
+              </Heading>
+              <p className={styles.workflowDescription}>{item.description}</p>
+              <div className={styles.workflowLinks}>
+                {item.links.map((link) => (
+                  <Link key={link.href} className={styles.workflowLink} to={link.href}>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
 
@@ -95,6 +201,7 @@ export default function Home(): ReactNode {
       <div className={styles.homeShell}>
         <HomepageHeader />
         <main className={styles.homeMain}>
+          <WorkflowSection />
           <HomepageFeatures />
           <section className={styles.modeSection}>
             <div className="container">
