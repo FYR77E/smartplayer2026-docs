@@ -15,7 +15,7 @@ export default function Root({children}: RootProps): ReactNode {
         .querySelectorAll<HTMLInputElement>('input.navbar__search-input, input[type="search"][name="q"]')
         .forEach((input) => {
           input.setAttribute('aria-label', 'Поиск');
-          input.setAttribute('placeholder', 'Поиск по документации');
+          input.setAttribute('placeholder', 'Поиск');
           input.setAttribute('enterkeyhint', 'search');
           input.setAttribute('autocomplete', 'off');
         });
