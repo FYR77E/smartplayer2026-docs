@@ -1,6 +1,9 @@
 .shell {
   position: relative;
   overflow: hidden;
+  max-width: 52rem;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 1.5rem;
   border: 1px solid rgba(34, 33, 29, 0.08);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 241, 0.98));
@@ -8,7 +11,7 @@
 }
 
 .lead {
-  margin: 0 0 1.75rem;
+  margin: 0 auto 1.75rem;
   padding: 1.25rem 1.35rem;
 }
 
@@ -30,7 +33,9 @@
 }
 
 .figure {
-  margin: 1.75rem 0 2rem;
+  max-width: 52rem;
+  margin: 1.75rem auto 2rem;
+  overflow: hidden;
   padding: 1rem;
   border-radius: 1.6rem;
   border: 1px solid rgba(34, 33, 29, 0.08);
@@ -39,17 +44,25 @@
   box-shadow: 0 28px 58px rgba(58, 41, 21, 0.08);
 }
 
+.figure + .figure {
+  margin-top: 1.15rem;
+}
+
 .figureImage {
   display: block;
-  width: min(100%, 980px);
+  width: 100%;
+  max-width: 980px;
   margin: 0 auto;
   border-radius: 1.1rem;
   border: 1px solid rgba(34, 33, 29, 0.08);
   background: #fff;
+  box-shadow: 0 16px 36px rgba(58, 41, 21, 0.08);
 }
 
 .figureCaption {
   margin-top: 0.95rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(34, 33, 29, 0.08);
   color: #5f574d;
   font-size: 0.96rem;
   line-height: 1.6;
@@ -57,7 +70,7 @@
 }
 
 .callout {
-  margin: 1.5rem 0;
+  margin: 1.5rem auto;
   padding: 1rem 1.2rem 1.05rem;
   background: linear-gradient(180deg, rgba(255, 248, 240, 0.98), rgba(255, 252, 246, 0.98));
 }

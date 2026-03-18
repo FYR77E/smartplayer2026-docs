@@ -39,6 +39,8 @@ What was completed in this session:
 - Visually checked the updated desktop shell on representative inner pages after rebuilding the static site.
 - Fixed visible UI issues on the desktop shell: restored contrast in the dark homepage hero panel, shortened and stabilized the navbar search control, and hid the desktop TOC earlier on narrower desktop widths where it was crowding the main reading column.
 - Re-checked the homepage and representative inner pages after the bugfix pass to confirm the obvious overlaps and visual clashes were removed.
+- Tightened the visual rhythm of long desktop procedures rendered via `ManualContent`: figures and shell blocks now align to a cleaner reading width, captions have clearer separation, and screenshot groups feel less scattered on long pages.
+- Visually checked representative long pages (`Content`, `Broadcasts`, `Schedules`) after the media-rhythm pass.
 
 ## Important scope note
 
