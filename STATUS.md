@@ -26,6 +26,7 @@ What was completed in this session:
 - Rewrote the intro callouts in the admin guides so they read like canonical product documentation instead of migration notes.
 - Rewrote the top generated entry pages so they start with user-facing descriptions instead of service metadata about the source document.
 - Reworked the quickstart and change-log entry pages so they read as product documentation, not source-manual dumps.
+- Unified the homepage background layers so the gradient transition feels smoother while scrolling the landing page.
 
 ## Important scope note
 

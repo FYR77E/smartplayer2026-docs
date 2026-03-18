@@ -92,54 +92,56 @@ export default function Home(): ReactNode {
     <Layout
       title={siteConfig.title}
       description="Документация SmartPlayer: запуск, контент, трансляции, эксплуатация и сопровождение платформы.">
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-        <section className={styles.modeSection}>
-          <div className="container">
-            <div className={styles.sectionLead}>
-              <span className={styles.sectionKicker}>Рабочие сценарии</span>
-              <Heading as="h2">Находите нужную инструкцию без долгого поиска по разделам</Heading>
-              <p>
-                Документация собрана так, чтобы команда могла заходить либо с общего
-                руководства, либо сразу с конкретной задачи: запуск, работа с
-                контентом, трансляции, мониторинг или администрирование.
-              </p>
-            </div>
-
-            <div className={styles.modeGrid}>
-              {deploymentModes.map((mode) => (
-                <article key={mode.title} className={styles.modeCard}>
-                  <Heading as="h3">{mode.title}</Heading>
-                  <p>{mode.description}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className={styles.supportStrip}>
-              <div>
-                <span className={styles.sectionKicker}>Частые задачи</span>
-                <Heading as="h3">
-                  Нужна конкретная инструкция? Начните с раздела по вашей задаче
-                </Heading>
+      <div className={styles.homeShell}>
+        <HomepageHeader />
+        <main className={styles.homeMain}>
+          <HomepageFeatures />
+          <section className={styles.modeSection}>
+            <div className="container">
+              <div className={styles.sectionLead}>
+                <span className={styles.sectionKicker}>Рабочие сценарии</span>
+                <Heading as="h2">Находите нужную инструкцию без долгого поиска по разделам</Heading>
+                <p>
+                  Документация собрана так, чтобы команда могла заходить либо с общего
+                  руководства, либо сразу с конкретной задачи: запуск, работа с
+                  контентом, трансляции, мониторинг или администрирование.
+                </p>
               </div>
-              <div className={styles.supportLinks}>
-                <Link className={styles.inlineLink} to="/generated/09-4-разделы-мониторинга-и-устройств">
-                  Мониторинг и устройства
-                </Link>
-                <Link className={styles.inlineLink} to="/generated/10-6-работа-с-трансляциями">
-                  Трансляции
-                </Link>
-                <Link
-                  className={styles.inlineLink}
-                  href="https://smartplayer.atlassian.net/servicedesk/customer/portals">
-                  Техподдержка
-                </Link>
+
+              <div className={styles.modeGrid}>
+                {deploymentModes.map((mode) => (
+                  <article key={mode.title} className={styles.modeCard}>
+                    <Heading as="h3">{mode.title}</Heading>
+                    <p>{mode.description}</p>
+                  </article>
+                ))}
+              </div>
+
+              <div className={styles.supportStrip}>
+                <div>
+                  <span className={styles.sectionKicker}>Частые задачи</span>
+                  <Heading as="h3">
+                    Нужна конкретная инструкция? Начните с раздела по вашей задаче
+                  </Heading>
+                </div>
+                <div className={styles.supportLinks}>
+                  <Link className={styles.inlineLink} to="/generated/09-4-разделы-мониторинга-и-устройств">
+                    Мониторинг и устройства
+                  </Link>
+                  <Link className={styles.inlineLink} to="/generated/10-6-работа-с-трансляциями">
+                    Трансляции
+                  </Link>
+                  <Link
+                    className={styles.inlineLink}
+                    href="https://smartplayer.atlassian.net/servicedesk/customer/portals">
+                    Техподдержка
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
+        </main>
+      </div>
     </Layout>
   );
 }
