@@ -32,6 +32,9 @@ What was completed in this session:
 - Added a new step-by-step launch route on the homepage so users can move through the docs as a real workflow, not only as separate section cards.
 - Improved the mobile UX of the homepage workflow route by turning the step cards into a touch-friendly horizontal strip on smaller screens.
 - Added search keywords and synonyms to the main canonical docs pages so the built-in local search finds common Russian queries more reliably.
+- Added quick-entry chips for frequent tasks on the homepage and clarified the mobile workflow strip with an explicit interaction hint.
+- Polished the docs shell for mobile: cleaner navbar toggle, more touch-friendly sidebar links, tidier breadcrumbs/pagination, and a clearer search field label.
+- Visually checked the current homepage layout in local desktop and mobile screenshots after rebuilding the static site.
 
 ## Important scope note
 
@@ -49,4 +52,4 @@ What was completed in this session:
 1. Review the remaining landing and quickstart copy for any other internal wording.
 2. Review the search experience on real user queries and keep expanding keywords where common phrasing is still missed.
 3. Continue polishing canonical documentation routes in Docusaurus without touching the legacy HTML branch of work.
-4. Keep checkpointing the current state in the repository so another machine can continue from the latest repo state.
+4. Audit the docs shell on a few representative inner pages to confirm the mobile sidebar and pagination feel equally strong beyond the homepage.

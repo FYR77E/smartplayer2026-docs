@@ -17,6 +17,11 @@ type WorkflowStep = {
   }>;
 };
 
+type QuickEntry = {
+  href: string;
+  label: string;
+};
+
 const readinessSignals = [
   {value: '13', label: 'ключевых разделов'},
   {value: '3', label: 'основных сценария работы'},
@@ -80,6 +85,15 @@ const workflowSteps: WorkflowStep[] = [
       {href: '/generated/16-12-типовые-ошибки-и-решения', label: 'Типовые ошибки'},
     ],
   },
+];
+
+const frequentEntries: QuickEntry[] = [
+  {href: '/generated/11-7-расписания', label: 'Расписания'},
+  {href: '/generated/10-6-работа-с-трансляциями', label: 'Трансляции'},
+  {href: '/generated/09-4-разделы-мониторинга-и-устройств', label: 'Мониторинг'},
+  {href: '/admin/пользователи-и-роли', label: 'Роли и права'},
+  {href: '/admin/история-и-аудит-действий', label: 'Аудит'},
+  {href: '/generated/16-12-типовые-ошибки-и-решения', label: 'Типовые ошибки'},
 ];
 
 const deploymentModes = [
@@ -147,6 +161,18 @@ function HomepageHeader() {
                 Чек-лист запуска
               </Link>
             </div>
+            <div className={styles.searchCluster}>
+              <p className={styles.searchCaption}>
+                Часто ищут по задачам: роли, расписания, эфир, аудит и диагностика.
+              </p>
+              <div className={styles.searchChips}>
+                {frequentEntries.map((entry) => (
+                  <Link key={entry.href} className={styles.searchChip} to={entry.href}>
+                    {entry.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </aside>
         </div>
       </div>
@@ -186,6 +212,9 @@ function WorkflowSection() {
             </article>
           ))}
         </div>
+        <p className={styles.workflowHint}>
+          На мобильных экранах карточки можно листать по горизонтали, как маршрут запуска.
+        </p>
       </div>
     </section>
   );
