@@ -28,6 +28,7 @@ What was completed in this session:
 - Reworked the quickstart and change-log entry pages so they read as product documentation, not source-manual dumps.
 - Unified the homepage background layers so the gradient transition feels smoother while scrolling the landing page.
 - Cleaned short generated sections (`Reports`, `Additional sections`, `Administration`, `Launch checklist`) and removed page-source mentions from figure captions in longer docs.
+- Rewrote the descriptions and lead blocks of the main working generated sections (`Getting started`, `Monitoring`, `Content`, `Broadcasts`, `Schedules`, `Recommendations`, `Common issues`) into a consistent user-facing tone.
 
 ## Important scope note
 
