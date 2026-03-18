@@ -30,6 +30,8 @@ What was completed in this session:
 - Cleaned short generated sections (`Reports`, `Additional sections`, `Administration`, `Launch checklist`) and removed page-source mentions from figure captions in longer docs.
 - Rewrote the descriptions and lead blocks of the main working generated sections (`Getting started`, `Monitoring`, `Content`, `Broadcasts`, `Schedules`, `Recommendations`, `Common issues`) into a consistent user-facing tone.
 - Added a new step-by-step launch route on the homepage so users can move through the docs as a real workflow, not only as separate section cards.
+- Improved the mobile UX of the homepage workflow route by turning the step cards into a touch-friendly horizontal strip on smaller screens.
+- Added search keywords and synonyms to the main canonical docs pages so the built-in local search finds common Russian queries more reliably.
 
 ## Important scope note
 
@@ -45,6 +47,6 @@ What was completed in this session:
 ## Recommended next step
 
 1. Review the remaining landing and quickstart copy for any other internal wording.
-2. Install dependencies and run a local build to verify routes and rendering.
+2. Review the search experience on real user queries and keep expanding keywords where common phrasing is still missed.
 3. Continue polishing canonical documentation routes in Docusaurus without touching the legacy HTML branch of work.
-4. Commit and push this checkpoint so another machine can continue from the latest repo state.
+4. Keep checkpointing the current state in the repository so another machine can continue from the latest repo state.

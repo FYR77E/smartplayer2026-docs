@@ -288,6 +288,7 @@
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 247, 236, 0.9));
   box-shadow: 0 24px 50px rgba(58, 41, 21, 0.07);
+  scroll-snap-align: start;
 }
 
 .workflowStep {
@@ -444,11 +445,29 @@
   }
 
   .heroGrid,
-  .workflowGrid,
   .modeGrid,
   .signalGrid,
   .supportStrip {
     grid-template-columns: 1fr;
+  }
+
+  .workflowSection {
+    padding: 0.5rem 0 3.25rem;
+  }
+
+  .workflowLead {
+    margin-bottom: 1.15rem;
+  }
+
+  .workflowGrid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(16rem, 82vw);
+    gap: 0.9rem;
+    overflow-x: auto;
+    padding: 0.1rem 0.1rem 0.5rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
   }
 
   .heroGrid,
