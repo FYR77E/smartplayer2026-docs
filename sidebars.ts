@@ -61,6 +61,7 @@ const sidebars: SidebarsConfig = {
         'generated/12-8-отчеты',
         'generated/13-9-дополнительные-разделы',
         'generated/14-10-администрирование',
+        'admin/пользователи-и-роли',
       ],
     },
     {
