@@ -5,8 +5,9 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'SmartPlayer — Документация',
-  tagline: 'Актуальное руководство по запуску, контенту и эксплуатации SmartPlayer',
+  title: 'SmartPlayer \u2014 \u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f',
+  tagline:
+    '\u0410\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0435 \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u043e \u043f\u043e \u0437\u0430\u043f\u0443\u0441\u043a\u0443, \u043a\u043e\u043d\u0442\u0435\u043d\u0442\u0443 \u0438 \u044d\u043a\u0441\u043f\u043b\u0443\u0430\u0442\u0430\u0446\u0438\u0438 SmartPlayer',
   favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -96,59 +97,81 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'manualSidebar',
           position: 'left',
-          label: 'Документация',
+          label: '\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f',
         },
         {
           to: '/quickstart/',
-          label: 'Быстрый старт',
+          label: '\u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u0441\u0442\u0430\u0440\u0442',
           position: 'left',
         },
         {
-          to: '/generated/17-13-чек-лист-запуска',
-          label: 'Чек-лист запуска',
+          to: '/generated/17-13-\u0447\u0435\u043a-\u043b\u0438\u0441\u0442-\u0437\u0430\u043f\u0443\u0441\u043a\u0430',
+          label: '\u0427\u0435\u043a-\u043b\u0438\u0441\u0442 \u0437\u0430\u043f\u0443\u0441\u043a\u0430',
           position: 'left',
         },
         {
           type: 'search',
           position: 'right',
         },
-        {href: 'https://wiki.smartplayer.org', label: 'База знаний', position: 'right'},
+        {
+          href: 'https://wiki.smartplayer.org',
+          label: '\u0411\u0430\u0437\u0430 \u0437\u043d\u0430\u043d\u0438\u0439',
+          position: 'right',
+        },
       ],
     },
     footer: {
       style: 'dark',
       links: [
         {
-          title: 'Старт',
-          items: [
-            {label: 'Полное руководство', to: '/generated/smartplayer-руководство'},
-            {label: 'Быстрый старт', to: '/generated/быстрый-старт'},
-            {label: 'Чек-лист запуска', to: '/generated/17-13-чек-лист-запуска'},
-          ],
-        },
-        {
-          title: 'Эксплуатация',
-          items: [
-            {label: 'Мониторинг и устройства', to: '/generated/09-4-разделы-мониторинга-и-устройств'},
-            {label: 'Контент и трансляции', to: '/generated/10-5-работа-с-контентом'},
-            {label: 'Типовые ошибки', to: '/generated/16-12-типовые-ошибки-и-решения'},
-          ],
-        },
-        {
-          title: 'Ссылки',
+          title: '\u0421\u0442\u0430\u0440\u0442',
           items: [
             {
-              label: 'База знаний',
+              label: '\u041f\u043e\u043b\u043d\u043e\u0435 \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u043e',
+              to: '/generated/smartplayer-\u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u043e',
+            },
+            {
+              label: '\u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u0441\u0442\u0430\u0440\u0442',
+              to: '/generated/\u0431\u044b\u0441\u0442\u0440\u044b\u0439-\u0441\u0442\u0430\u0440\u0442',
+            },
+            {
+              label: '\u0427\u0435\u043a-\u043b\u0438\u0441\u0442 \u0437\u0430\u043f\u0443\u0441\u043a\u0430',
+              to: '/generated/17-13-\u0447\u0435\u043a-\u043b\u0438\u0441\u0442-\u0437\u0430\u043f\u0443\u0441\u043a\u0430',
+            },
+          ],
+        },
+        {
+          title: '\u042d\u043a\u0441\u043f\u043b\u0443\u0430\u0442\u0430\u0446\u0438\u044f',
+          items: [
+            {
+              label: '\u041c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433 \u0438 \u0443\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u0430',
+              to: '/generated/09-4-\u0440\u0430\u0437\u0434\u0435\u043b\u044b-\u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433\u0430-\u0438-\u0443\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432',
+            },
+            {
+              label: '\u041a\u043e\u043d\u0442\u0435\u043d\u0442 \u0438 \u0442\u0440\u0430\u043d\u0441\u043b\u044f\u0446\u0438\u0438',
+              to: '/generated/10-5-\u0440\u0430\u0431\u043e\u0442\u0430-\u0441-\u043a\u043e\u043d\u0442\u0435\u043d\u0442\u043e\u043c',
+            },
+            {
+              label: '\u0422\u0438\u043f\u043e\u0432\u044b\u0435 \u043e\u0448\u0438\u0431\u043a\u0438',
+              to: '/generated/16-12-\u0442\u0438\u043f\u043e\u0432\u044b\u0435-\u043e\u0448\u0438\u0431\u043a\u0438-\u0438-\u0440\u0435\u0448\u0435\u043d\u0438\u044f',
+            },
+          ],
+        },
+        {
+          title: '\u0421\u0441\u044b\u043b\u043a\u0438',
+          items: [
+            {
+              label: '\u0411\u0430\u0437\u0430 \u0437\u043d\u0430\u043d\u0438\u0439',
               href: 'https://wiki.smartplayer.org',
             },
             {
-              label: 'Техподдержка',
+              label: '\u0422\u0435\u0445\u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0430',
               href: 'https://smartplayer.atlassian.net/servicedesk/customer/portals',
             },
           ],
         },
       ],
-      copyright: `© ${new Date().getFullYear()} SmartPlayer`,
+      copyright: `\u00A9 ${new Date().getFullYear()} SmartPlayer`,
     },
     prism: {
       theme: prismThemes.github,
