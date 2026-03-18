@@ -35,6 +35,8 @@ What was completed in this session:
 - Added quick-entry chips for frequent tasks on the homepage and clarified the mobile workflow strip with an explicit interaction hint.
 - Polished the docs shell for mobile: cleaner navbar toggle, more touch-friendly sidebar links, tidier breadcrumbs/pagination, and a clearer search field label.
 - Visually checked the current homepage layout in local desktop and mobile screenshots after rebuilding the static site.
+- Polished the desktop docs shell on inner pages: the content column now reads as a clearer surface, the TOC behaves more like a reference card, and the sidebar has stronger visual rhythm on larger screens.
+- Visually checked the updated desktop shell on representative inner pages after rebuilding the static site.
 
 ## Important scope note
 
@@ -52,4 +54,4 @@ What was completed in this session:
 1. Review the remaining landing and quickstart copy for any other internal wording.
 2. Review the search experience on real user queries and keep expanding keywords where common phrasing is still missed.
 3. Continue polishing canonical documentation routes in Docusaurus without touching the legacy HTML branch of work.
-4. Audit the docs shell on a few representative inner pages to confirm the mobile sidebar and pagination feel equally strong beyond the homepage.
+4. Audit a few more high-traffic desktop pages with dense screenshots or long procedures to confirm the new shell stays comfortable at scale.
