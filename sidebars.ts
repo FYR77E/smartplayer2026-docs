@@ -76,6 +76,17 @@ const sidebars: SidebarsConfig = {
         'generated/16-12-типовые-ошибки-и-решения',
       ],
     },
+    {
+      type: 'category',
+      label: 'Архив и сверка',
+      link: {
+        type: 'generated-index',
+        title: 'Архив и сверка',
+        description:
+          'Материалы из архивного PDF и разделы, которые еще не полностью перенесены в основной Word-мануал SmartPlayer.',
+      },
+      items: ['archive/архивные-разделы-из-pdf'],
+    },
   ],
 };
 
