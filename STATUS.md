@@ -23,6 +23,7 @@ What was completed in this session:
 - Reframed the homepage around client-facing tasks and entry points.
 - Fixed user-facing text encoding in the Docusaurus config and quickstart wrapper.
 - Removed the archive/PDF section from the main sidebar while keeping the source page in the repository.
+- Rewrote the intro callouts in the admin guides so they read like canonical product documentation instead of migration notes.
 
 ## Important scope note
 
