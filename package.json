@@ -15,6 +15,10 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc"
   },
+  "overrides": {
+    "picomatch": "2.3.2",
+    "serialize-javascript": "7.0.5"
+  },
   "dependencies": {
     "@docusaurus/core": "3.9.2",
     "@docusaurus/faster": "3.9.2",

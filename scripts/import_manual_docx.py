@@ -20,6 +20,16 @@ DEFAULT_SOURCE = ROOT_DIR / "docs-source.docx"
 DEFAULT_OUTPUT_DIR = ROOT_DIR / "docs" / "generated"
 DEFAULT_ASSETS_DIR = ROOT_DIR / "static" / "img" / "manual"
 WEBP_SOURCE_EXTENSIONS = {".png", ".jpg", ".jpeg"}
+MDX_INLINE_ESCAPES = (
+    ("\\", "\\\\"),
+    ("`", "\\`"),
+    ("*", "\\*"),
+    ("_", "\\_"),
+    ("[", "\\["),
+    ("]", "\\]"),
+    ("(", "\\("),
+    (")", "\\)"),
+)
 
 MAJOR_RE = re.compile(r"^(?P<number>\d+)\.\s+(?P<title>.+)$")
 SUB_RE = re.compile(r"^(?P<number>\d+\.\d+)\.\s+(?P<title>.+)$")
@@ -156,7 +166,7 @@ class DocFile:
             f"sidebar_position: {self.sidebar_position}",
             "---",
             "",
-            "import {ManualCallout, ManualFigure, ManualLead} from '@site/src/components/ManualContent';",
+            "import {ManualCallout, ManualFigure, ManualLead, ManualList, ManualText} from '@site/src/components/ManualContent';",
             "",
             ]
         )
@@ -175,16 +185,16 @@ class DocFile:
                     lines.extend([f"<ManualLead text={json.dumps(value, ensure_ascii=False)} />", ""])
                     lead_rendered = True
                 else:
-                    lines.extend([value, ""])
+                    lines.extend([f"<ManualText text={json.dumps(value, ensure_ascii=False)} />", ""])
             elif kind == "ul":
-                lines.extend([f"- {item}" for item in value])
-                lines.append("")
+                safe_items = [normalize_text(item) for item in value if normalize_text(item)]
+                lines.extend([f"<ManualList items={json.dumps(safe_items, ensure_ascii=False)} />", ""])
             elif kind == "ol":
-                lines.extend([f"1. {item}" for item in value])
-                lines.append("")
+                safe_items = [normalize_text(item) for item in value if normalize_text(item)]
+                lines.extend([f"<ManualList ordered items={json.dumps(safe_items, ensure_ascii=False)} />", ""])
             elif kind.startswith("h"):
                 level = int(kind[1:])
-                lines.extend([f'{"#" * level} {value}', ""])
+                lines.extend([f'{"#" * level} {escape_mdx_heading(value)}', ""])
             elif kind == "img":
                 image: BlockImage = value
                 alt = normalize_text(image.alt or image.caption or self.title)
@@ -208,6 +218,16 @@ def normalize_text(text: str) -> str:
     text = text.replace("\xa0", " ").replace("\u200b", " ")
     text = re.sub(r"\s+", " ", text)
     return text.strip()
+
+
+def escape_mdx_heading(text: str) -> str:
+    escaped = normalize_text(text)
+    escaped = escaped.replace("&", "&amp;")
+    escaped = escaped.replace("<", "&lt;").replace(">", "&gt;")
+    escaped = escaped.replace("{", "&#123;").replace("}", "&#125;")
+    for needle, replacement in MDX_INLINE_ESCAPES:
+        escaped = escaped.replace(needle, replacement)
+    return escaped
 
 
 def shorten_text(text: str, limit: int = 170) -> str:
