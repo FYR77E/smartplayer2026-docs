@@ -491,7 +491,7 @@ export default function InteractiveTourPage() {
         <main className={styles.stageMain}>
           <header className={styles.topbar}>
             <div className={styles.topbarCopy}>
-              <span className={styles.surfaceEyebrow}>SmartPlayer / Wallboard flow</span>
+              <span className={styles.surfaceEyebrow}>SmartPlayer / Interactive flow</span>
               <h2>{activeStage.heading}</h2>
               <p>{activeStage.description}</p>
             </div>

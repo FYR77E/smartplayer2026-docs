@@ -11,10 +11,10 @@ export default function NewInteractiveRedirect() {
 
   return (
     <Layout
-      title="SmartPlayer - Интерактивное обучение Wallboard"
+      title="SmartPlayer - Интерактивный тур"
       description="Маршрут /new-interactive перенаправляет на финальный React-тур /interactive-tour.">
       <main className="container margin-vert--lg">
-        <h1>Интерактивное обучение Wallboard</h1>
+        <h1>Интерактивный тур SmartPlayer</h1>
         <p>Открываю финальную версию маршрута в формате React/Docusaurus.</p>
         <p>
           Если редирект не сработал, откройте вручную: <a href={redirectUrl}>{redirectUrl}</a>
