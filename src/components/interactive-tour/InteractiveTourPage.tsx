@@ -394,10 +394,10 @@ export default function InteractiveTourPage() {
   const [activeScreen, setActiveScreen] = useState<TourScreen>('content');
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
 
-  const contentScreenSrc = useBaseUrl('/img/interactive-tour/content-screen.png');
-  const deviceScreenSrc = useBaseUrl('/img/interactive-tour/device-screen.png');
-  const editorScreenSrc = useBaseUrl('/img/interactive-tour/editor-screen.png');
-  const scheduleScreenSrc = useBaseUrl('/img/interactive-tour/schedule-screen.png');
+  const contentScreenSrc = useBaseUrl(encodeURI('/quickstart-site/image/png/Контент.webp'));
+  const deviceScreenSrc = useBaseUrl(encodeURI('/quickstart-site/image/png/Параметры устройства-20260226.webp'));
+  const editorScreenSrc = useBaseUrl(encodeURI('/quickstart-site/image/png/Редактирование созданных трансляций.webp'));
+  const scheduleScreenSrc = useBaseUrl(encodeURI('/quickstart-site/image/png/Расписание - назначение на устройства.webp'));
 
   const steps = useMemo(
     () =>

@@ -463,14 +463,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.12;
-  filter: saturate(0.75) contrast(0.94);
+  opacity: 0.88;
+  filter: saturate(1.02) contrast(0.96);
 }
 
 .panelOverlay {
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.34), transparent 28rem),
-    linear-gradient(180deg, rgba(255, 252, 246, 0.68), rgba(248, 241, 231, 0.92));
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), transparent 22rem),
+    linear-gradient(180deg, rgba(23, 17, 12, 0.12), rgba(23, 17, 12, 0.34));
 }
 
 .panelContent {
