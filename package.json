@@ -3,6 +3,9 @@
   "version": "3.9.2",
   "private": true,
   "scripts": {
+    "prestart": "node scripts/sync_quickstart_compat.cjs",
+    "prebuild": "node scripts/sync_quickstart_compat.cjs",
+    "preserve": "node scripts/sync_quickstart_compat.cjs",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
@@ -22,6 +25,7 @@
     "@easyops-cn/docusaurus-search-local": "^0.55.1",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
+    "driver.js": "^1.4.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
