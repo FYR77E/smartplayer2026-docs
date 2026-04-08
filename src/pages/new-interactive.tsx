@@ -11,7 +11,7 @@ export default function NewInteractiveRedirect() {
 
   return (
     <Layout
-      title="SmartPlayer - Интерактивный тур"
+      title="SmartPlayer — Интерактивный тур"
       description="Маршрут /new-interactive перенаправляет на финальный React-тур /interactive-tour.">
       <main className="container margin-vert--lg">
         <h1>Интерактивный тур SmartPlayer</h1>

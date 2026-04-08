@@ -1,4 +1,6 @@
-import {startTransition, useMemo, useState} from 'react';
+import {startTransition, useEffect, useMemo, useState} from 'react';
+import type {ReactNode} from 'react';
+import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
@@ -44,76 +46,92 @@ type ScreenPanelProps = {
   badge: string;
   image: string;
   imageAlt: string;
-  children: React.ReactNode;
+  children: ReactNode;
   footer: string;
 };
 
 type ModalProps = {
   onClose: () => void;
+  closeDisabled: boolean;
 };
 
 const screens: StageConfig[] = [
   {
     id: 'content',
     label: 'Контент',
-    heading: 'Стартовый набор материалов',
-    description: 'Соберите релиз, проверьте статусы и подготовьте группу к публикации на целевые экраны.',
-    chips: ['12 материалов', '3 активные группы', 'Готовность 98%'],
+    heading: 'Контент и быстрая отправка',
+    description:
+      'Шаги повторяют Quick Start: проверка медиатеки, загрузка файла и подготовка контента перед созданием трансляции.',
+    chips: ['Раздел «Контент»', 'Загрузка файлов', 'Готово к отправке'],
   },
   {
     id: 'device',
     label: 'Устройства',
-    heading: 'Контроль подключения',
-    description: 'Проверьте heartbeat, версии пакетов и доступность экранов перед пилотом.',
-    chips: ['Online 96%', 'Пакет 4.2', '2 экрана в проверке'],
+    heading: 'Добавление устройства и карточка устройства',
+    description: 'Проверяем подключение, статус устройства и параметры карточки перед назначением трансляции.',
+    chips: ['Раздел «Устройства»', 'Карточка устройства', 'Состояние подключения'],
   },
   {
     id: 'editor',
     label: 'Редактор',
-    heading: 'Сборка сценария показа',
-    description: 'Настройте таймлайн, длительности блоков и слои, которые пойдут в финальный слот.',
-    chips: ['Длина 04:20', '4 блока', '2 зоны показа'],
+    heading: 'Трансляции и редактирование',
+    description: 'Переходим к разделу «Трансляции», проверяем состав контента, таймлайн и параметры текущего показа.',
+    chips: ['Раздел «Трансляции»', 'Редактирование', 'Timeline'],
   },
   {
     id: 'schedule',
     label: 'Публикация',
-    heading: 'Расписание и go-live',
-    description: 'Назначьте окна трансляции, целевые площадки и подтвердите отправку в production.',
-    chips: ['3 окна запуска', '12 устройств', 'Ближайший слот 16:00'],
+    heading: 'Расписание и назначение на устройства',
+    description: 'Назначаем окно показа, выбираем устройства и подтверждаем публикацию согласно сценарию Quick Start.',
+    chips: ['Расписание', 'Назначение на устройства', 'Публикация'],
   },
 ];
 
 const navTabs: ScreenTab[] = [
   {id: 'content', label: 'Контент', note: 'Медиатека'},
-  {id: 'device', label: 'Устройства', note: 'Мониторинг'},
-  {id: 'editor', label: 'Редактор', note: 'Таймлайн'},
-  {id: 'schedule', label: 'Публикация', note: 'Go-live'},
+  {id: 'device', label: 'Устройства', note: 'Карточка'},
+  {id: 'editor', label: 'Редактор', note: 'Трансляции'},
+  {id: 'schedule', label: 'Публикация', note: 'Назначение'},
 ];
 
 const contentQueue = [
-  {name: 'Весенний запуск / Лобби', count: '12 блоков', state: 'Готов к публикации'},
-  {name: 'Промо витрина East', count: '4 блока', state: 'Черновик'},
-  {name: 'HQ signage / Main wall', count: '8 блоков', state: 'Согласование'},
+  {name: 'Контент: фильтры и превью файлов', count: 'Проверить состав', state: 'Готово'},
+  {name: 'Загрузка контента', count: 'Добавить файл', state: 'Выполнено'},
+  {name: 'Контент на устройства (быстрая отправка)', count: 'Шаг 1', state: 'Подготовка'},
 ];
 
 const deviceStatuses: DeviceStatus[] = [
-  {name: 'LED Lobby 01', state: 'На связи', sync: '2 минуты назад'},
-  {name: 'Kiosk East', state: 'Проверка', sync: '5 минут назад'},
-  {name: 'Video Wall West', state: 'Готов', sync: 'только что'},
+  {name: 'LED Lobby 01', state: 'Подключено', sync: 'карточка обновлена 2 мин назад'},
+  {name: 'Kiosk East', state: 'Проверка', sync: 'параметры устройства обновлены'},
+  {name: 'Video Wall West', state: 'Готово', sync: 'скриншот устройства актуален'},
 ];
 
 const timelineSlots: TimelineSlot[] = [
-  {name: 'Вступительный ролик', duration: '00:15', type: 'Основной'},
-  {name: 'Промо-сетка', duration: '00:45', type: 'Контент'},
-  {name: 'Инфо-плашка', duration: '00:10', type: 'Системный слой'},
-  {name: 'Финальный CTA', duration: '00:12', type: 'Финальный'},
+  {name: 'Трансляции: общий вид', duration: 'Шаг 1', type: 'Создать'},
+  {name: 'Добавление контента в Timeline', duration: 'Шаг 2', type: 'Контент'},
+  {name: 'Редактирование созданных трансляций', duration: 'Шаг 3', type: 'Редактирование'},
+  {name: 'Проверка перед публикацией', duration: 'Шаг 4', type: 'Контроль'},
 ];
 
 const scheduleSlots: ScheduleSlot[] = [
-  {day: 'Пн', slot: '08:00-12:00', target: 'Лобби и ресепшен'},
-  {day: 'Ср', slot: '12:00-16:00', target: 'Торговый зал'},
-  {day: 'Пт', slot: '16:00-20:00', target: 'Все экраны проекта'},
+  {day: 'Пн', slot: '08:00-12:00', target: 'LED Lobby 01'},
+  {day: 'Ср', slot: '12:00-16:00', target: 'Kiosk East'},
+  {day: 'Пт', slot: '16:00-20:00', target: 'Video Wall West'},
 ];
+
+function scrollToTarget(selector: string, block: ScrollLogicalPosition = 'center') {
+  const element = document.querySelector(selector);
+
+  if (!(element instanceof HTMLElement)) {
+    return;
+  }
+
+  element.scrollIntoView({
+    behavior: 'smooth',
+    block,
+    inline: 'nearest',
+  });
+}
 
 function ScreenPanel({title, subtitle, badge, image, imageAlt, children, footer}: ScreenPanelProps) {
   return (
@@ -141,17 +159,20 @@ function ContentStage({image, onCreateGroup}: {image: string; onCreateGroup: () 
       <header className={styles.stageHeader}>
         <div>
           <span className={styles.surfaceEyebrow}>Контент</span>
-          <h2>Стартовый набор медиаматериалов</h2>
-          <p>Подготовьте группу, проверьте очередность блоков и подтвердите целевой экран для первой публикации.</p>
+          <h2>Медиатека и подготовка к быстрой отправке</h2>
+          <p>
+            Сверьте файлы в разделе «Контент», проверьте превью и подготовьте трансляцию для отправки на выбранные
+            устройства.
+          </p>
         </div>
         <button className={styles.primaryButton} data-tour="create-group" onClick={onCreateGroup} type="button">
-          Создать группу
+          Создать трансляцию
         </button>
       </header>
 
       <div className={styles.stageGrid}>
         <article className={styles.queueCard}>
-          <h3>Очередь контента</h3>
+          <h3>Контрольный список раздела «Контент»</h3>
           <div className={styles.queueList}>
             {contentQueue.map((item) => (
               <article className={styles.queueItem} key={item.name}>
@@ -166,24 +187,24 @@ function ContentStage({image, onCreateGroup}: {image: string; onCreateGroup: () 
         </article>
 
         <ScreenPanel
-          badge="Превью сценария"
-          footer="Основной плейлист • Длительность 04:20"
+          badge="Quick Start: Контент"
+          footer="Контент • Подготовка перед назначением на устройства"
           image={image}
-          imageAlt="Экран контента SmartPlayer"
-          subtitle="Сцена, слои и ключевые блоки перед переходом к устройствам."
-          title="Весенний запуск / Лобби">
+          imageAlt="Экран раздела «Контент» SmartPlayer"
+          subtitle="Реальный экран медиатеки из Quick Start: фильтры, список файлов и превью."
+          title="Контент: медиатека проекта">
           <div className={styles.previewLayout}>
             <article className={styles.featureCard}>
-              <strong>Релиз готов</strong>
-              <span>Контент прошел предварительную проверку и ожидает публикации.</span>
+              <strong>Проверка структуры файлов</strong>
+              <span>Убедитесь, что нужные материалы доступны перед запуском трансляции.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Промо-ролик</strong>
-              <span>00:45 • HQ signage</span>
+              <strong>Загрузка нового контента</strong>
+              <span>Добавьте файл и дождитесь статуса успешной загрузки.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Локальные объявления</strong>
-              <span>00:30 • Утренний слот</span>
+              <strong>Переход к отправке</strong>
+              <span>После проверки переходите к созданию и назначению трансляции.</span>
             </article>
           </div>
         </ScreenPanel>
@@ -198,14 +219,17 @@ function DeviceStage({image}: {image: string}) {
       <header className={styles.stageHeader}>
         <div>
           <span className={styles.surfaceEyebrow}>Устройства</span>
-          <h2>Мониторинг подключения</h2>
-          <p>Проверьте состояние экранов и синхронизацию пакетов перед запуском пилотной трансляции.</p>
+          <h2>Карточка устройства и параметры</h2>
+          <p>
+            Этап из Quick Start «Добавление устройства»: проверяем карточку, параметры устройства и доступность экрана
+            перед публикацией.
+          </p>
         </div>
       </header>
 
       <div className={styles.stageGrid}>
         <article className={styles.queueCard}>
-          <h3>Последний heartbeat</h3>
+          <h3>Статус устройств</h3>
           <div className={styles.queueList}>
             {deviceStatuses.map((item) => (
               <article className={styles.queueItem} key={item.name}>
@@ -220,24 +244,24 @@ function DeviceStage({image}: {image: string}) {
         </article>
 
         <ScreenPanel
-          badge="Карта проекта"
-          footer="Пакет 4.2 синхронизирован • Следующий пинг 00:54"
+          badge="Quick Start: Добавление устройства"
+          footer="Устройства • Карточка устройства и параметры"
           image={image}
-          imageAlt="Экран устройств SmartPlayer"
-          subtitle="Критичные зоны и готовность к пилоту."
-          title="Контур устройств">
+          imageAlt="Экран карточки устройства SmartPlayer"
+          subtitle="Реальный экран карточки устройства из Quick Start."
+          title="Параметры устройства">
           <div className={styles.previewLayout}>
             <article className={styles.featureCard}>
-              <strong>Зона лобби</strong>
-              <span>3 экрана online</span>
+              <strong>Карточка устройства</strong>
+              <span>Проверьте идентификатор, статус и параметры подключенного экрана.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Торговый зал</strong>
-              <span>1 экран в проверке</span>
+              <strong>Диагностика</strong>
+              <span>Убедитесь, что устройство на связи и готово принять трансляцию.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Видеостена</strong>
-              <span>Готова к запуску</span>
+              <strong>Проверка перед запуском</strong>
+              <span>После подтверждения параметров переходите к редактированию трансляции.</span>
             </article>
           </div>
         </ScreenPanel>
@@ -251,15 +275,18 @@ function EditorStage({image}: {image: string}) {
     <section className={styles.stageSection} data-tour="editor-screen">
       <header className={styles.stageHeader}>
         <div>
-          <span className={styles.surfaceEyebrow}>Редактор</span>
-          <h2>Таймлайн и слои сценария</h2>
-          <p>Выстройте последовательность блоков и закрепите финальный вид сценария перед публикацией.</p>
+          <span className={styles.surfaceEyebrow}>Трансляции</span>
+          <h2>Редактирование созданных трансляций</h2>
+          <p>
+            Шаг соответствует разделам Quick Start «Трансляции» и «Редактирование созданных трансляций»: правим состав,
+            порядок и параметры показа.
+          </p>
         </div>
       </header>
 
       <div className={styles.stageGrid}>
         <article className={styles.queueCard}>
-          <h3>Таймлайн релиза</h3>
+          <h3>Этапы редактирования</h3>
           <div className={styles.timelineList}>
             {timelineSlots.map((item) => (
               <article className={styles.timelineItem} key={item.name}>
@@ -272,24 +299,24 @@ function EditorStage({image}: {image: string}) {
         </article>
 
         <ScreenPanel
-          badge="Редактор сцены"
-          footer="2 зоны показа • Автоцикл включен"
+          badge="Quick Start: Редактирование трансляции"
+          footer="Трансляции • Изменение параметров и контента"
           image={image}
-          imageAlt="Экран редактора SmartPlayer"
-          subtitle="Сцена с рабочими слоями и финальным слотом публикации."
-          title="Основной поток / Утро">
+          imageAlt="Экран редактирования созданных трансляций SmartPlayer"
+          subtitle="Реальный экран из раздела «Редактирование созданных трансляций»."
+          title="Редактирование созданных трансляций">
           <div className={styles.previewLayout}>
             <article className={styles.featureCard}>
-              <strong>Canvas Hero</strong>
-              <span>Промо + навигационная плашка</span>
+              <strong>Проверка текущей трансляции</strong>
+              <span>Уточните параметры и состав контента перед публикацией.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Info Layer</strong>
-              <span>Ticker и локальные уведомления</span>
+              <strong>Обновление расписания</strong>
+              <span>При необходимости внесите изменения в окно показа.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Final CTA</strong>
-              <span>Завершающий слот сценария</span>
+              <strong>Подготовка к назначению</strong>
+              <span>После правок переходите к шагу «Расписание — назначение на устройства».</span>
             </article>
           </div>
         </ScreenPanel>
@@ -303,15 +330,18 @@ function ScheduleStage({image}: {image: string}) {
     <section className={styles.stageSection} data-tour="schedule-screen">
       <header className={styles.stageHeader}>
         <div>
-          <span className={styles.surfaceEyebrow}>Публикация</span>
-          <h2>Расписание и подтверждение go-live</h2>
-          <p>Назначьте слоты, выберите площадки и подтвердите отправку сценария на целевые устройства.</p>
+          <span className={styles.surfaceEyebrow}>Расписание</span>
+          <h2>Назначение трансляции на устройства</h2>
+          <p>
+            Финальный этап Quick Start: задайте расписание показа, выберите целевые устройства и подтвердите публикацию
+            трансляции.
+          </p>
         </div>
       </header>
 
       <div className={styles.stageGrid}>
         <article className={styles.queueCard}>
-          <h3>Окна публикации</h3>
+          <h3>Окна показа</h3>
           <div className={styles.scheduleList}>
             {scheduleSlots.map((item) => (
               <article className={styles.scheduleItem} key={`${item.day}-${item.slot}`}>
@@ -324,24 +354,24 @@ function ScheduleStage({image}: {image: string}) {
         </article>
 
         <ScreenPanel
-          badge="Публикационный центр"
-          footer="Целевые площадки: 12 устройств • Публикация в один клик"
+          badge="Quick Start: Назначение трансляции"
+          footer="Расписание • Назначение на устройства • Публикация"
           image={image}
-          imageAlt="Экран публикации SmartPlayer"
-          subtitle="Финальная проверка перед запуском сценария."
-          title="Весенний запуск / Пятница 16:00">
+          imageAlt="Экран назначения трансляции на устройства SmartPlayer"
+          subtitle="Реальный экран из шага «Расписание — назначение на устройства»."
+          title="Расписание и назначение">
           <div className={styles.previewLayout}>
             <article className={styles.featureCardStrong}>
-              <strong>Публикация подтверждена</strong>
-              <span>Релиз уйдет на устройства сразу после финальной проверки.</span>
+              <strong>Дата и окно показа</strong>
+              <span>Выберите период трансляции и частоту показа контента.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Контент проверен</strong>
-              <span>Все блоки синхронизированы</span>
+              <strong>Целевые устройства</strong>
+              <span>Отметьте устройства, на которые будет назначена трансляция.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Пилот завершен</strong>
-              <span>Можно запускать production</span>
+              <strong>Подтверждение публикации</strong>
+              <span>Сохраните назначение и проверьте итоговый статус публикации.</span>
             </article>
           </div>
         </ScreenPanel>
@@ -350,36 +380,41 @@ function ScheduleStage({image}: {image: string}) {
   );
 }
 
-function CreateGroupModal({onClose}: ModalProps) {
+function CreateGroupModal({onClose, closeDisabled}: ModalProps) {
   return (
     <div className={styles.modalLayer}>
       <div className={styles.modalCard} data-tour="create-group-modal">
         <header className={styles.modalHeader}>
           <div>
-            <span className={styles.surfaceEyebrow}>Новая группа контента</span>
-            <h3>Параметры запуска</h3>
+            <span className={styles.surfaceEyebrow}>Создание трансляции</span>
+            <h3>Параметры запуска трансляции</h3>
           </div>
-          <button aria-label="Закрыть модальное окно" className={styles.iconButton} onClick={onClose} type="button">
+          <button
+            aria-label="Закрыть модальное окно"
+            className={styles.iconButton}
+            disabled={closeDisabled}
+            onClick={onClose}
+            type="button">
             ×
           </button>
         </header>
         <div className={styles.modalBody}>
           <label className={styles.modalField}>
-            <span>Название группы</span>
+            <span>Название трансляции</span>
             <div>Весенний запуск / Лобби</div>
           </label>
           <label className={styles.modalField}>
-            <span>Целевой экран</span>
-            <div>LED Lobby 01</div>
+            <span>Устройства</span>
+            <div>LED Lobby 01, Kiosk East</div>
           </label>
           <label className={styles.modalField}>
-            <span>Стартовый сценарий</span>
-            <div>Основной поток / Утро</div>
+            <span>Расписание</span>
+            <div>Пн-Пт, 08:00-20:00</div>
           </label>
         </div>
         <footer className={styles.modalFooter}>
-          <button className={styles.secondaryButton} onClick={onClose} type="button">
-            Позже
+          <button className={styles.secondaryButton} disabled={closeDisabled} onClick={onClose} type="button">
+            Отменить
           </button>
           <button className={styles.primaryButton} type="button">
             Сохранить черновик
@@ -408,11 +443,40 @@ export default function InteractiveTourPage() {
     [setActiveScreen, setShowCreateGroupModal],
   );
 
-  const {startTour} = useDriverTour(steps, {
+  const {startTour, isTourActive} = useDriverTour(steps, {
     onDestroyed: () => {
       setShowCreateGroupModal(false);
     },
   });
+
+  useEffect(() => {
+    if (!isTourActive) {
+      return;
+    }
+
+    const selector = `[data-tour="${activeScreen}-screen"]`;
+    const timer = window.setTimeout(() => {
+      scrollToTarget(selector, 'start');
+    }, 120);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [activeScreen, isTourActive]);
+
+  useEffect(() => {
+    if (!isTourActive || !showCreateGroupModal) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      scrollToTarget('[data-tour="create-group-modal"]');
+    }, 80);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [showCreateGroupModal, isTourActive]);
 
   const activeStage = screens.find((screen) => screen.id === activeScreen) ?? screens[0];
   const activeStageIndex = screens.findIndex((screen) => screen.id === activeScreen);
@@ -429,6 +493,10 @@ export default function InteractiveTourPage() {
   };
 
   const handleScreenSwitch = (screen: TourScreen) => {
+    if (isTourActive) {
+      return;
+    }
+
     setShowCreateGroupModal(false);
     startTransition(() => {
       setActiveScreen(screen);
@@ -442,12 +510,12 @@ export default function InteractiveTourPage() {
           <span className={styles.heroEyebrow}>SmartPlayer onboarding</span>
           <h1>Интерактивный продуктовый тур</h1>
           <p>
-            Реалистичный walkthrough в стиле product demo: один рабочий стенд, spotlight по ключевым действиям и четкий
-            сценарий от подготовки контента до публикации.
+            Пошаговый маршрут по реальному сценарию Quick Start: Контент, Устройства, Трансляции и Расписание. Все шаги
+            проходят в одном рабочем стенде без перехода в отдельные страницы.
           </p>
         </div>
         <div className={styles.heroActions}>
-          <button className={styles.primaryButton} data-tour="launch-guide" onClick={launchTour} type="button">
+          <button className={styles.primaryButton} data-tour="launch-guide" disabled={isTourActive} onClick={launchTour} type="button">
             Запустить интерактивный гид
           </button>
           <Link className={styles.secondaryButton} to="/quickstart/">
@@ -456,7 +524,7 @@ export default function InteractiveTourPage() {
         </div>
       </section>
 
-      <section className={styles.stageShell}>
+      <section className={clsx(styles.stageShell, showCreateGroupModal && styles.stageShellModalOpen)}>
         <aside className={styles.sidebar} data-tour="sidebar">
           <div className={styles.sidebarBrand}>
             <span className={styles.sidebarLogo}>SP</span>
@@ -466,14 +534,18 @@ export default function InteractiveTourPage() {
             </div>
           </div>
           <div className={styles.sidebarProject}>
-            <span className={styles.surfaceEyebrow}>Sandbox project</span>
-            <strong>Весенний запуск / Центральный офис</strong>
-            <p>Изолированный учебный контур для демонстрации сценария без влияния на production.</p>
+            <span className={styles.surfaceEyebrow}>Учебный контур</span>
+            <strong>Быстрый старт / Практический маршрут</strong>
+            <p>Сценарий повторяет ключевые шаги Quick Start и не влияет на production-данные.</p>
           </div>
           <nav aria-label="Навигация по учебным экранам" className={styles.sidebarNav}>
             {navTabs.map((tab) => (
               <button
-                className={tab.id === activeScreen ? styles.navButtonActive : styles.navButton}
+                className={clsx(
+                  tab.id === activeScreen ? styles.navButtonActive : styles.navButton,
+                  isTourActive && styles.navButtonDisabled,
+                )}
+                disabled={isTourActive}
                 key={tab.id}
                 onClick={() => handleScreenSwitch(tab.id)}
                 type="button">
@@ -484,20 +556,20 @@ export default function InteractiveTourPage() {
           </nav>
           <div className={styles.sidebarHint}>
             <strong>9 шагов тура</strong>
-            <p>Контент → Устройства → Редактор → Публикация</p>
+            <p>Контент → Устройства → Трансляции → Расписание</p>
           </div>
         </aside>
 
         <main className={styles.stageMain}>
           <header className={styles.topbar}>
             <div className={styles.topbarCopy}>
-              <span className={styles.surfaceEyebrow}>SmartPlayer / Interactive flow</span>
+              <span className={styles.surfaceEyebrow}>SmartPlayer / Quick Start walkthrough</span>
               <h2>{activeStage.heading}</h2>
               <p>{activeStage.description}</p>
             </div>
             <div className={styles.topbarControls}>
               <span>{`Экран ${activeStageIndex + 1} / ${screens.length}`}</span>
-              <button className={styles.ghostButton} onClick={launchTour} type="button">
+              <button className={styles.ghostButton} disabled={isTourActive} onClick={launchTour} type="button">
                 Перезапустить гид
               </button>
             </div>
@@ -512,14 +584,34 @@ export default function InteractiveTourPage() {
           </div>
 
           {activeScreen === 'content' ? (
-            <ContentStage image={contentScreenSrc} onCreateGroup={() => setShowCreateGroupModal(true)} />
+            <ContentStage
+              image={contentScreenSrc}
+              onCreateGroup={() => {
+                if (isTourActive) {
+                  return;
+                }
+
+                setShowCreateGroupModal(true);
+              }}
+            />
           ) : null}
           {activeScreen === 'device' ? <DeviceStage image={deviceScreenSrc} /> : null}
           {activeScreen === 'editor' ? <EditorStage image={editorScreenSrc} /> : null}
           {activeScreen === 'schedule' ? <ScheduleStage image={scheduleScreenSrc} /> : null}
         </main>
 
-        {showCreateGroupModal ? <CreateGroupModal onClose={() => setShowCreateGroupModal(false)} /> : null}
+        {showCreateGroupModal ? (
+          <CreateGroupModal
+            closeDisabled={isTourActive}
+            onClose={() => {
+              if (isTourActive) {
+                return;
+              }
+
+              setShowCreateGroupModal(false);
+            }}
+          />
+        ) : null}
       </section>
     </div>
   );
