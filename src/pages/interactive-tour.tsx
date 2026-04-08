@@ -5,7 +5,7 @@ export default function InteractiveTour() {
   return (
     <Layout
       title="SmartPlayer — Интерактивное обучение"
-      description="Интерактивный маршрут по базовым рабочим сценариям SmartPlayer: контент, устройства, редактор и публикация.">
+      description="Интерактивный маршрут по ключевым шагам Quick Start: Контент, Устройства, Трансляции и Расписание.">
       <InteractiveTourPage />
     </Layout>
   );

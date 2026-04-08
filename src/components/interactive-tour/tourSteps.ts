@@ -8,162 +8,249 @@ type BuildTourStepsOptions = {
   setShowCreateGroupModal: Dispatch<SetStateAction<boolean>>;
 };
 
-const TRANSITION_DELAY_MS = 240;
+const BASE_TRANSITION_DELAY_MS = 140;
+const WAIT_TIMEOUT_MS = 2800;
 
-function queueTransition(action: () => void, move: () => void) {
+const SELECTORS = {
+  sidebar: '[data-tour="sidebar"]',
+  content: '[data-tour="content-screen"]',
+  createGroup: '[data-tour="create-group"]',
+  createGroupModal: '[data-tour="create-group-modal"]',
+  device: '[data-tour="device-screen"]',
+  editor: '[data-tour="editor-screen"]',
+  schedule: '[data-tour="schedule-screen"]',
+} as const;
+
+function getVisibleElement(selector: string): HTMLElement | null {
+  const element = document.querySelector(selector);
+
+  if (!(element instanceof HTMLElement)) {
+    return null;
+  }
+
+  const rect = element.getBoundingClientRect();
+
+  if (rect.width < 8 || rect.height < 8) {
+    return null;
+  }
+
+  return element;
+}
+
+function ensureElementInViewport(selector: string) {
+  const element = getVisibleElement(selector);
+
+  if (!element) {
+    return;
+  }
+
+  element.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+    inline: 'nearest',
+  });
+}
+
+async function waitForVisibleElement(selector: string, timeoutMs = WAIT_TIMEOUT_MS): Promise<void> {
+  const start = window.performance.now();
+
+  while (window.performance.now() - start < timeoutMs) {
+    if (getVisibleElement(selector)) {
+      return;
+    }
+
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, 32);
+    });
+  }
+}
+
+function queueTransition({
+  action,
+  move,
+  waitForSelector,
+}: {
+  action: () => void;
+  move: () => void;
+  waitForSelector?: string;
+}) {
   action();
-  window.setTimeout(move, TRANSITION_DELAY_MS);
+
+  const run = async () => {
+    if (waitForSelector) {
+      await waitForVisibleElement(waitForSelector).catch(() => undefined);
+      ensureElementInViewport(waitForSelector);
+    } else {
+      await new Promise((resolve) => {
+        window.setTimeout(resolve, BASE_TRANSITION_DELAY_MS);
+      });
+    }
+
+    window.requestAnimationFrame(() => {
+      move();
+    });
+  };
+
+  void run();
 }
 
 function withNextScreen(
   setActiveScreen: BuildTourStepsOptions['setActiveScreen'],
   screen: TourScreen,
+  waitForSelector: string,
   afterChange?: () => void,
 ): DriverHook {
   return (_, __, {driver}) => {
-    queueTransition(
-      () => {
+    queueTransition({
+      action: () => {
         setActiveScreen(screen);
         afterChange?.();
       },
-      () => driver.moveNext(),
-    );
+      move: () => driver.moveNext(),
+      waitForSelector,
+    });
   };
 }
 
 function withPreviousScreen(
   setActiveScreen: BuildTourStepsOptions['setActiveScreen'],
   screen: TourScreen,
+  waitForSelector: string,
   afterChange?: () => void,
 ): DriverHook {
   return (_, __, {driver}) => {
-    queueTransition(
-      () => {
+    queueTransition({
+      action: () => {
         setActiveScreen(screen);
         afterChange?.();
       },
-      () => driver.movePrevious(),
-    );
+      move: () => driver.movePrevious(),
+      waitForSelector,
+    });
   };
 }
 
-export function buildTourSteps({
-  setActiveScreen,
-  setShowCreateGroupModal,
-}: BuildTourStepsOptions): DriveStep[] {
+export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: BuildTourStepsOptions): DriveStep[] {
   return [
     {
       popover: {
         title: 'Интерактивное обучение SmartPlayer',
         description:
-          'Этот маршрут проводит по ключевым рабочим действиям: навигация, подготовка контента, проверка устройств, редактирование сценария и публикация.',
+          'Маршрут повторяет логику Quick Start: Контент → Устройства → Трансляции → Расписание и назначение на устройства.',
         side: 'over',
         align: 'center',
       },
     },
     {
-      element: '[data-tour="sidebar"]',
+      element: SELECTORS.sidebar,
       popover: {
-        title: 'Навигация по разделам',
+        title: 'Навигация по ключевым разделам',
         description:
-          'Левая панель помогает быстро переключаться между контентом, устройствами, редактором и расписаниями без выхода из рабочей области.',
+          'Слева собраны основные зоны SmartPlayer: разделы «Контент», «Устройства», «Трансляции» и этап публикации по расписанию.',
         side: 'right',
         align: 'start',
       },
     },
     {
-      element: '[data-tour="content-screen"]',
+      element: SELECTORS.content,
       popover: {
-        title: 'Стартовая рабочая область',
+        title: 'Раздел «Контент»',
         description:
-          'Здесь команда собирает группы контента, видит статус медиаматериалов и отслеживает, что уже готово к публикации.',
+          'На этом экране оператор проверяет медиатеку, статус файлов и готовит материал для этапа «Контент на устройства (быстрая отправка)».',
         side: 'left',
         align: 'start',
       },
     },
     {
-      element: '[data-tour="create-group"]',
+      element: SELECTORS.createGroup,
       popover: {
-        title: 'Создание группы контента',
+        title: 'Создание трансляции',
         description:
-          'Кнопка запускает короткую настройку группы: название, сценарий показа и базовые параметры публикации.',
+          'Кнопка запускает параметры новой трансляции: название, целевые устройства и сценарий перед переходом к карточке устройств.',
         side: 'bottom',
         align: 'start',
         onNextClick: (_, __, {driver}) => {
-          queueTransition(
-            () => setShowCreateGroupModal(true),
-            () => driver.moveNext(),
-          );
+          queueTransition({
+            action: () => {
+              setShowCreateGroupModal(true);
+            },
+            move: () => driver.moveNext(),
+            waitForSelector: SELECTORS.createGroupModal,
+          });
         },
       },
     },
     {
-      element: '[data-tour="create-group-modal"]',
+      element: SELECTORS.createGroupModal,
       popover: {
-        title: 'Параметры новой группы',
+        title: 'Параметры запуска трансляции',
         description:
-          'В модальном окне задаются название, целевой экран и стартовый сценарий. После этого можно переходить к проверке устройств.',
+          'В модальном окне задаются название трансляции, устройства и расписание. После сохранения можно перейти к проверке карточек устройств.',
         side: 'top',
         align: 'start',
         onPrevClick: (_, __, {driver}) => {
-          queueTransition(
-            () => setShowCreateGroupModal(false),
-            () => driver.movePrevious(),
-          );
+          queueTransition({
+            action: () => {
+              setShowCreateGroupModal(false);
+            },
+            move: () => driver.movePrevious(),
+            waitForSelector: SELECTORS.createGroup,
+          });
         },
-        onNextClick: withNextScreen(setActiveScreen, 'device', () => {
+        onNextClick: withNextScreen(setActiveScreen, 'device', SELECTORS.device, () => {
           setShowCreateGroupModal(false);
         }),
       },
     },
     {
-      element: '[data-tour="device-screen"]',
+      element: SELECTORS.device,
       popover: {
-        title: 'Проверка устройств',
+        title: 'Устройства и параметры устройства',
         description:
-          'После подготовки контента оператор убеждается, что нужные экраны на связи, получают актуальные пакеты и готовы к пробному показу.',
+          'Этот шаг соответствует разделу Quick Start «Добавление устройства»: проверяем карточку устройства, состояние подключения и доступность экрана.',
         side: 'left',
         align: 'start',
         onPrevClick: (_, __, {driver}) => {
-          queueTransition(
-            () => {
+          queueTransition({
+            action: () => {
               setActiveScreen('content');
               setShowCreateGroupModal(true);
             },
-            () => driver.movePrevious(),
-          );
+            move: () => driver.movePrevious(),
+            waitForSelector: SELECTORS.createGroupModal,
+          });
         },
-        onNextClick: withNextScreen(setActiveScreen, 'editor'),
+        onNextClick: withNextScreen(setActiveScreen, 'editor', SELECTORS.editor),
       },
     },
     {
-      element: '[data-tour="editor-screen"]',
+      element: SELECTORS.editor,
       popover: {
-        title: 'Редактор сценария',
+        title: 'Трансляции и редактирование',
         description:
-          'В редакторе команда выстраивает последовательность блоков, проверяет длительности и готовит итоговый сценарий к публикации.',
+          'Здесь повторяется логика разделов «Трансляции» и «Редактирование созданных трансляций»: состав контента, таймлайн и параметры текущей трансляции.',
         side: 'left',
         align: 'center',
-        onPrevClick: withPreviousScreen(setActiveScreen, 'device'),
-        onNextClick: withNextScreen(setActiveScreen, 'schedule'),
+        onPrevClick: withPreviousScreen(setActiveScreen, 'device', SELECTORS.device),
+        onNextClick: withNextScreen(setActiveScreen, 'schedule', SELECTORS.schedule),
       },
     },
     {
-      element: '[data-tour="schedule-screen"]',
+      element: SELECTORS.schedule,
       popover: {
-        title: 'Расписание и публикация',
+        title: 'Расписание — назначение на устройства',
         description:
-          'Финальный шаг — назначить временные окна, целевые площадки и подтвердить публикацию, чтобы сценарий ушёл на устройства по расписанию.',
+          'Финальный рабочий шаг Quick Start: задать окно показа, выбрать устройства и подтвердить публикацию трансляции.',
         side: 'left',
         align: 'start',
-        onPrevClick: withPreviousScreen(setActiveScreen, 'editor'),
+        onPrevClick: withPreviousScreen(setActiveScreen, 'editor', SELECTORS.editor),
       },
     },
     {
       popover: {
         title: 'Маршрут завершён',
         description:
-          'Теперь страницу можно использовать как изолированный тренажёр: запускать гид заново, переключать экраны вручную и показывать сценарий новой команде.',
+          'Тур можно запускать повторно для онбординга команды: последовательность шагов полностью повторяет рабочий сценарий Quick Start.',
         side: 'over',
         align: 'center',
       },
