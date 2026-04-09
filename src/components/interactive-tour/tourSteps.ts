@@ -136,7 +136,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Интерактивное обучение SmartPlayer',
         description:
-          'Маршрут повторяет логику Quick Start: Контент → Устройства → Трансляции → Расписание и назначение на устройства.',
+          'Это guided walkthrough по реальным экранам Quick Start. Используйте кнопки «Далее» и «Назад», чтобы пройти маршрут Контент → Устройства → Трансляции → Расписание.',
         side: 'over',
         align: 'center',
       },
@@ -156,7 +156,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Раздел «Контент»',
         description:
-          'На этом экране оператор проверяет медиатеку, статус файлов и готовит материал для этапа «Контент на устройства (быстрая отправка)».',
+          'В центре показан реальный экран раздела «Контент» из Quick Start: медиатека, список файлов и действия с выбранным материалом перед отправкой на устройства.',
         side: 'left',
         align: 'start',
       },
@@ -166,7 +166,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Создание трансляции',
         description:
-          'Кнопка запускает параметры новой трансляции: название, целевые устройства и сценарий перед переходом к карточке устройств.',
+          'Этот шаг демонстрационный: кнопка открывает параметры новой трансляции, чтобы показать логику Quick Start перед переходом к экрану устройства.',
         side: 'bottom',
         align: 'start',
         onNextClick: (_, __, {driver}) => {
@@ -185,7 +185,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Параметры запуска трансляции',
         description:
-          'В модальном окне задаются название трансляции, устройства и расписание. После сохранения можно перейти к проверке карточек устройств.',
+          'Модальное окно показывает демонстрационный шаг создания трансляции: название, устройства и расписание перед переходом к реальной карточке устройства.',
         side: 'top',
         align: 'start',
         onPrevClick: (_, __, {driver}) => {
@@ -207,7 +207,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Устройства и параметры устройства',
         description:
-          'Этот шаг соответствует разделу Quick Start «Добавление устройства»: проверяем карточку устройства, состояние подключения и доступность экрана.',
+          'Сейчас в центре реальный экран Quick Start «Добавление устройства»: карточка устройства, статус подключения и параметры конкретного экрана.',
         side: 'left',
         align: 'start',
         onPrevClick: (_, __, {driver}) => {
@@ -228,7 +228,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Трансляции и редактирование',
         description:
-          'Здесь повторяется логика разделов «Трансляции» и «Редактирование созданных трансляций»: состав контента, таймлайн и параметры текущей трансляции.',
+          'Это реальный экран редактирования созданных трансляций: здесь проверяют состав контента, текущие параметры и готовность трансляции к назначению.',
         side: 'left',
         align: 'center',
         onPrevClick: withPreviousScreen(setActiveScreen, 'device', SELECTORS.device),
@@ -240,7 +240,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Расписание — назначение на устройства',
         description:
-          'Финальный рабочий шаг Quick Start: задать окно показа, выбрать устройства и подтвердить публикацию трансляции.',
+          'Финальный реальный экран Quick Start: задайте окно показа, выберите устройства и подтвердите назначение трансляции на целевые экраны.',
         side: 'left',
         align: 'start',
         onPrevClick: withPreviousScreen(setActiveScreen, 'editor', SELECTORS.editor),
@@ -250,7 +250,7 @@ export function buildTourSteps({setActiveScreen, setShowCreateGroupModal}: Build
       popover: {
         title: 'Маршрут завершён',
         description:
-          'Тур можно запускать повторно для онбординга команды: последовательность шагов полностью повторяет рабочий сценарий Quick Start.',
+          'Тур можно запускать повторно для онбординга команды: он показывает реальный интерфейс SmartPlayer и повторяет основной сценарий Quick Start без перехода по отдельным страницам.',
         side: 'over',
         align: 'center',
       },

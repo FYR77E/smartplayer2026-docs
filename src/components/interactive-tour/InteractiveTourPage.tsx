@@ -44,6 +44,7 @@ type ScreenPanelProps = {
   title: string;
   subtitle: string;
   badge: string;
+  proof: string;
   image: string;
   imageAlt: string;
   children: ReactNode;
@@ -119,6 +120,21 @@ const scheduleSlots: ScheduleSlot[] = [
   {day: 'Пт', slot: '16:00-20:00', target: 'Video Wall West'},
 ];
 
+const tourGuidePoints = [
+  {
+    title: 'Это walkthrough по реальным экранам',
+    description: 'В центре каждого шага показан реальный интерфейс SmartPlayer из Quick Start, а не декоративный макет.',
+  },
+  {
+    title: 'Проходите тур через Next / Prev',
+    description: 'Основная навигация идет через popover Driver.js: так шаги, подсветка и переходы остаются синхронными.',
+  },
+  {
+    title: 'Часть действий демонстрационная',
+    description: 'Кнопки и модалки показывают логику сценария, но не меняют данные и не влияют на production.',
+  },
+];
+
 function scrollToTarget(selector: string, block: ScrollLogicalPosition = 'center') {
   const element = document.querySelector(selector);
 
@@ -133,20 +149,33 @@ function scrollToTarget(selector: string, block: ScrollLogicalPosition = 'center
   });
 }
 
-function ScreenPanel({title, subtitle, badge, image, imageAlt, children, footer}: ScreenPanelProps) {
+function ScreenPanel({title, subtitle, badge, proof, image, imageAlt, children, footer}: ScreenPanelProps) {
   return (
     <article className={styles.screenPanel}>
       <header className={styles.screenPanelHeader}>
-        <div>
+        <div className={styles.screenPanelMeta}>
           <span className={styles.surfaceEyebrow}>{badge}</span>
+          <span className={styles.screenPanelProof}>{proof}</span>
+        </div>
+        <div>
           <h3>{title}</h3>
           <p>{subtitle}</p>
         </div>
       </header>
-      <div className={styles.screenPanelCanvas}>
-        <img alt={imageAlt} className={styles.panelBackdrop} src={image} />
-        <div className={styles.panelOverlay} />
-        <div className={styles.panelContent}>{children}</div>
+      <figure className={styles.screenPanelCanvas}>
+        <div className={styles.screenFrame}>
+          <div className={styles.screenFrameBar}>
+            <span className={styles.screenFrameDot} />
+            <span className={styles.screenFrameDot} />
+            <span className={styles.screenFrameDot} />
+            <span className={styles.screenFrameLabel}>Реальный экран SmartPlayer из Quick Start</span>
+          </div>
+          <img alt={imageAlt} className={styles.panelBackdrop} src={image} />
+        </div>
+      </figure>
+      <div className={styles.panelContent}>
+        <span className={styles.panelContentLabel}>Что смотреть на экране</span>
+        {children}
       </div>
       <footer className={styles.screenPanelFooter}>{footer}</footer>
     </article>
@@ -188,23 +217,24 @@ function ContentStage({image, onCreateGroup}: {image: string; onCreateGroup: () 
 
         <ScreenPanel
           badge="Quick Start: Контент"
+          proof="Реальный экран медиатеки"
           footer="Контент • Подготовка перед назначением на устройства"
           image={image}
           imageAlt="Экран раздела «Контент» SmartPlayer"
-          subtitle="Реальный экран медиатеки из Quick Start: фильтры, список файлов и превью."
+          subtitle="Тот же экран, который используется в Quick Start: медиатека, список файлов и рабочие действия с контентом."
           title="Контент: медиатека проекта">
           <div className={styles.previewLayout}>
             <article className={styles.featureCard}>
-              <strong>Проверка структуры файлов</strong>
-              <span>Убедитесь, что нужные материалы доступны перед запуском трансляции.</span>
+              <strong>Список материалов</strong>
+              <span>Проверьте, что нужный файл появился в таблице и доступен для дальнейших действий.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Загрузка нового контента</strong>
-              <span>Добавьте файл и дождитесь статуса успешной загрузки.</span>
+              <strong>Фильтры и поиск</strong>
+              <span>Именно здесь оператор отбирает нужный контент перед отправкой на устройства.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Переход к отправке</strong>
-              <span>После проверки переходите к созданию и назначению трансляции.</span>
+              <strong>Действия с выбранным файлом</strong>
+              <span>После проверки можно переходить к созданию трансляции и назначению контента.</span>
             </article>
           </div>
         </ScreenPanel>
@@ -245,23 +275,24 @@ function DeviceStage({image}: {image: string}) {
 
         <ScreenPanel
           badge="Quick Start: Добавление устройства"
+          proof="Реальная карточка устройства"
           footer="Устройства • Карточка устройства и параметры"
           image={image}
           imageAlt="Экран карточки устройства SmartPlayer"
-          subtitle="Реальный экран карточки устройства из Quick Start."
+          subtitle="Реальная карточка устройства из Quick Start: параметры, статус подключения и технические поля."
           title="Параметры устройства">
           <div className={styles.previewLayout}>
             <article className={styles.featureCard}>
               <strong>Карточка устройства</strong>
-              <span>Проверьте идентификатор, статус и параметры подключенного экрана.</span>
+              <span>Проверьте имя, идентификатор и базовые параметры конкретного экрана.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Диагностика</strong>
-              <span>Убедитесь, что устройство на связи и готово принять трансляцию.</span>
+              <strong>Статус подключения</strong>
+              <span>Убедитесь, что устройство на связи и готово принять назначенную трансляцию.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Проверка перед запуском</strong>
-              <span>После подтверждения параметров переходите к редактированию трансляции.</span>
+              <strong>Параметры перед запуском</strong>
+              <span>После проверки карточки можно переходить к разделу трансляций и дальнейшей настройке показа.</span>
             </article>
           </div>
         </ScreenPanel>
@@ -300,23 +331,24 @@ function EditorStage({image}: {image: string}) {
 
         <ScreenPanel
           badge="Quick Start: Редактирование трансляции"
+          proof="Реальный экран редактирования"
           footer="Трансляции • Изменение параметров и контента"
           image={image}
           imageAlt="Экран редактирования созданных трансляций SmartPlayer"
-          subtitle="Реальный экран из раздела «Редактирование созданных трансляций»."
+          subtitle="Реальный экран из Quick Start для работы с уже созданной трансляцией и ее параметрами."
           title="Редактирование созданных трансляций">
           <div className={styles.previewLayout}>
             <article className={styles.featureCard}>
-              <strong>Проверка текущей трансляции</strong>
-              <span>Уточните параметры и состав контента перед публикацией.</span>
+              <strong>Список и состав трансляции</strong>
+              <span>На экране видно, какую трансляцию редактирует оператор и из чего она собрана.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Обновление расписания</strong>
-              <span>При необходимости внесите изменения в окно показа.</span>
+              <strong>Изменение параметров</strong>
+              <span>Здесь вносят правки перед публикацией: порядок, состав и рабочие настройки показа.</span>
             </article>
             <article className={styles.featureCard}>
-              <strong>Подготовка к назначению</strong>
-              <span>После правок переходите к шагу «Расписание — назначение на устройства».</span>
+              <strong>Переход к назначению</strong>
+              <span>После проверки трансляции переходим к расписанию и выбору устройств для показа.</span>
             </article>
           </div>
         </ScreenPanel>
@@ -355,23 +387,24 @@ function ScheduleStage({image}: {image: string}) {
 
         <ScreenPanel
           badge="Quick Start: Назначение трансляции"
+          proof="Реальный экран расписания"
           footer="Расписание • Назначение на устройства • Публикация"
           image={image}
           imageAlt="Экран назначения трансляции на устройства SmartPlayer"
-          subtitle="Реальный экран из шага «Расписание — назначение на устройства»."
+          subtitle="Реальный экран из Quick Start для выбора окна показа и назначения трансляции на устройства."
           title="Расписание и назначение">
           <div className={styles.previewLayout}>
             <article className={styles.featureCardStrong}>
               <strong>Дата и окно показа</strong>
-              <span>Выберите период трансляции и частоту показа контента.</span>
+              <span>Именно здесь задают период показа и время запуска трансляции.</span>
             </article>
             <article className={styles.featureCard}>
               <strong>Целевые устройства</strong>
-              <span>Отметьте устройства, на которые будет назначена трансляция.</span>
+              <span>Отметьте устройства, на которые будет назначена подготовленная трансляция.</span>
             </article>
             <article className={styles.featureCard}>
               <strong>Подтверждение публикации</strong>
-              <span>Сохраните назначение и проверьте итоговый статус публикации.</span>
+              <span>После сохранения назначения проверьте итоговый статус публикации и готовность устройств.</span>
             </article>
           </div>
         </ScreenPanel>
@@ -510,18 +543,30 @@ export default function InteractiveTourPage() {
           <span className={styles.heroEyebrow}>SmartPlayer onboarding</span>
           <h1>Интерактивный продуктовый тур</h1>
           <p>
-            Пошаговый маршрут по реальному сценарию Quick Start: Контент, Устройства, Трансляции и Расписание. Все шаги
-            проходят в одном рабочем стенде без перехода в отдельные страницы.
+            Это пошаговый обзор основных разделов SmartPlayer на реальных экранах Quick Start. Ниже показан настоящий
+            интерфейс, а Driver.js проводит по нему шаг за шагом.
           </p>
+          <div className={styles.heroActions}>
+            <button className={styles.primaryButton} data-tour="launch-guide" disabled={isTourActive} onClick={launchTour} type="button">
+              Запустить интерактивный гид
+            </button>
+            <Link className={styles.secondaryButton} to="/quickstart/">
+              Открыть текущий Quick Start
+            </Link>
+          </div>
         </div>
-        <div className={styles.heroActions}>
-          <button className={styles.primaryButton} data-tour="launch-guide" disabled={isTourActive} onClick={launchTour} type="button">
-            Запустить интерактивный гид
-          </button>
-          <Link className={styles.secondaryButton} to="/quickstart/">
-            Открыть текущий Quick Start
-          </Link>
-        </div>
+        <aside className={styles.heroGuide}>
+          <span className={styles.heroGuideEyebrow}>Как пользоваться</span>
+          <h2>Guided walkthrough по интерфейсу SmartPlayer</h2>
+          <div className={styles.heroGuideList}>
+            {tourGuidePoints.map((point) => (
+              <article className={styles.heroGuideItem} key={point.title}>
+                <strong>{point.title}</strong>
+                <p>{point.description}</p>
+              </article>
+            ))}
+          </div>
+        </aside>
       </section>
 
       <section className={clsx(styles.stageShell, showCreateGroupModal && styles.stageShellModalOpen)}>
