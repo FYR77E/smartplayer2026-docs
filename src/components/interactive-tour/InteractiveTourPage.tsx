@@ -34,8 +34,7 @@ const TOUR_STEPS: TourStep[] = [
     imageAlt: 'Экран авторизации SmartPlayer',
     zone: {top: 30, left: 25, width: 50, height: 35},
     popover: {top: 66, left: 62},
-    description:
-      'Введите e-mail и пароль. Для восстановления доступа нажмите «Не получается войти?».',
+    description: 'Введите e-mail и пароль. Для восстановления доступа нажмите «Не получается войти?».',
   },
   {
     id: 'dashboard',
@@ -54,8 +53,7 @@ const TOUR_STEPS: TourStep[] = [
     imageAlt: 'Раздел Устройства в SmartPlayer',
     zone: {top: 15, left: 5, width: 90, height: 60},
     popover: {top: 77, left: 60},
-    description:
-      'Список устройств с цветовыми статусами: зелёный — онлайн, серый — офлайн, красный — ошибка.',
+    description: 'Список устройств с цветовыми статусами: зелёный — онлайн, серый — офлайн, красный — ошибка.',
   },
   {
     id: 'add-device',
@@ -64,8 +62,7 @@ const TOUR_STEPS: TourStep[] = [
     imageAlt: 'Диалог добавления устройства в SmartPlayer',
     zone: {top: 20, left: 30, width: 45, height: 50},
     popover: {top: 75, left: 56},
-    description:
-      'Введите 9-значный код с экрана устройства. Укажите название, местоположение и часовой пояс.',
+    description: 'Введите 9-значный код с экрана устройства. Укажите название, местоположение и часовой пояс.',
   },
   {
     id: 'content',
@@ -74,8 +71,7 @@ const TOUR_STEPS: TourStep[] = [
     imageAlt: 'Раздел Контент в SmartPlayer',
     zone: {top: 10, left: 5, width: 90, height: 75},
     popover: {top: 79, left: 61},
-    description:
-      'Медиатека проекта. Загружайте файлы через Drag & Drop или выбором из проводника.',
+    description: 'Медиатека проекта. Загружайте файлы через Drag & Drop или выбором из проводника.',
   },
   {
     id: 'quick-send',
@@ -94,8 +90,7 @@ const TOUR_STEPS: TourStep[] = [
     imageAlt: 'Выбор устройств в сценарии быстрой отправки',
     zone: {top: 15, left: 10, width: 80, height: 60},
     popover: {top: 79, left: 56},
-    description:
-      'Выберите устройства или группы, на которые отправится трансляция. Нажмите «Далее».',
+    description: 'Выберите устройства или группы, на которые отправится трансляция. Нажмите «Далее».',
   },
   {
     id: 'schedule',
@@ -104,8 +99,7 @@ const TOUR_STEPS: TourStep[] = [
     imageAlt: 'Расписание трансляции в SmartPlayer',
     zone: {top: 15, left: 10, width: 80, height: 65},
     popover: {top: 81, left: 56},
-    description:
-      'Установите дату, время и повторение. Приоритет у новых трансляций по умолчанию — низкий.',
+    description: 'Установите дату, время и повторение. Приоритет у новых трансляций по умолчанию — низкий.',
   },
   {
     id: 'device-card',
@@ -118,6 +112,15 @@ const TOUR_STEPS: TourStep[] = [
       'После запуска проверяйте устройства: скриншот, статус, перезагрузка и управление громкостью.',
   },
 ];
+
+function isTypingTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  const tagName = target.tagName.toLowerCase();
+  return tagName === 'input' || tagName === 'textarea' || tagName === 'select' || target.isContentEditable;
+}
 
 function HighlightZone({
   zone,
@@ -173,6 +176,37 @@ export default function InteractiveTourPage() {
     });
   }, [stepIndex]);
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isTypingTarget(event.target)) {
+        return;
+      }
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        setStepIndex((current) => Math.min(current + 1, steps.length));
+        return;
+      }
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        setStepIndex((current) => Math.max(current - 1, 0));
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setStepIndex(steps.length);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [steps.length]);
+
   const handleNext = () => {
     setStepIndex((current) => Math.min(current + 1, steps.length));
   };
@@ -201,6 +235,7 @@ export default function InteractiveTourPage() {
           <ul className={styles.heroGuideList}>
             <li>Используйте кнопки «← Назад» и «Далее →» в popover рядом с подсвеченной зоной.</li>
             <li>Клик по выделенной области на скриншоте тоже переводит к следующему шагу.</li>
+            <li>Горячие клавиши: `ArrowRight` — следующий шаг, `ArrowLeft` — предыдущий, `Escape` — завершить тур.</li>
             <li>Все экраны в туре — реальные изображения из `/quickstart-site/image/png`.</li>
           </ul>
         </aside>
