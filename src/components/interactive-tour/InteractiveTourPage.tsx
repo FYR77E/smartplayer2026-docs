@@ -26,6 +26,8 @@ type TourStep = {
   description: string;
 };
 
+type TourMode = 'intro' | 'active' | 'complete';
+
 const TOUR_STEPS: TourStep[] = [
   {
     id: 'login',
@@ -151,6 +153,7 @@ function HighlightZone({
 export default function InteractiveTourPage() {
   const {siteConfig} = useDocusaurusContext();
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const [mode, setMode] = useState<TourMode>('intro');
   const [stepIndex, setStepIndex] = useState(0);
 
   const normalizedBaseUrl = siteConfig.baseUrl.endsWith('/') ? siteConfig.baseUrl : `${siteConfig.baseUrl}/`;
@@ -164,17 +167,22 @@ export default function InteractiveTourPage() {
     [normalizedBaseUrl],
   );
 
-  const isComplete = stepIndex >= steps.length;
-  const currentStep = isComplete ? null : steps[stepIndex];
-  const progressValue = isComplete ? 100 : ((stepIndex + 1) / steps.length) * 100;
+  const isActive = mode === 'active';
+  const isComplete = mode === 'complete';
+  const currentStep = isActive ? steps[stepIndex] : null;
+  const progressValue = isComplete ? 100 : isActive ? ((stepIndex + 1) / steps.length) * 100 : 0;
 
   useEffect(() => {
+    if (!isActive) {
+      return;
+    }
+
     stageRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
       inline: 'nearest',
     });
-  }, [stepIndex]);
+  }, [isActive, stepIndex]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -182,9 +190,17 @@ export default function InteractiveTourPage() {
         return;
       }
 
+      if (!isActive) {
+        return;
+      }
+
       if (event.key === 'ArrowRight') {
         event.preventDefault();
-        setStepIndex((current) => Math.min(current + 1, steps.length));
+        if (stepIndex >= steps.length - 1) {
+          setMode('complete');
+          return;
+        }
+        setStepIndex((current) => Math.min(current + 1, steps.length - 1));
         return;
       }
 
@@ -196,7 +212,8 @@ export default function InteractiveTourPage() {
 
       if (event.key === 'Escape') {
         event.preventDefault();
-        setStepIndex(steps.length);
+        setStepIndex(0);
+        setMode('intro');
       }
     };
 
@@ -205,18 +222,39 @@ export default function InteractiveTourPage() {
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [steps.length]);
+  }, [isActive, stepIndex, steps.length]);
+
+  const handleStart = () => {
+    setStepIndex(0);
+    setMode('active');
+  };
 
   const handleNext = () => {
-    setStepIndex((current) => Math.min(current + 1, steps.length));
+    if (!isActive) {
+      return;
+    }
+    if (stepIndex >= steps.length - 1) {
+      setMode('complete');
+      return;
+    }
+    setStepIndex((current) => Math.min(current + 1, steps.length - 1));
   };
 
   const handlePrevious = () => {
+    if (!isActive) {
+      return;
+    }
     setStepIndex((current) => Math.max(current - 1, 0));
+  };
+
+  const handleExitToIntro = () => {
+    setStepIndex(0);
+    setMode('intro');
   };
 
   const handleRestart = () => {
     setStepIndex(0);
+    setMode('active');
   };
 
   return (
@@ -233,9 +271,9 @@ export default function InteractiveTourPage() {
         <aside className={styles.heroGuide}>
           <h2>Как пользоваться интерактивом</h2>
           <ul className={styles.heroGuideList}>
-            <li>Используйте кнопки «← Назад» и «Далее →» в popover рядом с подсвеченной зоной.</li>
-            <li>Клик по выделенной области на скриншоте тоже переводит к следующему шагу.</li>
-            <li>Горячие клавиши: `ArrowRight` — следующий шаг, `ArrowLeft` — предыдущий, `Escape` — завершить тур.</li>
+            <li>На десктопе используйте «← Назад» и «Далее →» в popover рядом с подсвеченной зоной.</li>
+            <li>На мобильных описание и кнопки выводятся отдельным блоком под скриншотом.</li>
+            <li>Горячие клавиши: `ArrowRight` — следующий шаг, `ArrowLeft` — предыдущий, `Escape` — выход в intro.</li>
             <li>Все экраны в туре — реальные изображения из `/quickstart-site/image/png`.</li>
           </ul>
         </aside>
@@ -245,14 +283,31 @@ export default function InteractiveTourPage() {
         <div className={styles.progressHeader}>
           <div className={styles.progressMeta}>
             <span className={styles.progressEyebrow}>Прогресс тура</span>
-            <strong>{isComplete ? 'Завершено' : `Шаг ${stepIndex + 1} из ${steps.length}`}</strong>
+            <strong>{isComplete ? 'Завершено' : isActive ? `Шаг ${stepIndex + 1} из ${steps.length}` : 'Введение'}</strong>
           </div>
           <div aria-hidden="true" className={styles.progressTrack}>
             <div className={styles.progressBar} style={{width: `${progressValue}%`}} />
           </div>
         </div>
 
-        {isComplete ? (
+        {!isActive && !isComplete ? (
+          <section className={styles.introCard}>
+            <span className={styles.completionEyebrow}>Старт тура</span>
+            <h2>Готовы пройти маршрут Quick Start</h2>
+            <p>
+              Тур покажет базовый путь: авторизация, устройство, контент, публикация и проверка результата. Нажмите
+              «Запустить тур», чтобы перейти к первому шагу.
+            </p>
+            <div className={styles.introActions}>
+              <button className={styles.primaryButton} onClick={handleStart} type="button">
+                Запустить тур
+              </button>
+              <Link className={styles.secondaryButton} to="/quickstart/">
+                Открыть полный Быстрый старт
+              </Link>
+            </div>
+          </section>
+        ) : isComplete ? (
           <section className={styles.completionCard}>
             <span className={styles.completionEyebrow}>Тур завершён</span>
             <h2>Вы прошли базовый тур SmartPlayer</h2>
@@ -260,6 +315,9 @@ export default function InteractiveTourPage() {
             <div className={styles.completionActions}>
               <button className={styles.primaryButton} onClick={handleRestart} type="button">
                 Пройти ещё раз
+              </button>
+              <button className={styles.secondaryButton} onClick={handleExitToIntro} type="button">
+                Вернуться к вступлению
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
                 Перейти к Быстрому старту
@@ -296,8 +354,28 @@ export default function InteractiveTourPage() {
                     <button className={styles.primaryButton} onClick={handleNext} type="button">
                       Далее →
                     </button>
+                    <button className={styles.secondaryButton} onClick={handleExitToIntro} type="button">
+                      Выйти из тура
+                    </button>
                   </div>
                 </aside>
+              </div>
+
+              <div className={styles.mobileDetails}>
+                <span className={styles.popoverStep}>{`Шаг ${stepIndex + 1} из ${steps.length}`}</span>
+                <h2>{currentStep.title}</h2>
+                <p className={styles.popoverText}>{currentStep.description}</p>
+                <div className={styles.mobileActions}>
+                  <button className={styles.secondaryButton} disabled={stepIndex === 0} onClick={handlePrevious} type="button">
+                    ← Назад
+                  </button>
+                  <button className={styles.primaryButton} onClick={handleNext} type="button">
+                    Далее →
+                  </button>
+                  <button className={styles.secondaryButton} onClick={handleExitToIntro} type="button">
+                    Выйти из тура
+                  </button>
+                </div>
               </div>
             </div>
 

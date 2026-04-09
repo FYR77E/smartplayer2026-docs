@@ -251,7 +251,9 @@
 }
 
 .popoverActions,
-.completionActions {
+.completionActions,
+.introActions,
+.mobileActions {
   display: flex;
   align-items: center;
   gap: 0.58rem;
@@ -322,6 +324,7 @@
   color: #fff4e8;
 }
 
+.introCard,
 .completionCard {
   display: grid;
   gap: 0.7rem;
@@ -345,6 +348,23 @@
   line-height: 1.6;
 }
 
+.introCard h2 {
+  margin: 0;
+  font-size: clamp(1.72rem, 3vw, 2.3rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+}
+
+.introCard p {
+  margin: 0;
+  color: var(--tour-muted);
+  line-height: 1.6;
+}
+
+.mobileDetails {
+  display: none;
+}
+
 @media screen and (max-width: 1120px) {
   .hero {
     grid-template-columns: 1fr;
@@ -360,7 +380,8 @@
   .tourShell,
   .hero,
   .stageFrame,
-  .completionCard {
+  .completionCard,
+  .introCard {
     border-radius: 20px;
   }
 
@@ -369,10 +390,25 @@
   }
 
   .popover {
-    position: static;
-    transform: none;
-    width: auto;
-    margin: 0.64rem;
+    display: none;
+  }
+
+  .highlightZone {
+    display: none;
+  }
+
+  .mobileDetails {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.95rem;
+    background: #fffbf6;
+    border-top: 1px solid var(--tour-line);
+  }
+
+  .mobileDetails h2 {
+    margin: 0;
+    font-size: 1.12rem;
+    line-height: 1.28;
   }
 
   .highlightLabel {
@@ -387,14 +423,20 @@
 
 @media screen and (max-width: 680px) {
   .popoverActions,
-  .completionActions {
+  .completionActions,
+  .introActions,
+  .mobileActions {
     width: 100%;
   }
 
   .popoverActions .primaryButton,
   .popoverActions .secondaryButton,
   .completionActions .primaryButton,
-  .completionActions .secondaryButton {
+  .completionActions .secondaryButton,
+  .introActions .primaryButton,
+  .introActions .secondaryButton,
+  .mobileActions .primaryButton,
+  .mobileActions .secondaryButton {
     width: 100%;
   }
 }
