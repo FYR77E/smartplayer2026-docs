@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
@@ -34,86 +34,102 @@ const TOUR_STEPS: TourStep[] = [
     title: 'Вход в личный кабинет',
     image: 'Авторизация.webp',
     imageAlt: 'Экран авторизации SmartPlayer',
-    zone: {top: 30, left: 25, width: 50, height: 35},
-    popover: {top: 66, left: 62},
-    description: 'Введите e-mail и пароль. Для восстановления доступа нажмите «Не получается войти?».',
+    zone: {top: 46, left: 72, width: 24, height: 26},
+    popover: {top: 63, left: 60},
+    description: 'В этой форме введите e-mail и пароль. Ссылка «Не получается войти?» открывает восстановление доступа.',
   },
   {
     id: 'dashboard',
     title: 'Обзор Dashboard',
     image: 'ЛК - Обзор (5).webp',
     imageAlt: 'Личный кабинет SmartPlayer, обзор',
-    zone: {top: 10, left: 0, width: 25, height: 80},
-    popover: {top: 17, left: 40},
-    description:
-      'Левое меню — основная навигация. Отсюда доступны все разделы: устройства, контент, трансляции.',
+    zone: {top: 18, left: 0.5, width: 15.5, height: 79},
+    popover: {top: 20, left: 23},
+    description: 'Левая колонка — основная навигация SmartPlayer. Здесь переключаются ключевые разделы: устройства, контент, трансляции и расписание.',
   },
   {
     id: 'devices',
     title: 'Раздел «Устройства»',
     image: 'ЛК - Устройства.webp',
     imageAlt: 'Раздел Устройства в SmartPlayer',
-    zone: {top: 15, left: 5, width: 90, height: 60},
-    popover: {top: 77, left: 60},
-    description: 'Список устройств с цветовыми статусами: зелёный — онлайн, серый — офлайн, красный — ошибка.',
+    zone: {top: 20, left: 17, width: 42, height: 40},
+    popover: {top: 24, left: 67},
+    description: 'В карточках устройств цветные индикаторы показывают состояние. По ним сразу видно, где устройство онлайн, офлайн или с ошибкой.',
   },
   {
     id: 'add-device',
     title: 'Добавление устройства',
     image: 'Добавление устройства-20260226.webp',
     imageAlt: 'Диалог добавления устройства в SmartPlayer',
-    zone: {top: 20, left: 30, width: 45, height: 50},
-    popover: {top: 75, left: 56},
-    description: 'Введите 9-значный код с экрана устройства. Укажите название, местоположение и часовой пояс.',
+    zone: {top: 38, left: 39.5, width: 21, height: 27},
+    popover: {top: 45, left: 67},
+    description: 'В модальном окне укажите 9-значный код с экрана устройства и выберите лицензию для активации.',
   },
   {
     id: 'content',
     title: 'Раздел «Контент»',
     image: 'Контент.webp',
     imageAlt: 'Раздел Контент в SmartPlayer',
-    zone: {top: 10, left: 5, width: 90, height: 75},
-    popover: {top: 79, left: 61},
-    description: 'Медиатека проекта. Загружайте файлы через Drag & Drop или выбором из проводника.',
+    zone: {top: 20, left: 15, width: 69, height: 33},
+    popover: {top: 56, left: 66},
+    description: 'Это рабочая область медиатеки: вкладки типов контента и список файлов. Отсюда выбираются материалы для трансляций.',
   },
   {
     id: 'quick-send',
     title: 'Быстрая отправка: шаг 1',
     image: 'Быстрая отправка - шаг 1-20260226.webp',
     imageAlt: 'Быстрая отправка, первый шаг',
-    zone: {top: 5, left: 5, width: 65, height: 80},
-    popover: {top: 13, left: 79},
+    zone: {top: 7, left: 72, width: 27.5, height: 90},
+    popover: {top: 18, left: 66},
     description:
-      'Перетащите файлы из правой панели в рабочую зону. Timeline покажет порядок воспроизведения.',
+      'В правой панели выберите нужный файл и перетащите его на центральный холст. Так формируется сценарий текущей трансляции.',
   },
   {
     id: 'targets',
     title: 'Выбор устройств',
     image: 'шаг 2.webp',
     imageAlt: 'Выбор устройств в сценарии быстрой отправки',
-    zone: {top: 15, left: 10, width: 80, height: 60},
-    popover: {top: 79, left: 56},
-    description: 'Выберите устройства или группы, на которые отправится трансляция. Нажмите «Далее».',
+    zone: {top: 39, left: 1.5, width: 19.5, height: 23},
+    popover: {top: 34, left: 34},
+    description:
+      'Выберите карточку устройства до появления отметки выбора. После этого устройство попадёт в список выбранных и шаг «Далее» станет осмысленным.',
   },
   {
     id: 'schedule',
     title: 'Расписание трансляции',
     image: 'шаг 3.webp',
     imageAlt: 'Расписание трансляции в SmartPlayer',
-    zone: {top: 15, left: 10, width: 80, height: 65},
-    popover: {top: 81, left: 56},
-    description: 'Установите дату, время и повторение. Приоритет у новых трансляций по умолчанию — низкий.',
+    zone: {top: 20, left: 1.2, width: 84, height: 40},
+    popover: {top: 63, left: 65},
+    description:
+      'Задайте даты и время начала/окончания, затем проверьте повтор и приоритет. Эти поля определяют когда и как долго будет идти трансляция.',
   },
   {
     id: 'device-card',
     title: 'Карточка устройства',
     image: 'ЛК - меню устройства-20260226.webp',
     imageAlt: 'Карточка устройства в SmartPlayer',
-    zone: {top: 20, left: 20, width: 60, height: 55},
-    popover: {top: 80, left: 56},
+    zone: {top: 6, left: 84, width: 15.5, height: 29},
+    popover: {top: 40, left: 70},
     description:
-      'После запуска проверяйте устройства: скриншот, статус, перезагрузка и управление громкостью.',
+      'В правой карточке доступны быстрые действия по устройству: скриншот, перезапуск, управление громкостью и переход в расширенное меню.',
   },
 ];
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+function overlapArea(
+  first: {left: number; top: number; width: number; height: number},
+  second: {left: number; top: number; width: number; height: number},
+): number {
+  const overlapWidth =
+    Math.max(0, Math.min(first.left + first.width, second.left + second.width) - Math.max(first.left, second.left));
+  const overlapHeight =
+    Math.max(0, Math.min(first.top + first.height, second.top + second.height) - Math.max(first.top, second.top));
+  return overlapWidth * overlapHeight;
+}
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) {
@@ -153,8 +169,11 @@ function HighlightZone({
 export default function InteractiveTourPage() {
   const {siteConfig} = useDocusaurusContext();
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const imageViewportRef = useRef<HTMLDivElement | null>(null);
+  const popoverRef = useRef<HTMLElement | null>(null);
   const [mode, setMode] = useState<TourMode>('intro');
   const [stepIndex, setStepIndex] = useState(0);
+  const [popoverPosition, setPopoverPosition] = useState<TourPopoverAnchor | null>(null);
 
   const normalizedBaseUrl = siteConfig.baseUrl.endsWith('/') ? siteConfig.baseUrl : `${siteConfig.baseUrl}/`;
 
@@ -172,17 +191,152 @@ export default function InteractiveTourPage() {
   const currentStep = isActive ? steps[stepIndex] : null;
   const progressValue = isComplete ? 100 : isActive ? ((stepIndex + 1) / steps.length) * 100 : 0;
 
-  useEffect(() => {
-    if (!isActive) {
+  const scrollToTourTop = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    if (!stageRef.current) {
       return;
     }
 
-    stageRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'nearest',
+    const stageRect = stageRef.current.getBoundingClientRect();
+    const absoluteTop = window.scrollY + stageRect.top;
+    window.scrollTo({
+      top: Math.max(absoluteTop - 84, 0),
+      behavior,
     });
-  }, [isActive, stepIndex]);
+  }, []);
+
+  const handleStart = useCallback(() => {
+    setStepIndex(0);
+    setMode('active');
+    requestAnimationFrame(() => scrollToTourTop());
+  }, [scrollToTourTop]);
+
+  const handleExitToIntro = useCallback(() => {
+    setStepIndex(0);
+    setMode('intro');
+    requestAnimationFrame(() => scrollToTourTop());
+  }, [scrollToTourTop]);
+
+  const handleRestart = useCallback(() => {
+    setStepIndex(0);
+    setMode('active');
+    requestAnimationFrame(() => scrollToTourTop());
+  }, [scrollToTourTop]);
+
+  const handleNext = useCallback(() => {
+    if (!isActive) {
+      return;
+    }
+    if (stepIndex >= steps.length - 1) {
+      setMode('complete');
+      return;
+    }
+    setStepIndex((current) => Math.min(current + 1, steps.length - 1));
+  }, [isActive, stepIndex, steps.length]);
+
+  const handlePrevious = useCallback(() => {
+    if (!isActive) {
+      return;
+    }
+    setStepIndex((current) => Math.max(current - 1, 0));
+  }, [isActive]);
+
+  const ensureActiveStepInView = useCallback(
+    (behavior: ScrollBehavior = 'smooth') => {
+      if (!isActive || !imageViewportRef.current) {
+        return;
+      }
+
+      const viewportRect = imageViewportRef.current.getBoundingClientRect();
+      const currentPopoverRect = popoverRef.current?.getBoundingClientRect();
+      const contentTop = Math.min(viewportRect.top, currentPopoverRect?.top ?? viewportRect.top);
+      const contentBottom = Math.max(viewportRect.bottom, currentPopoverRect?.bottom ?? viewportRect.bottom);
+
+      const safeTop = 92;
+      const safeBottom = window.innerHeight - 24;
+
+      if (contentTop < safeTop) {
+        window.scrollBy({
+          top: contentTop - safeTop - 8,
+          behavior,
+        });
+        return;
+      }
+
+      if (contentBottom > safeBottom) {
+        window.scrollBy({
+          top: contentBottom - safeBottom + 8,
+          behavior,
+        });
+      }
+    },
+    [isActive],
+  );
+
+  const computePopoverPosition = useCallback(() => {
+    if (!isActive || !currentStep || !imageViewportRef.current || !popoverRef.current) {
+      return;
+    }
+
+    if (window.matchMedia('(max-width: 920px)').matches) {
+      setPopoverPosition(null);
+      return;
+    }
+
+    const viewportRect = imageViewportRef.current.getBoundingClientRect();
+    const currentPopoverRect = popoverRef.current.getBoundingClientRect();
+
+    if (!currentPopoverRect.width || !currentPopoverRect.height) {
+      return;
+    }
+
+    const margin = 12;
+    const zoneRect = {
+      top: (currentStep.zone.top / 100) * viewportRect.height,
+      left: (currentStep.zone.left / 100) * viewportRect.width,
+      width: (currentStep.zone.width / 100) * viewportRect.width,
+      height: (currentStep.zone.height / 100) * viewportRect.height,
+    };
+    const anchorX = (currentStep.popover.left / 100) * viewportRect.width;
+    const anchorY = (currentStep.popover.top / 100) * viewportRect.height;
+    const popoverWidth = currentPopoverRect.width;
+    const popoverHeight = currentPopoverRect.height;
+    const zoneBottom = zoneRect.top + zoneRect.height;
+    const zoneTop = zoneRect.top;
+
+    const candidates = [
+      {left: anchorX + 16, top: anchorY + 12},
+      {left: anchorX + 16, top: anchorY - popoverHeight - 12},
+      {left: anchorX - popoverWidth - 16, top: anchorY + 12},
+      {left: anchorX - popoverWidth - 16, top: anchorY - popoverHeight - 12},
+      {left: zoneRect.left + (zoneRect.width - popoverWidth) / 2, top: zoneBottom + 12},
+      {left: zoneRect.left + (zoneRect.width - popoverWidth) / 2, top: zoneTop - popoverHeight - 12},
+    ];
+
+    let bestPosition = {top: margin, left: margin};
+    let bestScore = Number.POSITIVE_INFINITY;
+
+    for (const candidate of candidates) {
+      const maxLeft = Math.max(margin, viewportRect.width - popoverWidth - margin - 10);
+      const maxTop = Math.max(margin, viewportRect.height - popoverHeight - margin - 20);
+      const clampedLeft = clamp(candidate.left, margin, maxLeft);
+      const clampedTop = clamp(candidate.top, margin, maxTop);
+
+      const overlap = overlapArea(
+        {left: clampedLeft, top: clampedTop, width: popoverWidth, height: popoverHeight},
+        zoneRect,
+      );
+      const clampShift = Math.abs(clampedLeft - candidate.left) + Math.abs(clampedTop - candidate.top);
+      const anchorDistance = Math.hypot(clampedLeft + popoverWidth / 2 - anchorX, clampedTop + popoverHeight / 2 - anchorY);
+      const score = overlap * 1000 + clampShift * 4 + anchorDistance;
+
+      if (score < bestScore) {
+        bestScore = score;
+        bestPosition = {left: clampedLeft, top: clampedTop};
+      }
+    }
+
+    setPopoverPosition(bestPosition);
+  }, [currentStep, isActive]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -196,24 +350,19 @@ export default function InteractiveTourPage() {
 
       if (event.key === 'ArrowRight') {
         event.preventDefault();
-        if (stepIndex >= steps.length - 1) {
-          setMode('complete');
-          return;
-        }
-        setStepIndex((current) => Math.min(current + 1, steps.length - 1));
+        handleNext();
         return;
       }
 
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        setStepIndex((current) => Math.max(current - 1, 0));
+        handlePrevious();
         return;
       }
 
       if (event.key === 'Escape') {
         event.preventDefault();
-        setStepIndex(0);
-        setMode('intro');
+        handleExitToIntro();
       }
     };
 
@@ -222,40 +371,69 @@ export default function InteractiveTourPage() {
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [isActive, stepIndex, steps.length]);
+  }, [handleExitToIntro, handleNext, handlePrevious, isActive]);
 
-  const handleStart = () => {
-    setStepIndex(0);
-    setMode('active');
-  };
+  useEffect(() => {
+    if (!isActive) {
+      setPopoverPosition(null);
+      return;
+    }
 
-  const handleNext = () => {
+    computePopoverPosition();
+    let ensureRafId = 0;
+    const computeRafId = window.requestAnimationFrame(() => {
+      computePopoverPosition();
+      ensureRafId = window.requestAnimationFrame(() => {
+        ensureActiveStepInView();
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(computeRafId);
+      window.cancelAnimationFrame(ensureRafId);
+    };
+  }, [computePopoverPosition, ensureActiveStepInView, isActive, stepIndex]);
+
+  useEffect(() => {
     if (!isActive) {
       return;
     }
-    if (stepIndex >= steps.length - 1) {
-      setMode('complete');
+
+    const onResize = () => {
+      computePopoverPosition();
+      window.requestAnimationFrame(() => {
+        ensureActiveStepInView('auto');
+      });
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, [computePopoverPosition, ensureActiveStepInView, isActive]);
+
+  useEffect(() => {
+    if (!isActive || !popoverRef.current || typeof ResizeObserver === 'undefined') {
       return;
     }
-    setStepIndex((current) => Math.min(current + 1, steps.length - 1));
-  };
 
-  const handlePrevious = () => {
-    if (!isActive) {
-      return;
-    }
-    setStepIndex((current) => Math.max(current - 1, 0));
-  };
+    const observer = new ResizeObserver(() => {
+      computePopoverPosition();
+      ensureActiveStepInView('auto');
+    });
 
-  const handleExitToIntro = () => {
-    setStepIndex(0);
-    setMode('intro');
-  };
+    observer.observe(popoverRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [computePopoverPosition, ensureActiveStepInView, isActive, stepIndex]);
 
-  const handleRestart = () => {
-    setStepIndex(0);
-    setMode('active');
-  };
+  const popoverStyle =
+    currentStep && popoverPosition
+      ? {top: `${popoverPosition.top}px`, left: `${popoverPosition.left}px`}
+      : currentStep
+        ? {top: `${currentStep.popover.top}%`, left: `${currentStep.popover.left}%`}
+        : undefined;
 
   return (
     <div className={styles.page}>
@@ -334,16 +512,11 @@ export default function InteractiveTourPage() {
                 <span className={styles.stageFrameLabel}>Реальный экран SmartPlayer</span>
               </div>
 
-              <div className={styles.imageViewport}>
+              <div className={styles.imageViewport} ref={imageViewportRef}>
                 <img alt={currentStep.imageAlt} className={styles.stageImage} src={currentStep.image} />
                 <HighlightZone onClick={handleNext} title={currentStep.title} zone={currentStep.zone} />
 
-                <aside
-                  className={styles.popover}
-                  style={{
-                    top: `${currentStep.popover.top}%`,
-                    left: `${currentStep.popover.left}%`,
-                  }}>
+                <aside className={styles.popover} ref={popoverRef} style={popoverStyle}>
                   <span className={styles.popoverStep}>{`Шаг ${stepIndex + 1} из ${steps.length}`}</span>
                   <h2>{currentStep.title}</h2>
                   <p className={styles.popoverText}>{currentStep.description}</p>
