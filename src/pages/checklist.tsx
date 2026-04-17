@@ -12,10 +12,10 @@ export default function ChecklistRedirect() {
   return (
     <Layout
       title="SmartPlayer — Чек-лист запуска"
-      description="Короткий маршрут к чек-листу запуска SmartPlayer.">
+      description="Короткий маршрут к launch gate перед пилотом и массовым запуском SmartPlayer.">
       <main className="container margin-vert--lg">
         <h1>Чек-лист запуска SmartPlayer</h1>
-        <p>Открываю короткий маршрут к рабочему чек-листу запуска и приёмки.</p>
+        <p>Открываю короткий маршрут к финальной сверке перед пилотом, приёмкой и массовым запуском.</p>
         <p>
           Если редирект не сработал, откройте вручную: <a href={redirectUrl}>{redirectUrl}</a>
         </p>

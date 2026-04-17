@@ -23,7 +23,7 @@ const tracks: TrackItem[] = [
     bullets: [
       'standalone Quick Start со скриншотами',
       'краткая reference-версия в полном руководстве',
-      'чек-лист перед запуском',
+      'launch gate перед пилотом и rollout',
     ],
     links: [
       {href: '/quickstart/', label: 'Quick Start со скриншотами'},
