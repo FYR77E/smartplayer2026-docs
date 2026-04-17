@@ -72,7 +72,7 @@ const workflowSteps: WorkflowStep[] = [
       'Назначьте расписание, прогоните пилотную группу и проверьте загрузки на устройства.',
     links: [
       {href: '/generated/11-7-расписания', label: 'Расписания'},
-      {href: '/generated/17-13-чек-лист-запуска', label: 'Чек-лист запуска'},
+      {href: '/checklist/', label: 'Чек-лист запуска'},
     ],
   },
   {
@@ -157,7 +157,10 @@ function HomepageHeader() {
               <Link className={styles.ghostLink} to="/quickstart/">
                 Быстрый старт
               </Link>
-              <Link className={styles.ghostLink} to="/generated/17-13-чек-лист-запуска">
+              <Link className={styles.ghostLink} to="/interactive-tour/">
+                Интерактивный тур
+              </Link>
+              <Link className={styles.ghostLink} to="/checklist/">
                 Чек-лист запуска
               </Link>
             </div>

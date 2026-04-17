@@ -1,0 +1,14 @@
+flowchart LR
+    A["Day 1<br/>Product Map"] --> B["Day 2<br/>Structural Research"]
+    B --> C["Day 3<br/>Product Understanding"]
+    C --> D["Day 4<br/>Governance and Infra"]
+    D --> E["Day 5<br/>Prioritization"]
+    E --> F["Day 6<br/>Solution Design"]
+    F --> G["Day 7<br/>Executive Synthesis"]
+
+    H["Customer Plane<br/>docs / quickstart / tour / checklist"] --> D
+    I["Operator Plane<br/>runbooks / launch / admin flows"] --> D
+    J["Automation Plane<br/>release audit / sync / QA"] --> D
+    K["Integration Plane<br/>wiki / support / deploy / repo"] --> D
+
+    G --> L["Outputs<br/>board + backlog + next sprint roadmap"]

@@ -15,3 +15,10 @@ legacy-static/.vite/
 .env*
 .env.*
 .DS_Store
+smartplayer2026-docs-build-*.zip
+static/favicon.ico
+static/favicon.svg
+static/manual-common.css
+static/manual-common.js
+static/sw.js
+static/image/

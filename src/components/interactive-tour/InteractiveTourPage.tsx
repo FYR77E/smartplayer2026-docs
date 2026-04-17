@@ -70,9 +70,10 @@ const TOUR_STEPS: TourStep[] = [
     title: 'Раздел «Контент»',
     image: 'Контент.webp',
     imageAlt: 'Раздел Контент в SmartPlayer',
-    zone: {top: 20, left: 15, width: 69, height: 33},
+    zone: {top: 23, left: 17, width: 44, height: 24},
     popover: {top: 56, left: 66},
-    description: 'Это рабочая область медиатеки: вкладки типов контента и список файлов. Отсюда выбираются материалы для трансляций.',
+    description:
+      'Это верхняя часть медиатеки: вкладки типов контента и первые карточки файлов. Отсюда выбираются материалы для трансляций.',
   },
   {
     id: 'quick-send',
@@ -99,10 +100,10 @@ const TOUR_STEPS: TourStep[] = [
     title: 'Расписание трансляции',
     image: 'шаг 3.webp',
     imageAlt: 'Расписание трансляции в SmartPlayer',
-    zone: {top: 20, left: 1.2, width: 84, height: 40},
+    zone: {top: 20, left: 1.2, width: 60, height: 26},
     popover: {top: 63, left: 65},
     description:
-      'Задайте даты и время начала/окончания, затем проверьте повтор и приоритет. Эти поля определяют когда и как долго будет идти трансляция.',
+      'В этом блоке задаются даты и время начала/окончания, а ниже — приоритет. После этого при необходимости проверьте повтор рядом.',
   },
   {
     id: 'device-card',
@@ -310,12 +311,15 @@ export default function InteractiveTourPage() {
       {left: anchorX - popoverWidth - 16, top: anchorY - popoverHeight - 12},
       {left: zoneRect.left + (zoneRect.width - popoverWidth) / 2, top: zoneBottom + 12},
       {left: zoneRect.left + (zoneRect.width - popoverWidth) / 2, top: zoneTop - popoverHeight - 12},
+      {left: zoneRect.left, top: zoneBottom + 12},
+      {left: zoneRect.left + zoneRect.width - popoverWidth, top: zoneBottom + 12},
+      {left: zoneRect.left, top: zoneTop - popoverHeight - 12},
+      {left: zoneRect.left + zoneRect.width - popoverWidth, top: zoneTop - popoverHeight - 12},
+      {left: zoneRect.left - popoverWidth - 16, top: zoneRect.top + (zoneRect.height - popoverHeight) / 2},
+      {left: zoneRect.left + zoneRect.width + 16, top: zoneRect.top + (zoneRect.height - popoverHeight) / 2},
     ];
 
-    let bestPosition = {top: margin, left: margin};
-    let bestScore = Number.POSITIVE_INFINITY;
-
-    for (const candidate of candidates) {
+    const scoredCandidates = candidates.map((candidate) => {
       const maxLeft = Math.max(margin, viewportRect.width - popoverWidth - margin - 10);
       const maxTop = Math.max(margin, viewportRect.height - popoverHeight - margin - 20);
       const clampedLeft = clamp(candidate.left, margin, maxLeft);
@@ -327,15 +331,19 @@ export default function InteractiveTourPage() {
       );
       const clampShift = Math.abs(clampedLeft - candidate.left) + Math.abs(clampedTop - candidate.top);
       const anchorDistance = Math.hypot(clampedLeft + popoverWidth / 2 - anchorX, clampedTop + popoverHeight / 2 - anchorY);
-      const score = overlap * 1000 + clampShift * 4 + anchorDistance;
+      return {
+        left: clampedLeft,
+        top: clampedTop,
+        overlap,
+        score: overlap * 10000 + clampShift * 4 + anchorDistance,
+      };
+    });
 
-      if (score < bestScore) {
-        bestScore = score;
-        bestPosition = {left: clampedLeft, top: clampedTop};
-      }
-    }
+    const zeroOverlapCandidates = scoredCandidates.filter((candidate) => candidate.overlap === 0);
+    const rankedCandidates = zeroOverlapCandidates.length ? zeroOverlapCandidates : scoredCandidates;
+    const bestPosition = rankedCandidates.reduce((best, candidate) => (candidate.score < best.score ? candidate : best));
 
-    setPopoverPosition(bestPosition);
+    setPopoverPosition({left: bestPosition.left, top: bestPosition.top});
   }, [currentStep, isActive]);
 
   useEffect(() => {
@@ -384,7 +392,10 @@ export default function InteractiveTourPage() {
     const computeRafId = window.requestAnimationFrame(() => {
       computePopoverPosition();
       ensureRafId = window.requestAnimationFrame(() => {
-        ensureActiveStepInView();
+        if (window.matchMedia('(max-width: 1100px)').matches) {
+          scrollToTourTop('auto');
+        }
+        ensureActiveStepInView('auto');
       });
     });
 
@@ -392,7 +403,7 @@ export default function InteractiveTourPage() {
       window.cancelAnimationFrame(computeRafId);
       window.cancelAnimationFrame(ensureRafId);
     };
-  }, [computePopoverPosition, ensureActiveStepInView, isActive, stepIndex]);
+  }, [computePopoverPosition, ensureActiveStepInView, isActive, scrollToTourTop, stepIndex]);
 
   useEffect(() => {
     if (!isActive) {
@@ -439,11 +450,12 @@ export default function InteractiveTourPage() {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
-          <span className={styles.heroEyebrow}>SmartPlayer walkthrough</span>
+          <span className={styles.heroEyebrow}>Пошаговый тур SmartPlayer</span>
           <h1>Интерактивный визуальный тур по Quick Start</h1>
           <p>
-            Это guided walkthrough по реальным экранам SmartPlayer из раздела Быстрый старт. На каждом шаге показывается
-            конкретная зона интерфейса и короткое пояснение, чтобы быстро пройти базовый путь запуска.
+            Это пошаговый тур по реальным экранам SmartPlayer из раздела Быстрый старт. На каждом шаге показывается
+            конкретная зона интерфейса и короткое пояснение, чтобы быстро пройти базовый путь запуска без лишнего
+            переключения между разделами.
           </p>
         </div>
         <aside className={styles.heroGuide}>
@@ -451,8 +463,15 @@ export default function InteractiveTourPage() {
           <ul className={styles.heroGuideList}>
             <li>На десктопе используйте «← Назад» и «Далее →» в popover рядом с подсвеченной зоной.</li>
             <li>На мобильных описание и кнопки выводятся отдельным блоком под скриншотом.</li>
-            <li>Горячие клавиши: `ArrowRight` — следующий шаг, `ArrowLeft` — предыдущий, `Escape` — выход в intro.</li>
-            <li>Все экраны в туре — реальные изображения из `/quickstart-site/image/png`.</li>
+            <li className={styles.desktopGuideItem}>
+              Горячие клавиши: <kbd className={styles.keycap}>→</kbd> следующий шаг,{' '}
+              <kbd className={styles.keycap}>←</kbd> предыдущий, <kbd className={styles.keycap}>Esc</kbd> выход во
+              вступление.
+            </li>
+            <li className={styles.mobileGuideHint}>
+              Все шаги показывают реальные экраны из актуального Quick Start, поэтому текст и визуальный фокус идут
+              синхронно.
+            </li>
           </ul>
         </aside>
       </section>
@@ -483,22 +502,25 @@ export default function InteractiveTourPage() {
               <Link className={styles.secondaryButton} to="/quickstart/">
                 Открыть полный Быстрый старт
               </Link>
+              <Link className={styles.secondaryButton} to="/checklist/">
+                Открыть чек-лист запуска
+              </Link>
             </div>
           </section>
         ) : isComplete ? (
           <section className={styles.completionCard}>
             <span className={styles.completionEyebrow}>Тур завершён</span>
             <h2>Вы прошли базовый тур SmartPlayer</h2>
-            <p>Теперь можно повторить walkthrough или перейти к полному сценарию в разделе Быстрый старт.</p>
+            <p>Теперь можно повторить тур, перейти к полному сценарию запуска или сразу открыть чек-лист запуска.</p>
             <div className={styles.completionActions}>
               <button className={styles.primaryButton} onClick={handleRestart} type="button">
                 Пройти ещё раз
               </button>
-              <button className={styles.secondaryButton} onClick={handleExitToIntro} type="button">
-                Вернуться к вступлению
-              </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
                 Перейти к Быстрому старту
+              </Link>
+              <Link className={styles.secondaryButton} to="/checklist/">
+                Открыть чек-лист запуска
               </Link>
             </div>
           </section>
@@ -534,7 +556,7 @@ export default function InteractiveTourPage() {
                 </aside>
               </div>
 
-              <div className={styles.mobileDetails}>
+              <div aria-live="polite" className={styles.mobileDetails}>
                 <span className={styles.popoverStep}>{`Шаг ${stepIndex + 1} из ${steps.length}`}</span>
                 <h2>{currentStep.title}</h2>
                 <p className={styles.popoverText}>{currentStep.description}</p>
@@ -556,9 +578,14 @@ export default function InteractiveTourPage() {
               <p className={styles.footerNote}>
                 Сейчас отображается шаг: <strong>{currentStep.title}</strong>
               </p>
-              <Link className={styles.quickstartLink} to="/quickstart/">
-                Открыть полный Быстрый старт
-              </Link>
+              <div className={styles.footerLinks}>
+                <Link className={styles.quickstartLink} to="/quickstart/">
+                  Открыть полный Быстрый старт
+                </Link>
+                <Link className={styles.quickstartLink} to="/checklist/">
+                  Открыть чек-лист запуска
+                </Link>
+              </div>
             </div>
           </div>
         ) : null}
