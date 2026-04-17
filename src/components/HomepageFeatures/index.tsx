@@ -20,9 +20,14 @@ const tracks: TrackItem[] = [
     title: 'Запуск и подключение',
     description:
       'Быстрый путь для команды, которая поднимает SmartPlayer, выдает доступы и подключает первые устройства.',
-    bullets: ['авторизация и лицензии', 'добавление устройств', 'чек-лист перед запуском'],
+    bullets: [
+      'standalone Quick Start со скриншотами',
+      'краткая reference-версия в полном руководстве',
+      'чек-лист перед запуском',
+    ],
     links: [
-      {href: '/quickstart/', label: 'Открыть быстрый старт'},
+      {href: '/quickstart/', label: 'Quick Start со скриншотами'},
+      {href: '/generated/быстрый-старт', label: 'Краткая версия в руководстве'},
       {href: '/interactive-tour/', label: 'Интерактивный тур'},
       {href: '/checklist/', label: 'Чек-лист запуска'},
     ],

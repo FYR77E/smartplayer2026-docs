@@ -128,6 +128,19 @@
   margin-top: 1.75rem;
 }
 
+.formatNote {
+  max-width: 42rem;
+  margin: 0.9rem 0 0;
+  color: var(--smartplayer-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.formatNote a {
+  color: var(--ifm-color-primary-darkest);
+  font-weight: 700;
+}
+
 .primaryButton,
 .secondaryButton,
 .ghostLink,
