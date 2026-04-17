@@ -132,13 +132,13 @@ function HomepageHeader() {
                 Открыть полное руководство
               </Link>
               <Link className={styles.secondaryButton} to="/quickstart/">
-                Quick Start со скриншотами
+                Пошаговый быстрый старт
               </Link>
             </div>
             <p className={styles.formatNote}>
-              Нужен короткий reference-раздел внутри полного руководства? Откройте{' '}
+              Нужен короткий раздел внутри полного руководства? Откройте{' '}
               <Link to="/generated/быстрый-старт">краткую версию быстрого старта</Link>. Для
-              пошагового сценария со скриншотами используйте <Link to="/quickstart/">standalone Quick Start</Link>.
+              пошагового сценария со скриншотами используйте <Link to="/quickstart/">пошаговый быстрый старт</Link>.
             </p>
             <div className={styles.signalGrid}>
               {readinessSignals.map((signal) => (
@@ -160,7 +160,7 @@ function HomepageHeader() {
             </ul>
             <div className={styles.panelActions}>
               <Link className={styles.ghostLink} to="/quickstart/">
-                Quick Start
+                Быстрый старт
               </Link>
               <Link className={styles.ghostLink} to="/interactive-tour/">
                 Интерактивный тур

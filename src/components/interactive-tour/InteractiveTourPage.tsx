@@ -540,15 +540,15 @@ export default function InteractiveTourPage() {
             <h2>Готовы пройти маршрут Quick Start</h2>
             <p>
               Тур покажет базовый путь: авторизация, устройство, контент, публикация и проверка результата. Для
-              полного линейного сценария со скриншотами после тура используйте standalone Quick Start, а перед пилотом
-              сверяйтесь с чек-листом запуска.
+              полного линейного сценария со скриншотами после тура используйте пошаговый быстрый старт, а перед
+              пилотом сверяйтесь с чек-листом запуска.
             </p>
             <div className={styles.introActions}>
               <button className={styles.primaryButton} data-tour-action="start" onClick={handleStart} type="button">
                 Запустить тур
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
-                Quick Start со скриншотами
+                Пошаговый быстрый старт
               </Link>
               <Link className={styles.secondaryButton} to="/checklist/">
                 Сверить запуск по чек-листу
@@ -560,12 +560,12 @@ export default function InteractiveTourPage() {
             <span className={styles.completionEyebrow}>Тур завершён</span>
             <h2>Вы прошли базовый тур SmartPlayer</h2>
             <p>
-              Теперь перейдите к Quick Start со скриншотами и перед пилотом или rollout сверяйте запуск по
+              Теперь перейдите к пошаговому быстрому старту и перед пилотом или массовым запуском сверяйте запуск по
               чек-листу.
             </p>
             <div className={styles.completionActions}>
               <Link className={styles.primaryButton} to="/quickstart/">
-                Перейти к Quick Start
+                Перейти к быстрому старту
               </Link>
               <Link className={styles.secondaryButton} to="/checklist/">
                 Сверить запуск по чек-листу
@@ -645,7 +645,7 @@ export default function InteractiveTourPage() {
               </p>
               <div className={styles.footerLinks}>
                 <Link className={styles.quickstartLink} to="/quickstart/">
-                  Quick Start со скриншотами
+                  Пошаговый быстрый старт
                 </Link>
                 <Link className={styles.quickstartLink} to="/checklist/">
                   Сверить запуск по чек-листу

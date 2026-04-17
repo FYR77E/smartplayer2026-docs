@@ -21,12 +21,12 @@ const tracks: TrackItem[] = [
     description:
       'Быстрый путь для команды, которая поднимает SmartPlayer, выдает доступы и подключает первые устройства.',
     bullets: [
-      'standalone Quick Start со скриншотами',
-      'краткая reference-версия в полном руководстве',
+      'пошаговый быстрый старт со скриншотами',
+      'краткая версия в полном руководстве',
       'launch gate перед пилотом и rollout',
     ],
     links: [
-      {href: '/quickstart/', label: 'Quick Start со скриншотами'},
+      {href: '/quickstart/', label: 'Пошаговый быстрый старт'},
       {href: '/generated/быстрый-старт', label: 'Краткая версия в руководстве'},
       {href: '/interactive-tour/', label: 'Интерактивный тур'},
       {href: '/checklist/', label: 'Чек-лист запуска'},
