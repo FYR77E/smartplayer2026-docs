@@ -539,15 +539,15 @@ export default function InteractiveTourPage() {
             <span className={styles.completionEyebrow}>Старт тура</span>
             <h2>Готовы пройти маршрут Quick Start</h2>
             <p>
-              Тур покажет базовый путь: авторизация, устройство, контент, публикация и проверка результата. Нажмите
-              «Запустить тур», чтобы перейти к первому шагу.
+              Тур покажет базовый путь: авторизация, устройство, контент, публикация и проверка результата. Для
+              полного линейного сценария со скриншотами после тура используйте standalone Quick Start.
             </p>
             <div className={styles.introActions}>
               <button className={styles.primaryButton} data-tour-action="start" onClick={handleStart} type="button">
                 Запустить тур
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
-                Открыть полный Быстрый старт
+                Quick Start со скриншотами
               </Link>
               <Link className={styles.secondaryButton} to="/checklist/">
                 Открыть чек-лист запуска
@@ -558,13 +558,13 @@ export default function InteractiveTourPage() {
           <section className={styles.completionCard} data-tour-state="complete">
             <span className={styles.completionEyebrow}>Тур завершён</span>
             <h2>Вы прошли базовый тур SmartPlayer</h2>
-            <p>Теперь можно повторить тур, перейти к полному сценарию запуска или сразу открыть чек-лист запуска.</p>
+            <p>Теперь можно повторить тур, перейти к Quick Start со скриншотами или сразу открыть чек-лист запуска.</p>
             <div className={styles.completionActions}>
               <button className={styles.primaryButton} data-tour-action="restart" onClick={handleRestart} type="button">
                 Пройти ещё раз
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
-                Перейти к Быстрому старту
+                Перейти к Quick Start
               </Link>
               <Link className={styles.secondaryButton} to="/checklist/">
                 Открыть чек-лист запуска
@@ -641,7 +641,7 @@ export default function InteractiveTourPage() {
               </p>
               <div className={styles.footerLinks}>
                 <Link className={styles.quickstartLink} to="/quickstart/">
-                  Открыть полный Быстрый старт
+                  Quick Start со скриншотами
                 </Link>
                 <Link className={styles.quickstartLink} to="/checklist/">
                   Открыть чек-лист запуска

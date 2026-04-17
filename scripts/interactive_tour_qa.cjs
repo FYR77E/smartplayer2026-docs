@@ -121,7 +121,7 @@ async function waitForStep(page, stepId) {
 async function waitForLayoutReady(page, mobile = false) {
   let lastError;
 
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
     try {
       await page.waitForFunction(
         ({isMobile}) => {
@@ -160,12 +160,12 @@ async function waitForLayoutReady(page, mobile = false) {
           return overlapWidth * overlapHeight === 0;
         },
         {isMobile: mobile},
-        {timeout: 4000},
+        {timeout: 5000},
       );
       return;
     } catch (error) {
       lastError = error;
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(500);
     }
   }
 

@@ -845,6 +845,32 @@
       color: #0f172a;
     }
 
+    .manual-surface-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(30, 58, 138, 0.12);
+      background: rgba(239, 245, 255, 0.9);
+      color: #1e3a8a;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .manual-surface-note a {
+      color: #16336f;
+      font-weight: 800;
+    }
+
+    body.dark-mode .manual-surface-note {
+      background: rgba(15, 23, 42, 0.72);
+      border-color: rgba(148, 163, 184, 0.22);
+      color: #dbeafe;
+    }
+
+    body.dark-mode .manual-surface-note a {
+      color: #ffffff;
+    }
+
     .toc-blocks-short {
       margin-top: 8px;
       display: grid;
@@ -3444,9 +3470,15 @@
         <div class="search-status" id="search-status" aria-live="polite"></div>
         <div class="manual-switch-links" aria-label="Переключение версий руководства">
           <a href="/generated/smartplayer-руководство">Полное руководство</a>
-          <a href="/quickstart/" class="current" aria-current="page">Быстрый старт</a>
+          <a href="/quickstart/" class="current" aria-current="page">Quick Start со скриншотами</a>
+          <a href="/generated/быстрый-старт">Краткая версия в руководстве</a>
           <a href="/interactive-tour/">Интерактивный тур</a>
           <a href="/checklist/">Чек-лист запуска</a>
+        </div>
+        <div class="manual-surface-note">
+          Это standalone Quick Start со скриншотами и линейным маршрутом первого запуска. Если нужна краткая
+          reference-версия внутри полного руководства, откройте
+          <a href="/generated/быстрый-старт"> «Быстрый старт» в docs</a>.
         </div>
       </div>
       <ul class="toc-list" id="toc-list"></ul>
@@ -3633,10 +3665,10 @@
         <div class="overview-block is-hidden-by-request">
           <div class="overview-block-header">
             <div class="block-number">4</div>
-            <h3 class="block-title">Документация/Быстрый старт</h3>
+            <h3 class="block-title">Краткая версия в полном руководстве</h3>
           </div>
           <div class="block-content">
-            <p>Быстрый старт по использованию SmartPlayer CMS.</p>
+            <p>Короткий reference-раздел в docs, если нужен сжатый обзор без standalone сценария со скриншотами.</p>
           </div>
         </div>
 
@@ -6482,4 +6514,3 @@
 </script>
 </body>
 </html>
-
