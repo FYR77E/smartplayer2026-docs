@@ -154,6 +154,7 @@ function HighlightZone({
     <button
       aria-label={`Подсвеченная зона: ${title}. Нажмите, чтобы перейти к следующему шагу.`}
       className={styles.highlightZone}
+      data-tour-highlight="true"
       onClick={onClick}
       style={{
         top: `${zone.top}%`,
@@ -172,6 +173,7 @@ export default function InteractiveTourPage() {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const imageViewportRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLElement | null>(null);
+  const mobileDetailsRef = useRef<HTMLDivElement | null>(null);
   const [mode, setMode] = useState<TourMode>('intro');
   const [stepIndex, setStepIndex] = useState(0);
   const [popoverPosition, setPopoverPosition] = useState<TourPopoverAnchor | null>(null);
@@ -208,19 +210,19 @@ export default function InteractiveTourPage() {
   const handleStart = useCallback(() => {
     setStepIndex(0);
     setMode('active');
-    requestAnimationFrame(() => scrollToTourTop());
+    requestAnimationFrame(() => scrollToTourTop('auto'));
   }, [scrollToTourTop]);
 
   const handleExitToIntro = useCallback(() => {
     setStepIndex(0);
     setMode('intro');
-    requestAnimationFrame(() => scrollToTourTop());
+    requestAnimationFrame(() => scrollToTourTop('auto'));
   }, [scrollToTourTop]);
 
   const handleRestart = useCallback(() => {
     setStepIndex(0);
     setMode('active');
-    requestAnimationFrame(() => scrollToTourTop());
+    requestAnimationFrame(() => scrollToTourTop('auto'));
   }, [scrollToTourTop]);
 
   const handleNext = useCallback(() => {
@@ -249,11 +251,26 @@ export default function InteractiveTourPage() {
 
       const viewportRect = imageViewportRef.current.getBoundingClientRect();
       const currentPopoverRect = popoverRef.current?.getBoundingClientRect();
-      const contentTop = Math.min(viewportRect.top, currentPopoverRect?.top ?? viewportRect.top);
-      const contentBottom = Math.max(viewportRect.bottom, currentPopoverRect?.bottom ?? viewportRect.bottom);
+      const currentMobileDetailsRect = mobileDetailsRef.current?.getBoundingClientRect();
+      const contentTop = Math.min(
+        viewportRect.top,
+        currentPopoverRect?.top ?? viewportRect.top,
+        currentMobileDetailsRect?.top ?? viewportRect.top,
+      );
+      const contentBottom = Math.max(
+        viewportRect.bottom,
+        currentPopoverRect?.bottom ?? viewportRect.bottom,
+        currentMobileDetailsRect?.bottom ?? viewportRect.bottom,
+      );
 
       const safeTop = 92;
       const safeBottom = window.innerHeight - 24;
+      const stageRect = stageRef.current?.getBoundingClientRect();
+
+      if (!window.matchMedia('(max-width: 920px)').matches && stageRect && stageRect.top > safeTop) {
+        scrollToTourTop('auto');
+        return;
+      }
 
       if (contentTop < safeTop) {
         window.scrollBy({
@@ -270,7 +287,7 @@ export default function InteractiveTourPage() {
         });
       }
     },
-    [isActive],
+    [isActive, scrollToTourTop],
   );
 
   const computePopoverPosition = useCallback(() => {
@@ -389,6 +406,9 @@ export default function InteractiveTourPage() {
 
     computePopoverPosition();
     let ensureRafId = 0;
+    let settleTimeoutId = 0;
+    let lateSettleTimeoutId = 0;
+    let finalSettleTimeoutId = 0;
     const computeRafId = window.requestAnimationFrame(() => {
       computePopoverPosition();
       ensureRafId = window.requestAnimationFrame(() => {
@@ -398,10 +418,25 @@ export default function InteractiveTourPage() {
         ensureActiveStepInView('auto');
       });
     });
+    settleTimeoutId = window.setTimeout(() => {
+      computePopoverPosition();
+      ensureActiveStepInView('auto');
+    }, 140);
+    lateSettleTimeoutId = window.setTimeout(() => {
+      computePopoverPosition();
+      ensureActiveStepInView('auto');
+    }, 420);
+    finalSettleTimeoutId = window.setTimeout(() => {
+      computePopoverPosition();
+      ensureActiveStepInView('auto');
+    }, 1200);
 
     return () => {
       window.cancelAnimationFrame(computeRafId);
       window.cancelAnimationFrame(ensureRafId);
+      window.clearTimeout(settleTimeoutId);
+      window.clearTimeout(lateSettleTimeoutId);
+      window.clearTimeout(finalSettleTimeoutId);
     };
   }, [computePopoverPosition, ensureActiveStepInView, isActive, scrollToTourTop, stepIndex]);
 
@@ -424,7 +459,7 @@ export default function InteractiveTourPage() {
   }, [computePopoverPosition, ensureActiveStepInView, isActive]);
 
   useEffect(() => {
-    if (!isActive || !popoverRef.current || typeof ResizeObserver === 'undefined') {
+    if (!isActive || typeof ResizeObserver === 'undefined') {
       return;
     }
 
@@ -433,7 +468,19 @@ export default function InteractiveTourPage() {
       ensureActiveStepInView('auto');
     });
 
-    observer.observe(popoverRef.current);
+    if (popoverRef.current) {
+      observer.observe(popoverRef.current);
+    }
+    if (stageRef.current) {
+      observer.observe(stageRef.current);
+    }
+    if (imageViewportRef.current) {
+      observer.observe(imageViewportRef.current);
+    }
+    if (mobileDetailsRef.current) {
+      observer.observe(mobileDetailsRef.current);
+    }
+
     return () => {
       observer.disconnect();
     };
@@ -447,7 +494,7 @@ export default function InteractiveTourPage() {
         : undefined;
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-tour-page="interactive-tour">
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.heroEyebrow}>Пошаговый тур SmartPlayer</span>
@@ -488,7 +535,7 @@ export default function InteractiveTourPage() {
         </div>
 
         {!isActive && !isComplete ? (
-          <section className={styles.introCard}>
+          <section className={styles.introCard} data-tour-state="intro">
             <span className={styles.completionEyebrow}>Старт тура</span>
             <h2>Готовы пройти маршрут Quick Start</h2>
             <p>
@@ -496,7 +543,7 @@ export default function InteractiveTourPage() {
               «Запустить тур», чтобы перейти к первому шагу.
             </p>
             <div className={styles.introActions}>
-              <button className={styles.primaryButton} onClick={handleStart} type="button">
+              <button className={styles.primaryButton} data-tour-action="start" onClick={handleStart} type="button">
                 Запустить тур
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
@@ -508,12 +555,12 @@ export default function InteractiveTourPage() {
             </div>
           </section>
         ) : isComplete ? (
-          <section className={styles.completionCard}>
+          <section className={styles.completionCard} data-tour-state="complete">
             <span className={styles.completionEyebrow}>Тур завершён</span>
             <h2>Вы прошли базовый тур SmartPlayer</h2>
             <p>Теперь можно повторить тур, перейти к полному сценарию запуска или сразу открыть чек-лист запуска.</p>
             <div className={styles.completionActions}>
-              <button className={styles.primaryButton} onClick={handleRestart} type="button">
+              <button className={styles.primaryButton} data-tour-action="restart" onClick={handleRestart} type="button">
                 Пройти ещё раз
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
@@ -525,7 +572,7 @@ export default function InteractiveTourPage() {
             </div>
           </section>
         ) : currentStep ? (
-          <div className={styles.tourStage}>
+          <div className={styles.tourStage} data-tour-state="active" data-tour-step-id={currentStep.id}>
             <div className={styles.stageFrame}>
               <div className={styles.stageFrameBar}>
                 <span className={styles.stageDot} />
@@ -538,36 +585,50 @@ export default function InteractiveTourPage() {
                 <img alt={currentStep.imageAlt} className={styles.stageImage} src={currentStep.image} />
                 <HighlightZone onClick={handleNext} title={currentStep.title} zone={currentStep.zone} />
 
-                <aside className={styles.popover} ref={popoverRef} style={popoverStyle}>
-                  <span className={styles.popoverStep}>{`Шаг ${stepIndex + 1} из ${steps.length}`}</span>
-                  <h2>{currentStep.title}</h2>
+                <aside className={styles.popover} data-tour-popover="true" ref={popoverRef} style={popoverStyle}>
+                  <span className={styles.popoverStep} data-tour-progress="true">{`Шаг ${stepIndex + 1} из ${steps.length}`}</span>
+                  <h2 data-tour-step-title="true">{currentStep.title}</h2>
                   <p className={styles.popoverText}>{currentStep.description}</p>
                   <div className={styles.popoverActions}>
-                    <button className={styles.secondaryButton} disabled={stepIndex === 0} onClick={handlePrevious} type="button">
+                    <button
+                      className={styles.secondaryButton}
+                      data-tour-action="previous"
+                      disabled={stepIndex === 0}
+                      onClick={handlePrevious}
+                      type="button">
                       ← Назад
                     </button>
-                    <button className={styles.primaryButton} onClick={handleNext} type="button">
+                    <button className={styles.primaryButton} data-tour-action="next" onClick={handleNext} type="button">
                       Далее →
                     </button>
-                    <button className={styles.secondaryButton} onClick={handleExitToIntro} type="button">
+                    <button className={styles.secondaryButton} data-tour-action="exit" onClick={handleExitToIntro} type="button">
                       Выйти из тура
                     </button>
                   </div>
                 </aside>
               </div>
 
-              <div aria-live="polite" className={styles.mobileDetails}>
-                <span className={styles.popoverStep}>{`Шаг ${stepIndex + 1} из ${steps.length}`}</span>
-                <h2>{currentStep.title}</h2>
+              <div
+                aria-live="polite"
+                className={styles.mobileDetails}
+                data-tour-mobile-details="true"
+                ref={mobileDetailsRef}>
+                <span className={styles.popoverStep} data-tour-progress="true">{`Шаг ${stepIndex + 1} из ${steps.length}`}</span>
+                <h2 data-tour-step-title="true">{currentStep.title}</h2>
                 <p className={styles.popoverText}>{currentStep.description}</p>
                 <div className={styles.mobileActions}>
-                  <button className={styles.secondaryButton} disabled={stepIndex === 0} onClick={handlePrevious} type="button">
+                  <button
+                    className={styles.secondaryButton}
+                    data-tour-action="previous"
+                    disabled={stepIndex === 0}
+                    onClick={handlePrevious}
+                    type="button">
                     ← Назад
                   </button>
-                  <button className={styles.primaryButton} onClick={handleNext} type="button">
+                  <button className={styles.primaryButton} data-tour-action="next" onClick={handleNext} type="button">
                     Далее →
                   </button>
-                  <button className={styles.secondaryButton} onClick={handleExitToIntro} type="button">
+                  <button className={styles.secondaryButton} data-tour-action="exit" onClick={handleExitToIntro} type="button">
                     Выйти из тура
                   </button>
                 </div>
