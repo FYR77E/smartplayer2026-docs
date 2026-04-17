@@ -136,7 +136,10 @@ async function waitForLayoutReady(page, mobile = false) {
               return false;
             }
             const rect = details.getBoundingClientRect();
-            return rect.top >= 0 && rect.bottom <= window.innerHeight + 4;
+            const visibleTop = Math.max(rect.top, 0);
+            const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+            const visibleHeight = visibleBottom - visibleTop;
+            return rect.height > 0 && rect.top >= -4 && visibleHeight >= Math.min(rect.height, 140);
           }
 
           const popover = document.querySelector('[data-tour-popover="true"]');
