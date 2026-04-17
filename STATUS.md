@@ -53,8 +53,14 @@ What was completed in this session:
   - `npm run check:routes`
   - `npm run check:tour`
   - `npm run check:assets`
+  - `npm run check:release`
+  - `npm run check:release:full`
 - Added a repeatable Playwright-based `interactive-tour` QA flow and used it to drive real fixes in the tour's viewport behavior.
 - Added an asset budget check for Quick Start so referenced screenshots, WebP usage and orphaned PNGs are automatically validated.
+- Added governance artifacts for the hybrid docs surface:
+  - release runbook
+  - hybrid surface governance rules
+- Clarified the distinction between standalone Quick Start and the quick-start chapter inside the full docs.
 - Pushed the resulting work to `main` and published updated production deployments on Vercel during this phase.
 
 ## Important scope note
@@ -76,6 +82,6 @@ What was completed in this session:
 ## Recommended next step
 
 1. Keep expanding release discipline around the docs product by adding one more automation layer around Quick Start asset optimization and production verification.
-2. Strengthen the product distinction between `/quickstart/` and `/generated/быстрый-старт/` so users do not perceive them as two equal first-run routes.
-3. Document the operational rule that any Quick Start screenshot update requires an `interactive-tour` review.
-4. Continue updating internal runbook/governance docs so they describe the current hybrid production architecture accurately.
+2. Wire `npm run check:release:full` into the normal publication habit before every production deployment.
+3. Keep the rule that any Quick Start screenshot update requires an `interactive-tour` review visible in team docs and PR review.
+4. Continue tightening the distinction between execution surfaces and reference surfaces as new content is added.

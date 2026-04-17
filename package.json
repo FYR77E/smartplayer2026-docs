@@ -13,6 +13,8 @@
     "check:assets": "node scripts/quickstart_asset_budget_check.cjs",
     "check:routes": "node scripts/route_smoke_check.cjs",
     "check:tour": "npm exec --yes --package=playwright -- node scripts/interactive_tour_qa.cjs",
+    "check:release": "npm run typecheck && npm run build && npm run check:routes && npm run check:assets",
+    "check:release:full": "npm run check:release && npm run check:tour",
     "import:manual": "python3 scripts/import_manual_docx.py",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

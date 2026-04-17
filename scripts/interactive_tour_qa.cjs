@@ -119,45 +119,57 @@ async function waitForStep(page, stepId) {
 }
 
 async function waitForLayoutReady(page, mobile = false) {
-  await page.waitForFunction(
-    ({isMobile}) => {
-      const active = document.querySelector('[data-tour-state="active"]');
-      if (!active) {
-        return true;
-      }
+  let lastError;
 
-      if (isMobile) {
-        const details = document.querySelector('[data-tour-mobile-details="true"]');
-        if (!details) {
-          return false;
-        }
-        const rect = details.getBoundingClientRect();
-        return rect.top >= 0 && rect.bottom <= window.innerHeight + 4;
-      }
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      await page.waitForFunction(
+        ({isMobile}) => {
+          const active = document.querySelector('[data-tour-state="active"]');
+          if (!active) {
+            return true;
+          }
 
-      const popover = document.querySelector('[data-tour-popover="true"]');
-      const highlight = document.querySelector('[data-tour-highlight="true"]');
-      if (!popover) {
-        return false;
-      }
+          if (isMobile) {
+            const details = document.querySelector('[data-tour-mobile-details="true"]');
+            if (!details) {
+              return false;
+            }
+            const rect = details.getBoundingClientRect();
+            return rect.top >= 0 && rect.bottom <= window.innerHeight + 4;
+          }
 
-      const rect = popover.getBoundingClientRect();
-      if (rect.top < 0 || rect.bottom > window.innerHeight + 4) {
-        return false;
-      }
+          const popover = document.querySelector('[data-tour-popover="true"]');
+          const highlight = document.querySelector('[data-tour-highlight="true"]');
+          if (!popover) {
+            return false;
+          }
 
-      if (!highlight) {
-        return false;
-      }
+          const rect = popover.getBoundingClientRect();
+          if (rect.top < 0 || rect.bottom > window.innerHeight + 4) {
+            return false;
+          }
 
-      const zoneRect = highlight.getBoundingClientRect();
-      const overlapWidth = Math.max(0, Math.min(rect.right, zoneRect.right) - Math.max(rect.left, zoneRect.left));
-      const overlapHeight = Math.max(0, Math.min(rect.bottom, zoneRect.bottom) - Math.max(rect.top, zoneRect.top));
-      return overlapWidth * overlapHeight === 0;
-    },
-    {isMobile: mobile},
-    {timeout: 2500},
-  );
+          if (!highlight) {
+            return false;
+          }
+
+          const zoneRect = highlight.getBoundingClientRect();
+          const overlapWidth = Math.max(0, Math.min(rect.right, zoneRect.right) - Math.max(rect.left, zoneRect.left));
+          const overlapHeight = Math.max(0, Math.min(rect.bottom, zoneRect.bottom) - Math.max(rect.top, zoneRect.top));
+          return overlapWidth * overlapHeight === 0;
+        },
+        {isMobile: mobile},
+        {timeout: 4000},
+      );
+      return;
+    } catch (error) {
+      lastError = error;
+      await page.waitForTimeout(300);
+    }
+  }
+
+  throw lastError;
 }
 
 async function clickVisibleAction(page, action) {
