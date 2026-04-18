@@ -804,6 +804,7 @@
     .manual-switch-links a {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       padding: 5px 10px;
       border-radius: 999px;
       border: 1px solid #c7daf7;
@@ -811,6 +812,7 @@
       color: #1e3a8a;
       font-size: 12px;
       font-weight: 800;
+      text-align: center;
       text-decoration: none;
       transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
     }
@@ -856,6 +858,26 @@
       line-height: 1.55;
     }
 
+    .manual-surface-note-title {
+      margin: 0 0 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: inherit;
+    }
+
+    .manual-surface-note-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .manual-surface-note-list li {
+      margin: 0;
+    }
+
     .manual-surface-note a {
       color: #16336f;
       font-weight: 800;
@@ -869,6 +891,107 @@
 
     body.dark-mode .manual-surface-note a {
       color: #ffffff;
+    }
+
+    .quickstart-next-steps {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(30, 58, 138, 0.14);
+      background:
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.18), transparent 38%),
+        linear-gradient(135deg, rgba(30, 58, 138, 0.06), rgba(239, 245, 255, 0.92));
+    }
+
+    .quickstart-next-steps > p {
+      max-width: 760px;
+    }
+
+    .next-actions-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .next-action-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 100%;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(30, 58, 138, 0.12);
+      background: rgba(255, 255, 255, 0.9);
+      color: inherit;
+      text-decoration: none;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .next-action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+      border-color: rgba(30, 58, 138, 0.26);
+      text-decoration: none;
+    }
+
+    .next-action-card.is-primary {
+      border-color: rgba(30, 58, 138, 0.28);
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.98), rgba(37, 99, 235, 0.94));
+      color: #ffffff;
+      box-shadow: 0 18px 32px rgba(30, 58, 138, 0.22);
+    }
+
+    .next-action-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #3459a6;
+    }
+
+    .next-action-card.is-primary .next-action-eyebrow {
+      color: rgba(219, 234, 254, 0.92);
+    }
+
+    .next-action-card strong {
+      font-family: 'Space Grotesk', 'Manrope', sans-serif;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .next-action-description {
+      font-size: 13px;
+      line-height: 1.55;
+      color: inherit;
+      opacity: 0.94;
+    }
+
+    body.dark-mode .quickstart-next-steps {
+      border-color: rgba(96, 165, 250, 0.18);
+      background:
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.22), transparent 36%),
+        linear-gradient(135deg, rgba(15, 23, 42, 0.94), rgba(17, 24, 39, 0.92));
+    }
+
+    body.dark-mode .next-action-card {
+      background: rgba(15, 23, 42, 0.78);
+      border-color: rgba(148, 163, 184, 0.22);
+      color: #e5eefb;
+      box-shadow: 0 14px 26px rgba(2, 6, 23, 0.22);
+    }
+
+    body.dark-mode .next-action-card:hover {
+      border-color: rgba(96, 165, 250, 0.34);
+    }
+
+    body.dark-mode .next-action-card.is-primary {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.98), rgba(59, 130, 246, 0.92));
+      color: #eff6ff;
+    }
+
+    body.dark-mode .next-action-eyebrow {
+      color: #93c5fd;
     }
 
     .toc-blocks-short {
@@ -3173,6 +3296,23 @@
         opacity: 1;
       }
 
+      .manual-switch-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .manual-switch-links a:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .manual-surface-note {
+        padding: 12px;
+      }
+
+      .manual-surface-note-list {
+        gap: 6px;
+      }
+
       .grid-2 {
         grid-template-columns: 1fr;
       }
@@ -3295,6 +3435,10 @@
       .section-separator {
         margin: 24px 0;
       }
+
+      .next-actions-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 480px) {
@@ -3342,6 +3486,10 @@
 
       .resource-btn {
         min-width: 100%;
+      }
+
+      .manual-switch-links {
+        grid-template-columns: 1fr;
       }
 
       .zoom-level {
@@ -3404,6 +3552,10 @@
       .feedback-outcome-btn {
         min-width: 0;
         flex: 1 1 calc(50% - 8px);
+      }
+
+      .next-action-card {
+        padding: 16px;
       }
     }
   </style>
@@ -3470,16 +3622,18 @@
         <div class="search-status" id="search-status" aria-live="polite"></div>
         <div class="manual-switch-links" aria-label="Переключение версий руководства">
           <a href="/generated/smartplayer-руководство">Полное руководство</a>
-          <a href="/quickstart/" class="current" aria-current="page">Пошаговый быстрый старт</a>
-          <a href="/generated/быстрый-старт">Краткая версия в руководстве</a>
+          <a href="/quickstart/" class="current" aria-current="page">Пошаговый старт</a>
+          <a href="/generated/быстрый-старт" aria-label="Краткая версия быстрого старта в полном руководстве">Краткая версия</a>
           <a href="/interactive-tour/">Интерактивный тур</a>
-          <a href="/checklist/">Чек-лист запуска</a>
+          <a href="/checklist/">Чек-лист перед запуском</a>
         </div>
         <div class="manual-surface-note">
-          Это пошаговый быстрый старт со скриншотами и линейным маршрутом первого запуска. Если нужна краткая
-          версия внутри полного руководства, откройте
-          <a href="/generated/быстрый-старт"> «Быстрый старт» в документации</a>. Следующий шаг после этого маршрута —
-          <a href="/checklist/"> сверить запуск по чек-листу</a> перед пилотом или массовым включением.
+          <p class="manual-surface-note-title">Как использовать этот маршрут</p>
+          <ul class="manual-surface-note-list">
+            <li><strong>Сейчас вы здесь:</strong> пошаговый сценарий первого запуска со скриншотами.</li>
+            <li><strong>Если нужен обзор короче:</strong> откройте <a href="/generated/быстрый-старт">краткую версию в полном руководстве</a>.</li>
+            <li><strong>После прохождения:</strong> <a href="/checklist/">сверьте запуск по чек-листу</a> перед пилотом или массовым включением.</li>
+          </ul>
         </div>
       </div>
       <ul class="toc-list" id="toc-list"></ul>
@@ -4760,6 +4914,36 @@
           <li><strong>При проблеме:</strong> <span class="ui-path">Открыть раздел «Информация на устройстве» → нажать на иконку «Журнал устройства» → Выбрать тип → Сформировать → Перейти в «Журнал устройств» → Выбрать файл и скачать → Отправить в поддержку логи и «Идентификатор» устройства</span>.</li>
           <li><strong>Цвета статусов устройств:</strong> зелёный = online, серый = offline, красный = ошибка.</li>
         </ul>
+      </section>
+
+      <!-- Разделитель между разделами -->
+      <hr class="section-separator" aria-hidden="true">
+
+      <section id="after-quickstart" class="section quickstart-next-steps no-print" data-collapsible="true" data-mini-toc="true">
+        <h2 id="after-quickstart-title"><span class="section-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12h14"></path>
+            <path d="M13 6l6 6-6 6"></path>
+          </svg>
+        </span>Что дальше после Quick Start</h2>
+        <p>Когда базовый маршрут уже пройден, зафиксируйте готовность запуска и выберите следующий формат работы без возврата к поиску по меню.</p>
+        <div class="next-actions-grid">
+          <a class="next-action-card is-primary" href="/checklist/">
+            <span class="next-action-eyebrow">Следующий шаг</span>
+            <strong>Чек-лист перед запуском</strong>
+            <span class="next-action-description">Проверьте публикацию, устройства и контрольные пункты перед пилотом или массовым включением.</span>
+          </a>
+          <a class="next-action-card" href="/interactive-tour/">
+            <span class="next-action-eyebrow">Если нужен обзор</span>
+            <strong>Интерактивный тур</strong>
+            <span class="next-action-description">Быстро вспомните ключевые экраны Quick Start по скриншотам и подсветке важных зон.</span>
+          </a>
+          <a class="next-action-card" href="/generated/smartplayer-руководство">
+            <span class="next-action-eyebrow">Если нужна полная инструкция</span>
+            <strong>Полное руководство</strong>
+            <span class="next-action-description">Откройте подробные разделы по устройствам, контенту, трансляциям, отчётам и поддержке.</span>
+          </a>
+        </div>
       </section>
 
       <!-- Разделитель между разделами -->
