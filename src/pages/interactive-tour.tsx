@@ -4,7 +4,7 @@ import InteractiveTourPage from '@site/src/components/interactive-tour/Interacti
 export default function InteractiveTour() {
   return (
     <Layout
-      title="SmartPlayer — Интерактивное обучение"
+      title="SmartPlayer — Интерактивный тур"
       description="Интерактивный маршрут по ключевым шагам Quick Start: Контент, Устройства, Трансляции и Расписание.">
       <InteractiveTourPage />
     </Layout>
