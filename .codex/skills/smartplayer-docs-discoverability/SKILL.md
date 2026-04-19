@@ -33,7 +33,7 @@ Keep the docs platform coherent so users can tell where to start, where to go ne
 
 5. Update tracking when the information architecture changes.
 - Add or update an `analysis/*pass*.md` note for the change.
-- Add the paired `analysis/miro-*.md` template and `analysis/figma-*.mmd` artifact when the step is significant enough to track in the roadmap.
+- If the step needs roadmap tracking, keep Miro/Figma links in a private local workspace such as `.private-roadmap/` or outside the repo, and do not commit those board links.
 - In final reports, name the exact routes checked and the terminology decisions made.
 
 ## Guardrails

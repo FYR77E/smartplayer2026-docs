@@ -22,3 +22,8 @@ static/manual-common.css
 static/manual-common.js
 static/sw.js
 static/image/
+# Private planning artifacts
+.private-roadmap/
+analysis/miro-*.md
+analysis/figma-*.mmd
+

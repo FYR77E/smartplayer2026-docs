@@ -33,7 +33,7 @@ Run the repo's existing release gates in the right order, interpret failures, an
 
 5. Close the loop after a passing run.
 - If the user asked for publication status, report whether the work is only local, already pushed, or already deployed.
-- When the change affects user journeys or process, update the relevant `analysis/*.md` note and the paired `analysis/miro-*.md` or `analysis/figma-*.mmd` artifact.
+- When the change affects user journeys or process, update the relevant `analysis/*.md` note. Keep any Miro/Figma tracking links in a private local workspace such as `.private-roadmap/` or outside the repo, and do not commit those board links.
 - Keep the report compact and factual: changed files, checks passed/failed, routes manually verified, deploy status.
 
 ## Guardrails
