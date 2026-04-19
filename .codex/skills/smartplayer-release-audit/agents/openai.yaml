@@ -1,0 +1,4 @@
+interface:
+  display_name: "SmartPlayer Release Audit"
+  short_description: "Run SmartPlayer docs release checks"
+  default_prompt: "Use $smartplayer-release-audit to run the SmartPlayer docs release workflow and summarize any issues."

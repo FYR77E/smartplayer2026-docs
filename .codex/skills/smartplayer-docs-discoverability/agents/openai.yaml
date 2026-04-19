@@ -1,0 +1,4 @@
+interface:
+  display_name: "SmartPlayer Docs Discovery"
+  short_description: "Review SmartPlayer docs wayfinding and links"
+  default_prompt: "Use $smartplayer-docs-discoverability to review cross-links, next steps, and navigation consistency across SmartPlayer docs."

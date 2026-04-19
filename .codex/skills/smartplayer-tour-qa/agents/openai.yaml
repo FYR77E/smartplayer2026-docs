@@ -1,0 +1,4 @@
+interface:
+  display_name: "SmartPlayer Tour QA"
+  short_description: "Verify the SmartPlayer interactive tour"
+  default_prompt: "Use $smartplayer-tour-qa to validate the SmartPlayer interactive tour across breakpoints and report regressions."
