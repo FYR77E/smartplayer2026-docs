@@ -263,17 +263,20 @@ export default function Home(): ReactNode {
 
               <div className={styles.supportStrip}>
                 <div>
-                  <span className={styles.sectionKicker}>Частые задачи</span>
+                  <span className={styles.sectionKicker}>Если нужна помощь</span>
                   <Heading as="h3">
-                    Нужна конкретная инструкция? Начните с раздела по вашей задаче
+                    Сначала проверьте диагностику и docs, затем переходите в поддержку
                   </Heading>
                 </div>
                 <div className={styles.supportLinks}>
                   <Link className={styles.inlineLink} to="/generated/09-4-разделы-мониторинга-и-устройств">
                     Мониторинг и устройства
                   </Link>
-                  <Link className={styles.inlineLink} to="/generated/10-6-работа-с-трансляциями">
-                    Трансляции
+                  <Link className={styles.inlineLink} to="/generated/16-12-типовые-ошибки-и-решения">
+                    Типовые ошибки
+                  </Link>
+                  <Link className={styles.inlineLink} href="https://wiki.smartplayer.org">
+                    База знаний
                   </Link>
                   <Link
                     className={styles.inlineLink}
