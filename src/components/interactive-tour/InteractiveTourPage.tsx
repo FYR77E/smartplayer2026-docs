@@ -498,9 +498,9 @@ export default function InteractiveTourPage() {
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.heroEyebrow}>Пошаговый тур SmartPlayer</span>
-          <h1>Интерактивный визуальный тур по Quick Start</h1>
+          <h1>Интерактивный визуальный тур по пошаговому старту</h1>
           <p>
-            Это пошаговый тур по реальным экранам SmartPlayer из раздела Быстрый старт. На каждом шаге показывается
+            Это пошаговый тур по реальным экранам SmartPlayer из маршрута пошагового старта. На каждом шаге показывается
             конкретная зона интерфейса и короткое пояснение, чтобы быстро пройти базовый путь запуска без лишнего
             переключения между разделами.
           </p>
@@ -516,7 +516,7 @@ export default function InteractiveTourPage() {
               вступление.
             </li>
             <li className={styles.mobileGuideHint}>
-              Все шаги показывают реальные экраны из актуального Quick Start, поэтому текст и визуальный фокус идут
+              Все шаги показывают реальные экраны из актуального пошагового старта, поэтому текст и визуальный фокус идут
               синхронно.
             </li>
           </ul>
@@ -537,18 +537,18 @@ export default function InteractiveTourPage() {
         {!isActive && !isComplete ? (
           <section className={styles.introCard} data-tour-state="intro">
             <span className={styles.completionEyebrow}>Старт тура</span>
-            <h2>Готовы пройти маршрут Quick Start</h2>
+            <h2>Готовы пройти маршрут пошагового старта</h2>
             <p>
               Тур покажет базовый путь: авторизация, устройство, контент, публикация и проверка результата. Для
-              полного линейного сценария со скриншотами после тура используйте пошаговый быстрый старт, а перед
-              пилотом сверяйтесь с чек-листом запуска.
+              полного линейного сценария со скриншотами после тура используйте пошаговый старт, а перед пилотом
+              сверяйтесь с чек-листом перед запуском.
             </p>
             <div className={styles.introActions}>
               <button className={styles.primaryButton} data-tour-action="start" onClick={handleStart} type="button">
                 Запустить тур
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
-                Пошаговый быстрый старт
+                Пошаговый старт
               </Link>
               <Link className={styles.secondaryButton} to="/checklist/">
                 Сверить запуск по чек-листу
@@ -560,12 +560,12 @@ export default function InteractiveTourPage() {
             <span className={styles.completionEyebrow}>Тур завершён</span>
             <h2>Вы прошли базовый тур SmartPlayer</h2>
             <p>
-              Теперь перейдите к пошаговому быстрому старту и перед пилотом или массовым запуском сверяйте запуск по
+              Теперь перейдите к пошаговому старту и перед пилотом или массовым запуском сверяйте запуск по
               чек-листу.
             </p>
             <div className={styles.completionActions}>
               <Link className={styles.primaryButton} to="/quickstart/">
-                Перейти к быстрому старту
+                Перейти к пошаговому старту
               </Link>
               <Link className={styles.secondaryButton} to="/checklist/">
                 Сверить запуск по чек-листу
@@ -645,7 +645,7 @@ export default function InteractiveTourPage() {
               </p>
               <div className={styles.footerLinks}>
                 <Link className={styles.quickstartLink} to="/quickstart/">
-                  Пошаговый быстрый старт
+                  Пошаговый старт
                 </Link>
                 <Link className={styles.quickstartLink} to="/checklist/">
                   Сверить запуск по чек-листу

@@ -69,7 +69,7 @@ const workflowSteps: WorkflowStep[] = [
     step: '04',
     title: 'Расписание и пилот',
     description:
-      'Назначьте расписание, прогоните пилотную группу и перед массовым запуском сверяйтесь с чек-листом приемки.',
+      'Назначьте расписание, прогоните пилотную группу и перед массовым запуском сверяйтесь с чек-листом перед запуском.',
     links: [
       {href: '/generated/11-7-расписания', label: 'Расписания'},
       {href: '/checklist/', label: 'Чек-лист перед запуском'},
@@ -132,13 +132,13 @@ function HomepageHeader() {
                 Открыть полное руководство
               </Link>
               <Link className={styles.secondaryButton} to="/quickstart/">
-                Пошаговый быстрый старт
+                Пошаговый старт
               </Link>
             </div>
             <p className={styles.formatNote}>
               Нужен короткий раздел внутри полного руководства? Откройте{' '}
-              <Link to="/generated/быстрый-старт">краткую версию быстрого старта</Link>. Для
-              пошагового сценария со скриншотами используйте <Link to="/quickstart/">пошаговый быстрый старт</Link>.
+              <Link to="/generated/быстрый-старт">краткую версию старта</Link>. Для
+              пошагового сценария со скриншотами используйте <Link to="/quickstart/">пошаговый старт</Link>.
             </p>
             <div className={styles.signalGrid}>
               {readinessSignals.map((signal) => (
@@ -160,13 +160,13 @@ function HomepageHeader() {
             </ul>
             <div className={styles.panelActions}>
               <Link className={styles.ghostLink} to="/quickstart/">
-                Быстрый старт
+                Пошаговый старт
               </Link>
               <Link className={styles.ghostLink} to="/interactive-tour/">
                 Интерактивный тур
               </Link>
               <Link className={styles.ghostLink} to="/checklist/">
-                Чек-лист запуска
+                Чек-лист перед запуском
               </Link>
             </div>
             <div className={styles.searchCluster}>

@@ -13,7 +13,7 @@ const routeChecks = [
   {
     route: '/interactive-tour/',
     file: 'interactive-tour/index.html',
-    includes: ['Интерактивный визуальный тур по Quick Start', 'keycap_', '/quickstart/', '/checklist/'],
+    includes: ['Интерактивный визуальный тур по пошаговому старту', 'keycap_', '/quickstart/', '/checklist/'],
   },
   {
     route: '/quickstart/',
@@ -23,7 +23,7 @@ const routeChecks = [
   {
     route: '/checklist/',
     file: 'checklist/index.html',
-    includes: ['Чек-лист запуска SmartPlayer', '/generated/17-13-чек-лист-запуска'],
+    includes: ['Чек-лист перед запуском SmartPlayer', '/generated/17-13-чек-лист-запуска'],
   },
   {
     route: '/new-interactive/',
