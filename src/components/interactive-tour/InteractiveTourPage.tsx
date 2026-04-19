@@ -19,6 +19,7 @@ type TourPopoverAnchor = {
 type TourStep = {
   id: string;
   title: string;
+  shortTitle: string;
   image: string;
   imageAlt: string;
   zone: TourZone;
@@ -32,6 +33,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'login',
     title: 'Вход в личный кабинет',
+    shortTitle: 'Вход',
     image: 'Авторизация.webp',
     imageAlt: 'Экран авторизации SmartPlayer',
     zone: {top: 46, left: 72, width: 24, height: 26},
@@ -41,6 +43,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'dashboard',
     title: 'Обзор Dashboard',
+    shortTitle: 'Обзор',
     image: 'ЛК - Обзор (5).webp',
     imageAlt: 'Личный кабинет SmartPlayer, обзор',
     zone: {top: 18, left: 0.5, width: 15.5, height: 79},
@@ -50,6 +53,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'devices',
     title: 'Раздел «Устройства»',
+    shortTitle: 'Устройства',
     image: 'ЛК - Устройства.webp',
     imageAlt: 'Раздел Устройства в SmartPlayer',
     zone: {top: 20, left: 17, width: 42, height: 40},
@@ -59,6 +63,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'add-device',
     title: 'Добавление устройства',
+    shortTitle: 'Добавить',
     image: 'Добавление устройства-20260226.webp',
     imageAlt: 'Диалог добавления устройства в SmartPlayer',
     zone: {top: 38, left: 39.5, width: 21, height: 27},
@@ -68,6 +73,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'content',
     title: 'Раздел «Контент»',
+    shortTitle: 'Контент',
     image: 'Контент.webp',
     imageAlt: 'Раздел Контент в SmartPlayer',
     zone: {top: 23, left: 17, width: 44, height: 24},
@@ -78,6 +84,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'quick-send',
     title: 'Быстрая отправка: шаг 1',
+    shortTitle: 'Отправка',
     image: 'Быстрая отправка - шаг 1-20260226.webp',
     imageAlt: 'Быстрая отправка, первый шаг',
     zone: {top: 7, left: 72, width: 27.5, height: 90},
@@ -88,6 +95,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'targets',
     title: 'Выбор устройств',
+    shortTitle: 'Выбор',
     image: 'шаг 2.webp',
     imageAlt: 'Выбор устройств в сценарии быстрой отправки',
     zone: {top: 39, left: 1.5, width: 19.5, height: 23},
@@ -98,20 +106,22 @@ const TOUR_STEPS: TourStep[] = [
   {
     id: 'schedule',
     title: 'Расписание трансляции',
+    shortTitle: 'Расписание',
     image: 'шаг 3.webp',
     imageAlt: 'Расписание трансляции в SmartPlayer',
     zone: {top: 20, left: 1.2, width: 60, height: 26},
-    popover: {top: 63, left: 65},
+    popover: {top: 42, left: 58},
     description:
       'В этом блоке задаются даты и время начала/окончания, а ниже — приоритет публикации. Это основная зона настройки расписания перед запуском.',
   },
   {
     id: 'device-card',
     title: 'Карточка устройства',
+    shortTitle: 'Карточка',
     image: 'ЛК - меню устройства-20260226.webp',
     imageAlt: 'Карточка устройства в SmartPlayer',
     zone: {top: 6, left: 84, width: 15.5, height: 29},
-    popover: {top: 40, left: 70},
+    popover: {top: 18, left: 46},
     description:
       'В правой карточке доступны быстрые действия по устройству: скриншот, перезапуск, управление громкостью и переход в расширенное меню.',
   },
@@ -202,7 +212,7 @@ export default function InteractiveTourPage() {
     const stageRect = stageRef.current.getBoundingClientRect();
     const absoluteTop = window.scrollY + stageRect.top;
     window.scrollTo({
-      top: Math.max(absoluteTop - 84, 0),
+      top: Math.max(absoluteTop - 56, 0),
       behavior,
     });
   }, []);
@@ -243,6 +253,17 @@ export default function InteractiveTourPage() {
     setStepIndex((current) => Math.max(current - 1, 0));
   }, [isActive]);
 
+  const handleStepJump = useCallback(
+    (targetIndex: number) => {
+      if (!isActive) {
+        return;
+      }
+
+      setStepIndex(clamp(targetIndex, 0, steps.length - 1));
+    },
+    [isActive, steps.length],
+  );
+
   const ensureActiveStepInView = useCallback(
     (behavior: ScrollBehavior = 'smooth') => {
       if (!isActive || !imageViewportRef.current) {
@@ -269,6 +290,11 @@ export default function InteractiveTourPage() {
 
       if (!window.matchMedia('(max-width: 920px)').matches && stageRect && stageRect.top > safeTop) {
         scrollToTourTop('auto');
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            ensureActiveStepInView('auto');
+          });
+        });
         return;
       }
 
@@ -531,6 +557,29 @@ export default function InteractiveTourPage() {
           </div>
           <div aria-hidden="true" className={styles.progressTrack}>
             <div className={styles.progressBar} style={{width: `${progressValue}%`}} />
+          </div>
+          <div className={styles.stepRailWrap}>
+            <div aria-label="Шаги интерактивного тура" className={styles.stepRail}>
+              {steps.map((step, index) => {
+                const isCurrent = isActive && index === stepIndex;
+                const isReached = isComplete || index < stepIndex;
+                const state = isCurrent ? 'current' : isReached ? 'reached' : 'upcoming';
+
+                return (
+                  <button
+                    aria-current={isCurrent ? 'step' : undefined}
+                    className={styles.stepChip}
+                    data-step-state={state}
+                    disabled={!isActive}
+                    key={step.id}
+                    onClick={() => handleStepJump(index)}
+                    type="button">
+                    <span className={styles.stepChipNumber}>{index + 1}</span>
+                    <span className={styles.stepChipLabel}>{step.shortTitle}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
