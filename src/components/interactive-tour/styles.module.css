@@ -625,21 +625,37 @@
 @media screen and (max-width: 920px) {
   .page {
     width: min(100vw - 1rem, 100%);
-    padding-top: 0.9rem;
+    padding-top: 0.8rem;
   }
 
   .hero {
-    gap: 0.85rem;
-    padding: 1rem;
+    gap: 0.7rem;
+    padding: 0.92rem;
   }
 
   .heroCopy h1 {
-    font-size: clamp(1.9rem, 8vw, 2.6rem);
+    font-size: clamp(1.82rem, 7vw, 2.4rem);
+  }
+
+  .heroCopy p {
+    line-height: 1.52;
+  }
+
+  .heroFacts {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .heroFact {
+    min-height: 1.82rem;
+    padding: 0.22rem 0.64rem;
+    font-size: 0.78rem;
   }
 
   .heroGuideInline {
     display: grid;
-    gap: 0.45rem;
+    gap: 0.38rem;
+    font-size: 0.88rem;
   }
 
   .heroGuideInline span {
@@ -654,24 +670,60 @@
     border-radius: 20px;
   }
 
+  .tourShell {
+    margin-top: 0.82rem;
+    padding: 0.82rem;
+  }
+
+  .progressHeader {
+    gap: 0.5rem;
+    padding: 0.28rem 0.12rem 0.62rem;
+  }
+
+  .progressMeta {
+    align-items: flex-start;
+    gap: 0.52rem;
+  }
+
+  .progressMeta strong {
+    font-size: 0.9rem;
+  }
+
   .stepRail {
     display: flex;
     overflow-x: auto;
     padding-bottom: 0.1rem;
     scroll-snap-type: x proximity;
+    gap: 0.38rem;
   }
 
   .stepChip {
-    min-width: 6.6rem;
+    min-width: 5.6rem;
+    min-height: 2.08rem;
+    padding: 0.34rem 0.48rem;
     scroll-snap-align: start;
   }
 
+  .stepChipLabel {
+    font-size: 0.7rem;
+  }
+
   .stepRailHint {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
+    line-height: 1.28;
   }
 
   .stageImage {
-    min-height: 280px;
+    min-height: 260px;
+  }
+
+  .stageFrameBar {
+    min-height: 2.25rem;
+    padding: 0.44rem 0.72rem;
+  }
+
+  .stageFrameLabel {
+    font-size: 0.72rem;
   }
 
   .popover {
@@ -688,27 +740,33 @@
 
   .mobileDetails {
     display: grid;
-    gap: 0.75rem;
-    padding: 1rem;
+    gap: 0.62rem;
+    padding: 0.88rem 0.9rem 0.94rem;
     background: #fffbf6;
     border-top: 1px solid var(--tour-line);
   }
 
   .mobileDetails h2 {
     margin: 0;
-    font-size: 1.12rem;
-    line-height: 1.28;
+    font-size: 1.04rem;
+    line-height: 1.24;
+  }
+
+  .mobileDetails .popoverText {
+    line-height: 1.5;
   }
 
   .mobileActions {
     width: 100%;
     display: grid;
-    gap: 0.55rem;
+    gap: 0.45rem;
   }
 
   .mobileActions .primaryButton,
   .mobileActions .secondaryButton {
     width: 100%;
+    min-height: 2.45rem;
+    padding: 0.54rem 0.94rem;
   }
 
   .highlightLabel {
@@ -718,14 +776,66 @@
   .stageFooter {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.38rem;
+    padding: 0;
+  }
+
+  .footerNote {
+    font-size: 0.9rem;
+    line-height: 1.36;
   }
 
   .footerLinks {
-    width: 100%;
+    display: none;
   }
 
   .desktopGuideItem {
     display: none;
+  }
+
+  .introCard,
+  .completionCard {
+    gap: 0.62rem;
+    padding: 1rem;
+  }
+
+  .introCard h2,
+  .completionCard h2 {
+    font-size: clamp(1.52rem, 6vw, 2rem);
+  }
+
+  .introCard p,
+  .completionCard p {
+    line-height: 1.52;
+  }
+
+  .introFlow {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .introFlowItem {
+    min-height: 1.82rem;
+    padding: 0.2rem 0.64rem;
+    font-size: 0.8rem;
+  }
+
+  .completionFlow {
+    gap: 0.5rem;
+  }
+
+  .completionStepCard {
+    gap: 0.6rem;
+    padding: 0.74rem 0.78rem;
+  }
+
+  .completionStepCard strong {
+    font-size: 0.94rem;
+  }
+
+  .completionStepCard p {
+    font-size: 0.9rem;
+    line-height: 1.46;
   }
 }
 
