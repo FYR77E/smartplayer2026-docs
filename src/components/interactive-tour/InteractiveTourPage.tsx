@@ -604,28 +604,24 @@ export default function InteractiveTourPage() {
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.heroEyebrow}>Пошаговый тур SmartPlayer</span>
-          <h1>Интерактивный визуальный тур по пошаговому старту</h1>
+          <h1>Пройдите короткий тур по ключевым экранам SmartPlayer</h1>
           <p>
-            Тур проводит по 9 ключевым экранам SmartPlayer: от входа и устройств до публикации и проверки результата.
-            На каждом шаге показывается нужная зона интерфейса и короткое пояснение, чтобы быстро собрать общую картину
-            первого запуска.
+            Это быстрый обзор первого запуска: вход, устройства, контент, публикация и проверка результата. Тур идёт по
+            9 реальным экранам и показывает только нужную область интерфейса на каждом шаге.
           </p>
+          <div className={styles.heroFacts}>
+            <span className={styles.heroFact}>9 шагов по реальным экранам</span>
+            <span className={styles.heroFact}>Короткие пояснения без перегруза</span>
+            <span className={styles.heroFact}>После тура: пошаговый старт и чек-лист</span>
+          </div>
         </div>
-        <aside className={styles.heroGuide}>
-          <h2>Что внутри тура</h2>
-          <ul className={styles.heroGuideList}>
-            <li>9 шагов по реальным экранам SmartPlayer без перехода между разделами.</li>
-            <li>На десктопе пояснение идёт рядом с подсвеченной зоной, на мобильных — под скриншотом.</li>
-            <li className={styles.desktopGuideItem}>
-              Горячие клавиши: <kbd className={styles.keycap}>→</kbd> следующий шаг,{' '}
-              <kbd className={styles.keycap}>←</kbd> предыдущий, <kbd className={styles.keycap}>Esc</kbd> выход во
-              вступление.
-            </li>
-            <li className={styles.mobileGuideHint}>
-              После тура можно перейти в пошаговый старт и уже затем сверить запуск по чек-листу.
-            </li>
-          </ul>
-        </aside>
+        <div className={styles.heroGuideInline}>
+          <span>На десктопе пояснение идёт рядом с подсвеченной зоной, на мобильных — под скриншотом.</span>
+          <span className={styles.desktopGuideItem}>
+            Горячие клавиши: <kbd className={styles.keycap}>→</kbd> шаг вперёд,{' '}
+            <kbd className={styles.keycap}>←</kbd> шаг назад, <kbd className={styles.keycap}>Esc</kbd> выход.
+          </span>
+        </div>
       </section>
 
       <section className={styles.tourShell} ref={stageRef}>
@@ -660,6 +656,9 @@ export default function InteractiveTourPage() {
                   );
                 })}
               </div>
+              {isActive ? (
+                <p className={styles.stepRailHint}>Шаги сверху можно использовать для быстрого возврата или перехода к нужному экрану.</p>
+              ) : null}
             </div>
           </div>
         ) : null}
@@ -669,19 +668,24 @@ export default function InteractiveTourPage() {
             <span className={styles.completionEyebrow}>Старт тура</span>
             <h2>Готовы пройти маршрут пошагового старта</h2>
             <p>
-              Тур покажет базовый путь: вход, устройства, контент, публикация и проверка результата. Если нужен полный
-              линейный сценарий со скриншотами, откройте пошаговый старт после прохождения тура.
+              Начните с обзорного тура, чтобы быстро собрать картину первого запуска. Полный линейный сценарий со
+              скриншотами лучше открыть после него.
             </p>
+            <div className={styles.introFlow}>
+              <span className={styles.introFlowItem}>1. Пройти тур</span>
+              <span className={styles.introFlowItem}>2. Открыть пошаговый старт</span>
+              <span className={styles.introFlowItem}>3. Сверить запуск по чек-листу</span>
+            </div>
             <div className={styles.introActions}>
               <button className={styles.primaryButton} data-tour-action="start" onClick={handleStart} type="button">
                 Запустить тур
               </button>
               <Link className={styles.secondaryButton} to="/quickstart/">
-                Пошаговый старт
+                Открыть пошаговый старт
               </Link>
             </div>
             <p className={styles.introSupport}>
-              Чек-лист перед запуском пригодится после тура и перед пилотом:{' '}
+              Чек-лист пригодится после тура и перед пилотом:{' '}
               <Link className={styles.inlineLink} to="/checklist/">
                 открыть чек-лист
               </Link>

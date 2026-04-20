@@ -15,9 +15,8 @@
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.22fr) minmax(320px, 0.78fr);
-  gap: 1.1rem;
-  padding: 1.4rem;
+  gap: 0.9rem;
+  padding: 1.25rem 1.35rem;
   border-radius: 28px;
   border: 1px solid var(--tour-line);
   background:
@@ -28,7 +27,8 @@
 
 .heroCopy {
   display: grid;
-  gap: 0.7rem;
+  gap: 0.66rem;
+  max-width: 860px;
 }
 
 .heroEyebrow,
@@ -50,8 +50,8 @@
 
 .heroCopy h1 {
   margin: 0;
-  font-size: clamp(2.1rem, 4vw, 3rem);
-  line-height: 0.95;
+  font-size: clamp(2rem, 3.7vw, 2.7rem);
+  line-height: 0.98;
   letter-spacing: -0.04em;
 }
 
@@ -61,33 +61,42 @@
   line-height: 1.62;
 }
 
-.heroGuide {
-  display: grid;
-  align-content: start;
-  gap: 0.7rem;
-  padding: 1rem;
-  border-radius: 22px;
-  border: 1px solid var(--tour-line);
-  background: rgba(255, 253, 248, 0.84);
+.heroFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.heroGuide h2 {
-  margin: 0;
-  font-size: 1.16rem;
+.heroFact {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.24rem 0.72rem;
+  border-radius: 999px;
+  border: 1px solid rgba(53, 38, 24, 0.1);
+  background: rgba(255, 253, 248, 0.86);
+  color: var(--tour-ink);
+  font-size: 0.82rem;
+  font-weight: 700;
   line-height: 1.2;
 }
 
-.heroGuideList {
-  margin: 0;
-  padding: 0 0 0 1rem;
-  display: grid;
-  gap: 0.45rem;
+.heroGuideInline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.8rem;
   color: var(--tour-muted);
-  line-height: 1.48;
+  font-size: 0.94rem;
+  line-height: 1.52;
 }
 
-.desktopGuideItem,
-.mobileGuideHint {
+.heroGuideInline span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.desktopGuideItem {
   margin: 0;
 }
 
@@ -192,12 +201,14 @@
 .stepChip[data-step-state='current'] {
   border-color: rgba(249, 190, 123, 0.9);
   background: rgba(211, 101, 31, 0.18);
-  box-shadow: inset 0 0 0 1px rgba(249, 190, 123, 0.16);
+  box-shadow:
+    inset 0 0 0 1px rgba(249, 190, 123, 0.16),
+    0 10px 22px rgba(12, 8, 6, 0.18);
 }
 
 .stepChip[data-step-state='reached'] {
   border-color: rgba(249, 190, 123, 0.35);
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.11);
 }
 
 .stepChipNumber {
@@ -218,6 +229,13 @@
   font-size: 0.74rem;
   line-height: 1.2;
   font-weight: 700;
+}
+
+.stepRailHint {
+  margin: 0;
+  color: rgba(255, 243, 233, 0.76);
+  font-size: 0.8rem;
+  line-height: 1.35;
 }
 
 .tourStage {
@@ -526,6 +544,25 @@
   font-size: 0.95rem;
 }
 
+.introFlow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.52rem;
+}
+
+.introFlowItem {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.24rem 0.72rem;
+  border-radius: 999px;
+  background: rgba(211, 101, 31, 0.08);
+  border: 1px solid rgba(53, 38, 24, 0.08);
+  color: var(--tour-ink);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
 .completionSupport {
   font-size: 0.95rem;
 }
@@ -554,7 +591,7 @@
 
 @media screen and (max-width: 1120px) {
   .hero {
-    grid-template-columns: 1fr;
+    padding: 1.1rem 1.1rem 1rem;
   }
 }
 
@@ -573,14 +610,13 @@
     font-size: clamp(1.9rem, 8vw, 2.6rem);
   }
 
-  .heroGuide {
-    gap: 0.56rem;
-    padding: 0.85rem;
+  .heroGuideInline {
+    display: grid;
+    gap: 0.45rem;
   }
 
-  .heroGuideList {
-    gap: 0.45rem;
-    line-height: 1.48;
+  .heroGuideInline span {
+    align-items: flex-start;
   }
 
   .tourShell,
@@ -601,6 +637,10 @@
   .stepChip {
     min-width: 6.6rem;
     scroll-snap-align: start;
+  }
+
+  .stepRailHint {
+    font-size: 0.78rem;
   }
 
   .stageImage {

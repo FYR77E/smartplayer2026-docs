@@ -13,7 +13,7 @@ const routeChecks = [
   {
     route: '/interactive-tour/',
     file: 'interactive-tour/index.html',
-    includes: ['Интерактивный визуальный тур по пошаговому старту', 'keycap_', '/quickstart/', '/checklist/'],
+    includes: ['Пройдите короткий тур по ключевым экранам SmartPlayer', 'keycap_', '/quickstart/', '/checklist/'],
   },
   {
     route: '/quickstart/',
