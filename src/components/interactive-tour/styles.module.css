@@ -455,6 +455,19 @@
   line-height: 1.6;
 }
 
+.completionPath {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.45rem;
+  color: var(--tour-muted);
+  line-height: 1.52;
+}
+
+.completionPath strong {
+  color: var(--tour-ink);
+}
+
 .introCard h2 {
   margin: 0;
   font-size: clamp(1.72rem, 3vw, 2.3rem);
@@ -472,10 +485,26 @@
   font-size: 0.95rem;
 }
 
+.completionSupport {
+  font-size: 0.95rem;
+}
+
 .inlineLink {
   color: var(--tour-accent-strong);
   font-weight: 700;
   text-underline-offset: 0.14em;
+}
+
+.inlineAction {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--tour-accent-strong);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  cursor: pointer;
 }
 
 .mobileDetails {

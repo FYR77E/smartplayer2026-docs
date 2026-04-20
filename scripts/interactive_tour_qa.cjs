@@ -194,33 +194,54 @@ async function expectDesktopOrMediumState(page, stepId) {
   assert(await highlight.isVisible(), `Highlight should be visible for step ${stepId}`);
   assert(!(await mobileDetails.isVisible()), `Mobile details should be hidden for step ${stepId}`);
 
-  const [popoverBox, highlightBox, viewport] = await Promise.all([
-    popover.boundingBox(),
-    highlight.boundingBox(),
-    page.evaluate(() => ({width: window.innerWidth, height: window.innerHeight, scrollY: window.scrollY})),
-  ]);
+  const geometry = await page.evaluate(() => {
+    const popoverElement = document.querySelector('[data-tour-popover="true"]');
+    const highlightElement = document.querySelector('[data-tour-highlight="true"]');
+    const toRect = (element) => {
+      if (!(element instanceof HTMLElement)) {
+        return null;
+      }
+      const rect = element.getBoundingClientRect();
+      return {
+        left: rect.left,
+        right: rect.right,
+        top: rect.top,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+      };
+    };
+
+    return {
+      viewport: {width: window.innerWidth, height: window.innerHeight, scrollY: window.scrollY},
+      popoverBox: toRect(popoverElement),
+      highlightBox: toRect(highlightElement),
+    };
+  });
+
+  const {popoverBox, highlightBox, viewport} = geometry;
 
   assert(popoverBox, `Popover box missing for step ${stepId}`);
   assert(highlightBox, `Highlight box missing for step ${stepId}`);
 
   const overlap = overlapArea(
     {
-      left: popoverBox.x,
-      right: popoverBox.x + popoverBox.width,
-      top: popoverBox.y,
-      bottom: popoverBox.y + popoverBox.height,
+      left: popoverBox.left,
+      right: popoverBox.right,
+      top: popoverBox.top,
+      bottom: popoverBox.bottom,
     },
     {
-      left: highlightBox.x,
-      right: highlightBox.x + highlightBox.width,
-      top: highlightBox.y,
-      bottom: highlightBox.y + highlightBox.height,
+      left: highlightBox.left,
+      right: highlightBox.right,
+      top: highlightBox.top,
+      bottom: highlightBox.bottom,
     },
   );
 
   assert(overlap === 0, `Popover overlaps highlight on step ${stepId}`);
-  assert(popoverBox.y >= 0, `Popover is clipped above viewport on step ${stepId}`);
-  assert(popoverBox.y + popoverBox.height <= viewport.height + 4, `Popover is clipped below viewport on step ${stepId}`);
+  assert(popoverBox.top >= 0, `Popover is clipped above viewport on step ${stepId}`);
+  assert(popoverBox.bottom <= viewport.height + 4, `Popover is clipped below viewport on step ${stepId}`);
 }
 
 async function expectMobileState(page, stepId) {

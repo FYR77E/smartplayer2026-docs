@@ -613,9 +613,17 @@ export default function InteractiveTourPage() {
             <span className={styles.completionEyebrow}>Тур завершён</span>
             <h2>Вы прошли базовый тур SmartPlayer</h2>
             <p>
-              Теперь перейдите к пошаговому старту и перед пилотом или массовым запуском сверяйте запуск по
-              чек-листу.
+              Тур дал общий обзор интерфейса. Дальше лучше идти по рабочей последовательности, чтобы не потерять
+              контекст первого запуска.
             </p>
+            <ol className={styles.completionPath}>
+              <li>
+                Откройте <strong>пошаговый старт</strong> и пройдите полный линейный маршрут со скриншотами.
+              </li>
+              <li>
+                Перед пилотом или массовым запуском сверяйте результат по <strong>чек-листу перед запуском</strong>.
+              </li>
+            </ol>
             <div className={styles.completionActions}>
               <Link className={styles.primaryButton} to="/quickstart/">
                 Перейти к пошаговому старту
@@ -623,10 +631,18 @@ export default function InteractiveTourPage() {
               <Link className={styles.secondaryButton} to="/checklist/">
                 Сверить запуск по чек-листу
               </Link>
-              <button className={styles.secondaryButton} data-tour-action="restart" onClick={handleRestart} type="button">
+            </div>
+            <p className={styles.completionSupport}>
+              Нужно быстро освежить экраны тура?{' '}
+              <button
+                className={styles.inlineAction}
+                data-tour-action="restart"
+                onClick={handleRestart}
+                type="button">
                 Пройти ещё раз
               </button>
-            </div>
+              .
+            </p>
           </section>
         ) : currentStep ? (
           <div className={styles.tourStage} data-tour-state="active" data-tour-step-id={currentStep.id}>
