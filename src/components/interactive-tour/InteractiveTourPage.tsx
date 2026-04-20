@@ -192,6 +192,37 @@ function FocusMask({zone}: {zone: TourZone}) {
   );
 }
 
+function FocusWindow({
+  zone,
+  image,
+}: {
+  zone: TourZone;
+  image: string;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className={styles.focusWindow}
+      style={{
+        top: `${zone.top}%`,
+        left: `${zone.left}%`,
+        width: `${zone.width}%`,
+        height: `${zone.height}%`,
+      }}>
+      <img
+        alt=""
+        className={styles.focusWindowImage}
+        src={image}
+        style={{
+          width: `${10000 / zone.width}%`,
+          height: `${10000 / zone.height}%`,
+          transform: `translate(-${zone.left}%, -${zone.top}%)`,
+        }}
+      />
+    </div>
+  );
+}
+
 export default function InteractiveTourPage() {
   const {siteConfig} = useDocusaurusContext();
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -707,7 +738,8 @@ export default function InteractiveTourPage() {
               </div>
 
               <div className={styles.imageViewport} ref={imageViewportRef}>
-                <img alt={currentStep.imageAlt} className={styles.stageImage} src={currentStep.image} />
+                <img alt={currentStep.imageAlt} className={`${styles.stageImage} ${styles.stageImageMuted}`} src={currentStep.image} />
+                <FocusWindow image={currentStep.image} zone={currentStep.zone} />
                 <FocusMask zone={currentStep.zone} />
                 <HighlightZone onClick={handleNext} title={currentStep.title} zone={currentStep.zone} />
 

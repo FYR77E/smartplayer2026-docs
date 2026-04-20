@@ -271,19 +271,48 @@
   background: #fff;
 }
 
-.focusMask {
+.stageImageMuted {
+  filter: saturate(0.68) brightness(0.72) contrast(0.92);
+}
+
+.focusWindow {
   position: absolute;
   z-index: 1;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 1px rgba(255, 246, 235, 0.22),
+    0 20px 44px rgba(12, 9, 7, 0.26);
+  pointer-events: none;
+  transition:
+    top 220ms ease,
+    left 220ms ease,
+    width 220ms ease,
+    height 220ms ease,
+    box-shadow 160ms ease;
+}
+
+.focusWindowImage {
+  display: block;
+  max-width: none;
+  object-fit: contain;
+  transform-origin: top left;
+  filter: none;
+}
+
+.focusMask {
+  position: absolute;
+  z-index: 2;
   border-radius: 16px;
   border: 1px solid rgba(255, 246, 235, 0.38);
-  box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.58);
+  box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.34);
   pointer-events: none;
   transition: top 220ms ease, left 220ms ease, width 220ms ease, height 220ms ease, box-shadow 160ms ease;
 }
 
 .highlightZone {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   border-radius: 14px;
   border: 2px solid rgba(253, 209, 159, 0.95);
   background: rgba(211, 101, 31, 0.16);
@@ -326,7 +355,7 @@
 
 .popover {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   width: min(360px, calc(100% - 1.2rem));
   max-height: calc(100% - 1.2rem);
   border-radius: 20px;
@@ -594,7 +623,7 @@
   }
 
   .focusMask {
-    box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.42);
+    box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.26);
   }
 
   .mobileDetails {
