@@ -695,29 +695,37 @@ export default function InteractiveTourPage() {
         ) : isComplete ? (
           <section className={styles.completionCard} data-tour-state="complete">
             <span className={styles.completionEyebrow}>Тур завершён</span>
-            <h2>Вы прошли базовый тур SmartPlayer</h2>
+            <h2>Базовый обзор SmartPlayer завершён</h2>
             <p>
-              Тур дал общий обзор интерфейса. Дальше лучше идти по рабочей последовательности, чтобы не потерять
-              контекст первого запуска.
+              Теперь лучше перейти к рабочей последовательности, чтобы не потерять контекст первого запуска и спокойно
+              довести сценарий до конца.
             </p>
-            <ol className={styles.completionPath}>
-              <li>
-                Откройте <strong>пошаговый старт</strong> и пройдите полный линейный маршрут со скриншотами.
-              </li>
-              <li>
-                Перед пилотом или массовым запуском сверяйте результат по <strong>чек-листу перед запуском</strong>.
-              </li>
-            </ol>
+            <div className={styles.completionFlow}>
+              <article className={styles.completionStepCard}>
+                <span className={styles.completionStepNumber}>1</span>
+                <div>
+                  <strong>Пошаговый старт</strong>
+                  <p>Откройте полный линейный маршрут со скриншотами и пройдите его без пропусков.</p>
+                </div>
+              </article>
+              <article className={styles.completionStepCard}>
+                <span className={styles.completionStepNumber}>2</span>
+                <div>
+                  <strong>Чек-лист перед запуском</strong>
+                  <p>Перед пилотом или массовым запуском сверяйте результат по финальному чек-листу.</p>
+                </div>
+              </article>
+            </div>
             <div className={styles.completionActions}>
               <Link className={styles.primaryButton} to="/quickstart/">
-                Перейти к пошаговому старту
+                Открыть пошаговый старт
               </Link>
               <Link className={styles.secondaryButton} to="/checklist/">
-                Сверить запуск по чек-листу
+                Открыть чек-лист
               </Link>
             </div>
             <p className={styles.completionSupport}>
-              Нужно быстро освежить экраны тура?{' '}
+              Нужно ещё раз быстро освежить экраны?{' '}
               <button
                 className={styles.inlineAction}
                 data-tour-action="restart"

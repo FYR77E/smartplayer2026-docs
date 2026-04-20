@@ -514,17 +514,44 @@
   line-height: 1.6;
 }
 
-.completionPath {
-  margin: 0;
-  padding-left: 1.15rem;
+.completionFlow {
   display: grid;
-  gap: 0.45rem;
-  color: var(--tour-muted);
-  line-height: 1.52;
+  gap: 0.62rem;
 }
 
-.completionPath strong {
+.completionStepCard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.72rem;
+  align-items: start;
+  padding: 0.82rem 0.9rem;
+  border-radius: 16px;
+  border: 1px solid rgba(53, 38, 24, 0.08);
+  background: rgba(255, 251, 246, 0.92);
+}
+
+.completionStepCard strong {
+  display: block;
+  margin: 0 0 0.18rem;
   color: var(--tour-ink);
+  font-size: 0.98rem;
+}
+
+.completionStepCard p {
+  font-size: 0.94rem;
+}
+
+.completionStepNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  background: rgba(211, 101, 31, 0.12);
+  color: var(--tour-accent-strong);
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
 .introCard h2 {
