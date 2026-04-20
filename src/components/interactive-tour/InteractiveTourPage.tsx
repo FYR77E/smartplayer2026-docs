@@ -246,6 +246,7 @@ export default function InteractiveTourPage() {
   const isComplete = mode === 'complete';
   const currentStep = isActive ? steps[stepIndex] : null;
   const progressValue = isComplete ? 100 : isActive ? ((stepIndex + 1) / steps.length) * 100 : 0;
+  const isLastStep = isActive && stepIndex === steps.length - 1;
 
   const getMotionAwareBehavior = useCallback((behavior: ScrollBehavior) => {
     if (behavior !== 'smooth') {
@@ -757,21 +758,26 @@ export default function InteractiveTourPage() {
                   <h2 data-tour-step-title="true">{currentStep.title}</h2>
                   <p className={styles.popoverText}>{currentStep.description}</p>
                   <div className={styles.popoverActions}>
-                    <button
-                      className={styles.secondaryButton}
-                      data-tour-action="previous"
-                      disabled={stepIndex === 0}
-                      onClick={handlePrevious}
-                      type="button">
-                      ← Назад
-                    </button>
+                    {stepIndex > 0 ? (
+                      <button
+                        className={styles.secondaryButton}
+                        data-tour-action="previous"
+                        onClick={handlePrevious}
+                        type="button">
+                        ← Назад
+                      </button>
+                    ) : null}
                     <button className={styles.primaryButton} data-tour-action="next" onClick={handleNext} type="button">
-                      Далее →
-                    </button>
-                    <button className={styles.secondaryButton} data-tour-action="exit" onClick={handleExitToIntro} type="button">
-                      Выйти из тура
+                      {isLastStep ? 'Завершить тур' : 'Далее →'}
                     </button>
                   </div>
+                  <p className={styles.popoverSupport}>
+                    Нужно выйти из тура?{' '}
+                    <button className={styles.inlineAction} data-tour-action="exit" onClick={handleExitToIntro} type="button">
+                      Вернуться к вступлению
+                    </button>
+                    .
+                  </p>
                 </aside>
               </div>
 
@@ -784,21 +790,26 @@ export default function InteractiveTourPage() {
                 <h2 data-tour-step-title="true">{currentStep.title}</h2>
                 <p className={styles.popoverText}>{currentStep.description}</p>
                 <div className={styles.mobileActions}>
-                  <button
-                    className={styles.secondaryButton}
-                    data-tour-action="previous"
-                    disabled={stepIndex === 0}
-                    onClick={handlePrevious}
-                    type="button">
-                    ← Назад
-                  </button>
+                  {stepIndex > 0 ? (
+                    <button
+                      className={styles.secondaryButton}
+                      data-tour-action="previous"
+                      onClick={handlePrevious}
+                      type="button">
+                      ← Назад
+                    </button>
+                  ) : null}
                   <button className={styles.primaryButton} data-tour-action="next" onClick={handleNext} type="button">
-                    Далее →
-                  </button>
-                  <button className={styles.secondaryButton} data-tour-action="exit" onClick={handleExitToIntro} type="button">
-                    Выйти из тура
+                    {isLastStep ? 'Завершить тур' : 'Далее →'}
                   </button>
                 </div>
+                <p className={styles.popoverSupport}>
+                  Нужно выйти из тура?{' '}
+                  <button className={styles.inlineAction} data-tour-action="exit" onClick={handleExitToIntro} type="button">
+                    Вернуться к вступлению
+                  </button>
+                  .
+                </p>
               </div>
             </div>
 
@@ -806,14 +817,10 @@ export default function InteractiveTourPage() {
               <p className={styles.footerNote}>
                 Сейчас отображается шаг: <strong>{currentStep.title}</strong>
               </p>
-              <div className={styles.footerLinks}>
-                <Link className={styles.quickstartLink} to="/quickstart/">
-                  Пошаговый старт
-                </Link>
-                <Link className={styles.quickstartLink} to="/checklist/">
-                  Сверить запуск по чек-листу
-                </Link>
-              </div>
+              <p className={styles.footerSupport}>
+                После тура: <Link className={styles.inlineLink} to="/quickstart/">пошаговый старт</Link> и{' '}
+                <Link className={styles.inlineLink} to="/checklist/">чек-лист перед запуском</Link>.
+              </p>
             </div>
           </div>
         ) : null}
