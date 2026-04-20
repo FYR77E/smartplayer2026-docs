@@ -1,4 +1,5 @@
 node_modules/
+.tmp/
 .docusaurus/
 build/
 .vite/
@@ -26,4 +27,3 @@ static/image/
 .private-roadmap/
 analysis/miro-*.md
 analysis/figma-*.mmd
-

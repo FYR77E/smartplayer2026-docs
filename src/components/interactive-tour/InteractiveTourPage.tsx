@@ -204,6 +204,18 @@ export default function InteractiveTourPage() {
   const currentStep = isActive ? steps[stepIndex] : null;
   const progressValue = isComplete ? 100 : isActive ? ((stepIndex + 1) / steps.length) * 100 : 0;
 
+  const getTourTopOffset = useCallback(() => {
+    if (window.matchMedia('(max-width: 920px)').matches) {
+      return 12;
+    }
+
+    if (window.matchMedia('(max-width: 1100px)').matches) {
+      return 32;
+    }
+
+    return 48;
+  }, []);
+
   const scrollToTourTop = useCallback((behavior: ScrollBehavior = 'smooth') => {
     if (!stageRef.current) {
       return;
@@ -212,10 +224,10 @@ export default function InteractiveTourPage() {
     const stageRect = stageRef.current.getBoundingClientRect();
     const absoluteTop = window.scrollY + stageRect.top;
     window.scrollTo({
-      top: Math.max(absoluteTop - 56, 0),
+      top: Math.max(absoluteTop - getTourTopOffset(), 0),
       behavior,
     });
-  }, []);
+  }, [getTourTopOffset]);
 
   const handleStart = useCallback(() => {
     setStepIndex(0);
@@ -287,8 +299,9 @@ export default function InteractiveTourPage() {
       const safeTop = 92;
       const safeBottom = window.innerHeight - 24;
       const stageRect = stageRef.current?.getBoundingClientRect();
+      const desiredTop = getTourTopOffset();
 
-      if (!window.matchMedia('(max-width: 920px)').matches && stageRect && stageRect.top > safeTop) {
+      if (stageRect && stageRect.top > desiredTop + 4) {
         scrollToTourTop('auto');
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => {
@@ -313,7 +326,7 @@ export default function InteractiveTourPage() {
         });
       }
     },
-    [isActive, scrollToTourTop],
+    [getTourTopOffset, isActive, scrollToTourTop],
   );
 
   const computePopoverPosition = useCallback(() => {
@@ -511,6 +524,32 @@ export default function InteractiveTourPage() {
       observer.disconnect();
     };
   }, [computePopoverPosition, ensureActiveStepInView, isActive, stepIndex]);
+
+  useEffect(() => {
+    if (!isComplete) {
+      return;
+    }
+
+    let rafId = 0;
+    let settleTimeoutId = 0;
+    let lateSettleTimeoutId = 0;
+
+    rafId = window.requestAnimationFrame(() => {
+      scrollToTourTop('auto');
+    });
+    settleTimeoutId = window.setTimeout(() => {
+      scrollToTourTop('auto');
+    }, 140);
+    lateSettleTimeoutId = window.setTimeout(() => {
+      scrollToTourTop('auto');
+    }, 420);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(settleTimeoutId);
+      window.clearTimeout(lateSettleTimeoutId);
+    };
+  }, [isComplete, scrollToTourTop]);
 
   const popoverStyle =
     currentStep && popoverPosition
