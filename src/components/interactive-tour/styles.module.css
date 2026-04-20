@@ -279,7 +279,8 @@
   position: absolute;
   z-index: 1;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 14px;
+  background-repeat: no-repeat;
   box-shadow:
     0 0 0 1px rgba(255, 246, 235, 0.22),
     0 20px 44px rgba(12, 9, 7, 0.26);
@@ -290,14 +291,6 @@
     width 220ms ease,
     height 220ms ease,
     box-shadow 160ms ease;
-}
-
-.focusWindowImage {
-  display: block;
-  max-width: none;
-  object-fit: contain;
-  transform-origin: top left;
-  filter: none;
 }
 
 .focusMask {

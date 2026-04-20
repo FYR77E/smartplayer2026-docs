@@ -199,6 +199,10 @@ function FocusWindow({
   zone: TourZone;
   image: string;
 }) {
+  const backgroundSizeX = `${(100 / zone.width) * 100}%`;
+  const backgroundPositionX = `${(zone.left / (100 - zone.width)) * 100}%`;
+  const backgroundPositionY = `${(zone.top / (100 - zone.height)) * 100}%`;
+
   return (
     <div
       aria-hidden="true"
@@ -208,18 +212,11 @@ function FocusWindow({
         left: `${zone.left}%`,
         width: `${zone.width}%`,
         height: `${zone.height}%`,
-      }}>
-      <img
-        alt=""
-        className={styles.focusWindowImage}
-        src={image}
-        style={{
-          width: `${10000 / zone.width}%`,
-          height: `${10000 / zone.height}%`,
-          transform: `translate(-${zone.left}%, -${zone.top}%)`,
-        }}
-      />
-    </div>
+        backgroundImage: `url("${image}")`,
+        backgroundSize: `${backgroundSizeX} auto`,
+        backgroundPosition: `${backgroundPositionX} ${backgroundPositionY}`,
+      }}
+    />
   );
 }
 
