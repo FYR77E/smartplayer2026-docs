@@ -172,9 +172,23 @@ function HighlightZone({
         width: `${zone.width}%`,
         height: `${zone.height}%`,
       }}
-      type="button">
-      <span className={styles.highlightLabel}>Фокус шага</span>
-    </button>
+      type="button"
+    />
+  );
+}
+
+function FocusMask({zone}: {zone: TourZone}) {
+  return (
+    <div
+      aria-hidden="true"
+      className={styles.focusMask}
+      style={{
+        top: `${zone.top}%`,
+        left: `${zone.left}%`,
+        width: `${zone.width}%`,
+        height: `${zone.height}%`,
+      }}
+    />
   );
 }
 
@@ -184,6 +198,7 @@ export default function InteractiveTourPage() {
   const imageViewportRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLElement | null>(null);
   const mobileDetailsRef = useRef<HTMLDivElement | null>(null);
+  const pendingScrollBehaviorRef = useRef<ScrollBehavior>('auto');
   const [mode, setMode] = useState<TourMode>('intro');
   const [stepIndex, setStepIndex] = useState(0);
   const [popoverPosition, setPopoverPosition] = useState<TourPopoverAnchor | null>(null);
@@ -204,6 +219,14 @@ export default function InteractiveTourPage() {
   const currentStep = isActive ? steps[stepIndex] : null;
   const progressValue = isComplete ? 100 : isActive ? ((stepIndex + 1) / steps.length) * 100 : 0;
 
+  const getMotionAwareBehavior = useCallback((behavior: ScrollBehavior) => {
+    if (behavior !== 'smooth') {
+      return behavior;
+    }
+
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  }, []);
+
   const getTourTopOffset = useCallback(() => {
     if (window.matchMedia('(max-width: 920px)').matches) {
       return 12;
@@ -216,6 +239,28 @@ export default function InteractiveTourPage() {
     return 48;
   }, []);
 
+  const alignTourShellToViewport = useCallback(
+    (behavior: ScrollBehavior = 'auto') => {
+      if (!stageRef.current) {
+        return false;
+      }
+
+      const stageRect = stageRef.current.getBoundingClientRect();
+      const delta = stageRect.top - getTourTopOffset();
+
+      if (Math.abs(delta) <= 6) {
+        return false;
+      }
+
+      window.scrollBy({
+        top: delta,
+        behavior: getMotionAwareBehavior(behavior),
+      });
+      return true;
+    },
+    [getMotionAwareBehavior, getTourTopOffset],
+  );
+
   const scrollToTourTop = useCallback((behavior: ScrollBehavior = 'smooth') => {
     if (!stageRef.current) {
       return;
@@ -225,23 +270,26 @@ export default function InteractiveTourPage() {
     const absoluteTop = window.scrollY + stageRect.top;
     window.scrollTo({
       top: Math.max(absoluteTop - getTourTopOffset(), 0),
-      behavior,
+      behavior: getMotionAwareBehavior(behavior),
     });
-  }, [getTourTopOffset]);
+  }, [getMotionAwareBehavior, getTourTopOffset]);
 
   const handleStart = useCallback(() => {
+    pendingScrollBehaviorRef.current = 'auto';
     setStepIndex(0);
     setMode('active');
     requestAnimationFrame(() => scrollToTourTop('auto'));
   }, [scrollToTourTop]);
 
   const handleExitToIntro = useCallback(() => {
+    pendingScrollBehaviorRef.current = 'auto';
     setStepIndex(0);
     setMode('intro');
     requestAnimationFrame(() => scrollToTourTop('auto'));
   }, [scrollToTourTop]);
 
   const handleRestart = useCallback(() => {
+    pendingScrollBehaviorRef.current = 'auto';
     setStepIndex(0);
     setMode('active');
     requestAnimationFrame(() => scrollToTourTop('auto'));
@@ -251,6 +299,7 @@ export default function InteractiveTourPage() {
     if (!isActive) {
       return;
     }
+    pendingScrollBehaviorRef.current = 'smooth';
     if (stepIndex >= steps.length - 1) {
       setMode('complete');
       return;
@@ -262,6 +311,7 @@ export default function InteractiveTourPage() {
     if (!isActive) {
       return;
     }
+    pendingScrollBehaviorRef.current = 'smooth';
     setStepIndex((current) => Math.max(current - 1, 0));
   }, [isActive]);
 
@@ -271,62 +321,53 @@ export default function InteractiveTourPage() {
         return;
       }
 
-      setStepIndex(clamp(targetIndex, 0, steps.length - 1));
+      const nextIndex = clamp(targetIndex, 0, steps.length - 1);
+      if (nextIndex === stepIndex) {
+        return;
+      }
+
+      pendingScrollBehaviorRef.current = 'smooth';
+      setStepIndex(nextIndex);
     },
-    [isActive, steps.length],
+    [isActive, stepIndex, steps.length],
   );
 
   const ensureActiveStepInView = useCallback(
-    (behavior: ScrollBehavior = 'smooth') => {
+    (behavior: ScrollBehavior = 'auto') => {
       if (!isActive || !imageViewportRef.current) {
+        return;
+      }
+
+      const resolvedBehavior = getMotionAwareBehavior(behavior);
+      if (alignTourShellToViewport(resolvedBehavior)) {
+        return;
+      }
+
+      if (window.matchMedia('(max-width: 920px)').matches) {
         return;
       }
 
       const viewportRect = imageViewportRef.current.getBoundingClientRect();
       const currentPopoverRect = popoverRef.current?.getBoundingClientRect();
-      const currentMobileDetailsRect = mobileDetailsRef.current?.getBoundingClientRect();
-      const contentTop = Math.min(
-        viewportRect.top,
-        currentPopoverRect?.top ?? viewportRect.top,
-        currentMobileDetailsRect?.top ?? viewportRect.top,
-      );
-      const contentBottom = Math.max(
-        viewportRect.bottom,
-        currentPopoverRect?.bottom ?? viewportRect.bottom,
-        currentMobileDetailsRect?.bottom ?? viewportRect.bottom,
-      );
-
-      const safeTop = 92;
+      const safeTop = getTourTopOffset() + 8;
       const safeBottom = window.innerHeight - 24;
-      const stageRect = stageRef.current?.getBoundingClientRect();
-      const desiredTop = getTourTopOffset();
 
-      if (stageRect && stageRect.top > desiredTop + 4) {
-        scrollToTourTop('auto');
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            ensureActiveStepInView('auto');
-          });
+      if (viewportRect.top < safeTop) {
+        window.scrollBy({
+          top: viewportRect.top - safeTop - 6,
+          behavior: resolvedBehavior,
         });
         return;
       }
 
-      if (contentTop < safeTop) {
+      if (currentPopoverRect && currentPopoverRect.bottom > safeBottom) {
         window.scrollBy({
-          top: contentTop - safeTop - 8,
-          behavior,
-        });
-        return;
-      }
-
-      if (contentBottom > safeBottom) {
-        window.scrollBy({
-          top: contentBottom - safeBottom + 8,
-          behavior,
+          top: currentPopoverRect.bottom - safeBottom + 6,
+          behavior: resolvedBehavior,
         });
       }
     },
-    [getTourTopOffset, isActive, scrollToTourTop],
+    [alignTourShellToViewport, getMotionAwareBehavior, getTourTopOffset, isActive],
   );
 
   const computePopoverPosition = useCallback(() => {
@@ -443,41 +484,22 @@ export default function InteractiveTourPage() {
       return;
     }
 
+    const navigationBehavior = pendingScrollBehaviorRef.current;
+    pendingScrollBehaviorRef.current = 'auto';
     computePopoverPosition();
     let ensureRafId = 0;
-    let settleTimeoutId = 0;
-    let lateSettleTimeoutId = 0;
-    let finalSettleTimeoutId = 0;
     const computeRafId = window.requestAnimationFrame(() => {
       computePopoverPosition();
       ensureRafId = window.requestAnimationFrame(() => {
-        if (window.matchMedia('(max-width: 1100px)').matches) {
-          scrollToTourTop('auto');
-        }
-        ensureActiveStepInView('auto');
+        ensureActiveStepInView(navigationBehavior);
       });
     });
-    settleTimeoutId = window.setTimeout(() => {
-      computePopoverPosition();
-      ensureActiveStepInView('auto');
-    }, 140);
-    lateSettleTimeoutId = window.setTimeout(() => {
-      computePopoverPosition();
-      ensureActiveStepInView('auto');
-    }, 420);
-    finalSettleTimeoutId = window.setTimeout(() => {
-      computePopoverPosition();
-      ensureActiveStepInView('auto');
-    }, 1200);
 
     return () => {
       window.cancelAnimationFrame(computeRafId);
       window.cancelAnimationFrame(ensureRafId);
-      window.clearTimeout(settleTimeoutId);
-      window.clearTimeout(lateSettleTimeoutId);
-      window.clearTimeout(finalSettleTimeoutId);
     };
-  }, [computePopoverPosition, ensureActiveStepInView, isActive, scrollToTourTop, stepIndex]);
+  }, [computePopoverPosition, ensureActiveStepInView, isActive, stepIndex]);
 
   useEffect(() => {
     if (!isActive) {
@@ -504,7 +526,6 @@ export default function InteractiveTourPage() {
 
     const observer = new ResizeObserver(() => {
       computePopoverPosition();
-      ensureActiveStepInView('auto');
     });
 
     if (popoverRef.current) {
@@ -530,24 +551,16 @@ export default function InteractiveTourPage() {
       return;
     }
 
+    const navigationBehavior = pendingScrollBehaviorRef.current;
+    pendingScrollBehaviorRef.current = 'auto';
     let rafId = 0;
-    let settleTimeoutId = 0;
-    let lateSettleTimeoutId = 0;
 
     rafId = window.requestAnimationFrame(() => {
-      scrollToTourTop('auto');
+      scrollToTourTop(navigationBehavior);
     });
-    settleTimeoutId = window.setTimeout(() => {
-      scrollToTourTop('auto');
-    }, 140);
-    lateSettleTimeoutId = window.setTimeout(() => {
-      scrollToTourTop('auto');
-    }, 420);
 
     return () => {
       window.cancelAnimationFrame(rafId);
-      window.clearTimeout(settleTimeoutId);
-      window.clearTimeout(lateSettleTimeoutId);
     };
   }, [isComplete, scrollToTourTop]);
 
@@ -695,6 +708,7 @@ export default function InteractiveTourPage() {
 
               <div className={styles.imageViewport} ref={imageViewportRef}>
                 <img alt={currentStep.imageAlt} className={styles.stageImage} src={currentStep.image} />
+                <FocusMask zone={currentStep.zone} />
                 <HighlightZone onClick={handleNext} title={currentStep.title} zone={currentStep.zone} />
 
                 <aside className={styles.popover} data-tour-popover="true" ref={popoverRef} style={popoverStyle}>
