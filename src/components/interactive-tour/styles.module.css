@@ -276,7 +276,7 @@
   z-index: 1;
   border-radius: 16px;
   border: 1px solid rgba(255, 246, 235, 0.38);
-  box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.48);
+  box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.58);
   pointer-events: none;
   transition: top 220ms ease, left 220ms ease, width 220ms ease, height 220ms ease, box-shadow 160ms ease;
 }
@@ -594,7 +594,7 @@
   }
 
   .focusMask {
-    box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.34);
+    box-shadow: 0 0 0 9999px rgba(15, 11, 8, 0.42);
   }
 
   .mobileDetails {

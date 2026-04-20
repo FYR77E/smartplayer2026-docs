@@ -46,7 +46,7 @@ const TOUR_STEPS: TourStep[] = [
     shortTitle: 'Обзор',
     image: 'ЛК - Обзор (5).webp',
     imageAlt: 'Личный кабинет SmartPlayer, обзор',
-    zone: {top: 18, left: 0.5, width: 15.5, height: 79},
+    zone: {top: 16, left: 0.5, width: 15.5, height: 58},
     popover: {top: 20, left: 23},
     description: 'Левая колонка — основная навигация SmartPlayer. Здесь переключаются ключевые разделы: устройства, контент, трансляции и расписание.',
   },
@@ -87,7 +87,7 @@ const TOUR_STEPS: TourStep[] = [
     shortTitle: 'Отправка',
     image: 'Быстрая отправка - шаг 1-20260226.webp',
     imageAlt: 'Быстрая отправка, первый шаг',
-    zone: {top: 7, left: 72, width: 27.5, height: 90},
+    zone: {top: 7.5, left: 73.5, width: 26, height: 87},
     popover: {top: 18, left: 66},
     description:
       'В правой панели выберите нужный файл и перетащите его на центральный холст. Так формируется сценарий текущей трансляции.',
@@ -99,7 +99,7 @@ const TOUR_STEPS: TourStep[] = [
     image: 'шаг 2.webp',
     imageAlt: 'Выбор устройств в сценарии быстрой отправки',
     zone: {top: 39, left: 1.5, width: 19.5, height: 23},
-    popover: {top: 34, left: 34},
+    popover: {top: 34, left: 38},
     description:
       'Выберите карточку устройства до появления отметки выбора. После этого устройство попадёт в список выбранных и шаг «Далее» станет осмысленным.',
   },
@@ -110,9 +110,9 @@ const TOUR_STEPS: TourStep[] = [
     image: 'шаг 3.webp',
     imageAlt: 'Расписание трансляции в SmartPlayer',
     zone: {top: 20, left: 1.2, width: 60, height: 26},
-    popover: {top: 42, left: 58},
+    popover: {top: 50, left: 60},
     description:
-      'В этом блоке задаются даты и время начала/окончания, а ниже — приоритет публикации. Это основная зона настройки расписания перед запуском.',
+      'В этом блоке задаются даты и время начала и окончания трансляции. Это основная точка настройки расписания перед запуском.',
   },
   {
     id: 'device-card',
