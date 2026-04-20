@@ -526,71 +526,71 @@ export default function InteractiveTourPage() {
           <span className={styles.heroEyebrow}>Пошаговый тур SmartPlayer</span>
           <h1>Интерактивный визуальный тур по пошаговому старту</h1>
           <p>
-            Это пошаговый тур по реальным экранам SmartPlayer из маршрута пошагового старта. На каждом шаге показывается
-            конкретная зона интерфейса и короткое пояснение, чтобы быстро пройти базовый путь запуска без лишнего
-            переключения между разделами.
+            Тур проводит по 9 ключевым экранам SmartPlayer: от входа и устройств до публикации и проверки результата.
+            На каждом шаге показывается нужная зона интерфейса и короткое пояснение, чтобы быстро собрать общую картину
+            первого запуска.
           </p>
         </div>
         <aside className={styles.heroGuide}>
-          <h2>Как пользоваться интерактивом</h2>
+          <h2>Что внутри тура</h2>
           <ul className={styles.heroGuideList}>
-            <li>На десктопе используйте «← Назад» и «Далее →» в popover рядом с подсвеченной зоной.</li>
-            <li>На мобильных описание и кнопки выводятся отдельным блоком под скриншотом.</li>
+            <li>9 шагов по реальным экранам SmartPlayer без перехода между разделами.</li>
+            <li>На десктопе пояснение идёт рядом с подсвеченной зоной, на мобильных — под скриншотом.</li>
             <li className={styles.desktopGuideItem}>
               Горячие клавиши: <kbd className={styles.keycap}>→</kbd> следующий шаг,{' '}
               <kbd className={styles.keycap}>←</kbd> предыдущий, <kbd className={styles.keycap}>Esc</kbd> выход во
               вступление.
             </li>
             <li className={styles.mobileGuideHint}>
-              Все шаги показывают реальные экраны из актуального пошагового старта, поэтому текст и визуальный фокус идут
-              синхронно.
+              После тура можно перейти в пошаговый старт и уже затем сверить запуск по чек-листу.
             </li>
           </ul>
         </aside>
       </section>
 
       <section className={styles.tourShell} ref={stageRef}>
-        <div className={styles.progressHeader}>
-          <div className={styles.progressMeta}>
-            <span className={styles.progressEyebrow}>Прогресс тура</span>
-            <strong>{isComplete ? 'Завершено' : isActive ? `Шаг ${stepIndex + 1} из ${steps.length}` : 'Введение'}</strong>
-          </div>
-          <div aria-hidden="true" className={styles.progressTrack}>
-            <div className={styles.progressBar} style={{width: `${progressValue}%`}} />
-          </div>
-          <div className={styles.stepRailWrap}>
-            <div aria-label="Шаги интерактивного тура" className={styles.stepRail}>
-              {steps.map((step, index) => {
-                const isCurrent = isActive && index === stepIndex;
-                const isReached = isComplete || index < stepIndex;
-                const state = isCurrent ? 'current' : isReached ? 'reached' : 'upcoming';
+        {isActive || isComplete ? (
+          <div className={styles.progressHeader}>
+            <div className={styles.progressMeta}>
+              <span className={styles.progressEyebrow}>Прогресс тура</span>
+              <strong>{isComplete ? 'Завершено' : `Шаг ${stepIndex + 1} из ${steps.length}`}</strong>
+            </div>
+            <div aria-hidden="true" className={styles.progressTrack}>
+              <div className={styles.progressBar} style={{width: `${progressValue}%`}} />
+            </div>
+            <div className={styles.stepRailWrap}>
+              <div aria-label="Шаги интерактивного тура" className={styles.stepRail}>
+                {steps.map((step, index) => {
+                  const isCurrent = isActive && index === stepIndex;
+                  const isReached = isComplete || index < stepIndex;
+                  const state = isCurrent ? 'current' : isReached ? 'reached' : 'upcoming';
 
-                return (
-                  <button
-                    aria-current={isCurrent ? 'step' : undefined}
-                    className={styles.stepChip}
-                    data-step-state={state}
-                    disabled={!isActive}
-                    key={step.id}
-                    onClick={() => handleStepJump(index)}
-                    type="button">
-                    <span className={styles.stepChipNumber}>{index + 1}</span>
-                    <span className={styles.stepChipLabel}>{step.shortTitle}</span>
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      aria-current={isCurrent ? 'step' : undefined}
+                      className={styles.stepChip}
+                      data-step-state={state}
+                      disabled={!isActive}
+                      key={step.id}
+                      onClick={() => handleStepJump(index)}
+                      type="button">
+                      <span className={styles.stepChipNumber}>{index + 1}</span>
+                      <span className={styles.stepChipLabel}>{step.shortTitle}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
 
         {!isActive && !isComplete ? (
           <section className={styles.introCard} data-tour-state="intro">
             <span className={styles.completionEyebrow}>Старт тура</span>
             <h2>Готовы пройти маршрут пошагового старта</h2>
             <p>
-              Тур покажет базовый путь: авторизация, устройство, контент, публикация и проверка результата. Для
-              полного линейного сценария со скриншотами после тура используйте пошаговый старт, а перед пилотом
-              сверяйтесь с чек-листом перед запуском.
+              Тур покажет базовый путь: вход, устройства, контент, публикация и проверка результата. Если нужен полный
+              линейный сценарий со скриншотами, откройте пошаговый старт после прохождения тура.
             </p>
             <div className={styles.introActions}>
               <button className={styles.primaryButton} data-tour-action="start" onClick={handleStart} type="button">
@@ -599,10 +599,14 @@ export default function InteractiveTourPage() {
               <Link className={styles.secondaryButton} to="/quickstart/">
                 Пошаговый старт
               </Link>
-              <Link className={styles.secondaryButton} to="/checklist/">
-                Сверить запуск по чек-листу
-              </Link>
             </div>
+            <p className={styles.introSupport}>
+              Чек-лист перед запуском пригодится после тура и перед пилотом:{' '}
+              <Link className={styles.inlineLink} to="/checklist/">
+                открыть чек-лист
+              </Link>
+              .
+            </p>
           </section>
         ) : isComplete ? (
           <section className={styles.completionCard} data-tour-state="complete">

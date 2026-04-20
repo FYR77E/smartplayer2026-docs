@@ -36,3 +36,9 @@ Behavior:
 - `npm run check:tour` passed
 - `npm run typecheck` passed
 - `npm run build` passed
+
+## Follow-up
+
+- Intro-state density reduced without changing the walkthrough concept
+- Progress header and step rail now appear only after the tour starts
+- Intro CTA hierarchy is cleaner: start the tour first, then use Quick Start, then checklist
