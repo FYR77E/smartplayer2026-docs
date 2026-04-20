@@ -223,6 +223,8 @@ function FocusWindow({
 export default function InteractiveTourPage() {
   const {siteConfig} = useDocusaurusContext();
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const stepRailRef = useRef<HTMLDivElement | null>(null);
+  const stepChipRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const imageViewportRef = useRef<HTMLDivElement | null>(null);
   const popoverRef = useRef<HTMLElement | null>(null);
   const mobileDetailsRef = useRef<HTMLDivElement | null>(null);
@@ -399,6 +401,32 @@ export default function InteractiveTourPage() {
     [alignTourShellToViewport, getMotionAwareBehavior, getTourTopOffset, isActive],
   );
 
+  const ensureCurrentChipInView = useCallback(
+    (behavior: ScrollBehavior = 'auto') => {
+      if (!isActive || !stepRailRef.current) {
+        return;
+      }
+
+      const currentChip = stepChipRefs.current[stepIndex];
+      if (!currentChip) {
+        return;
+      }
+
+      const rail = stepRailRef.current;
+      const needsHorizontalScroll = rail.scrollWidth - rail.clientWidth > 8;
+      if (!needsHorizontalScroll) {
+        return;
+      }
+
+      currentChip.scrollIntoView({
+        behavior: getMotionAwareBehavior(behavior),
+        block: 'nearest',
+        inline: 'center',
+      });
+    },
+    [getMotionAwareBehavior, isActive, stepIndex],
+  );
+
   const computePopoverPosition = useCallback(() => {
     if (!isActive || !currentStep || !imageViewportRef.current || !popoverRef.current) {
       return;
@@ -520,6 +548,7 @@ export default function InteractiveTourPage() {
     const computeRafId = window.requestAnimationFrame(() => {
       computePopoverPosition();
       ensureRafId = window.requestAnimationFrame(() => {
+        ensureCurrentChipInView(navigationBehavior);
         ensureActiveStepInView(navigationBehavior);
       });
     });
@@ -528,7 +557,7 @@ export default function InteractiveTourPage() {
       window.cancelAnimationFrame(computeRafId);
       window.cancelAnimationFrame(ensureRafId);
     };
-  }, [computePopoverPosition, ensureActiveStepInView, isActive, stepIndex]);
+  }, [computePopoverPosition, ensureActiveStepInView, ensureCurrentChipInView, isActive, stepIndex]);
 
   useEffect(() => {
     if (!isActive) {
@@ -636,7 +665,7 @@ export default function InteractiveTourPage() {
               <div className={styles.progressBar} style={{width: `${progressValue}%`}} />
             </div>
             <div className={styles.stepRailWrap}>
-              <div aria-label="Шаги интерактивного тура" className={styles.stepRail}>
+              <div aria-label="Шаги интерактивного тура" className={styles.stepRail} ref={stepRailRef}>
                 {steps.map((step, index) => {
                   const isCurrent = isActive && index === stepIndex;
                   const isReached = isComplete || index < stepIndex;
@@ -646,10 +675,14 @@ export default function InteractiveTourPage() {
                     <button
                       aria-current={isCurrent ? 'step' : undefined}
                       className={styles.stepChip}
+                      data-tour-step-chip={state}
                       data-step-state={state}
                       disabled={!isActive}
                       key={step.id}
                       onClick={() => handleStepJump(index)}
+                      ref={(node) => {
+                        stepChipRefs.current[index] = node;
+                      }}
                       type="button">
                       <span className={styles.stepChipNumber}>{index + 1}</span>
                       <span className={styles.stepChipLabel}>{step.shortTitle}</span>
@@ -741,10 +774,13 @@ export default function InteractiveTourPage() {
           <div className={styles.tourStage} data-tour-state="active" data-tour-step-id={currentStep.id}>
             <div className={styles.stageFrame}>
               <div className={styles.stageFrameBar}>
-                <span className={styles.stageDot} />
-                <span className={styles.stageDot} />
-                <span className={styles.stageDot} />
+                <div className={styles.stageFrameDots} aria-hidden="true">
+                  <span className={styles.stageDot} />
+                  <span className={styles.stageDot} />
+                  <span className={styles.stageDot} />
+                </div>
                 <span className={styles.stageFrameLabel}>Реальный экран SmartPlayer</span>
+                <span className={styles.stageFrameMeta}>{`Шаг ${stepIndex + 1} из ${steps.length} · ${currentStep.shortTitle}`}</span>
               </div>
 
               <div className={styles.imageViewport} ref={imageViewportRef}>

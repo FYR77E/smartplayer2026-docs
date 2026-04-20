@@ -258,6 +258,30 @@ async function expectMobileState(page, stepId) {
 
   const ariaLive = await mobileDetails.getAttribute('aria-live');
   assert(ariaLive === 'polite', 'Mobile details must announce step changes with aria-live="polite"');
+
+  const currentChipVisibility = await page.evaluate(() => {
+    const rail = document.querySelector('[aria-label="Шаги интерактивного тура"]');
+    const currentChip = document.querySelector('[data-tour-step-chip="current"]');
+    if (!(rail instanceof HTMLElement) || !(currentChip instanceof HTMLElement)) {
+      return null;
+    }
+
+    const railRect = rail.getBoundingClientRect();
+    const chipRect = currentChip.getBoundingClientRect();
+    return {
+      chipLeft: chipRect.left,
+      chipRight: chipRect.right,
+      railLeft: railRect.left,
+      railRight: railRect.right,
+    };
+  });
+
+  assert(currentChipVisibility, `Current step chip geometry is missing on mobile for step ${stepId}`);
+  assert(
+    currentChipVisibility.chipLeft >= currentChipVisibility.railLeft - 2 &&
+      currentChipVisibility.chipRight <= currentChipVisibility.railRight + 2,
+    `Current step chip should stay visible inside the step rail on mobile for step ${stepId}`,
+  );
 }
 
 async function runDesktopChecks(baseUrl) {

@@ -259,6 +259,12 @@
   background: linear-gradient(180deg, rgba(34, 25, 18, 0.98), rgba(24, 18, 13, 1));
 }
 
+.stageFrameDots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+}
+
 .stageDot {
   width: 0.64rem;
   height: 0.64rem;
@@ -267,10 +273,17 @@
 }
 
 .stageFrameLabel {
-  margin-left: 0.5rem;
   color: rgba(255, 247, 238, 0.8);
   font-size: 0.77rem;
   font-weight: 700;
+}
+
+.stageFrameMeta {
+  margin-left: auto;
+  color: rgba(255, 247, 238, 0.64);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
 }
 
 .imageViewport {
@@ -733,6 +746,10 @@
     font-size: 0.72rem;
   }
 
+  .stageFrameMeta {
+    font-size: 0.66rem;
+  }
+
   .popover {
     display: none;
   }
@@ -867,5 +884,16 @@
 
   .popoverSupport {
     font-size: 0.88rem;
+  }
+
+  .stageFrameBar {
+    flex-wrap: wrap;
+    row-gap: 0.28rem;
+  }
+
+  .stageFrameMeta {
+    width: 100%;
+    margin-left: 0;
+    text-align: left;
   }
 }
