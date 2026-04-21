@@ -30,6 +30,11 @@ const routeChecks = [
     file: 'new-interactive/index.html',
     includes: ['Интерактивный тур SmartPlayer', '/interactive-tour'],
   },
+  {
+    route: '/guides/быстрая-отправка/',
+    file: 'guides/быстрая-отправка/index.html',
+    includes: ['Быстрая отправка — практический сценарий', '/generated/10-6-работа-с-трансляциями', '/checklist/'],
+  },
 ];
 
 function fail(message) {
