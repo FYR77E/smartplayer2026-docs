@@ -91,6 +91,8 @@ const config: Config = {
       logo: {
         alt: 'SmartPlayer',
         src: 'img/logo.svg',
+        width: 32,
+        height: 32,
       },
       items: [
         {
