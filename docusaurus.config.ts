@@ -16,10 +16,10 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://smartplayer2026-docs.vercel.app',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  // Both Vercel (root /) and GitHub Pages (/smartplayer2026-docs/) deploy from
+  // the same repo — env vars let each target inject the right base.
+  url: process.env.SITE_URL || 'https://smartplayer2026-docs.vercel.app',
+  baseUrl: process.env.BASE_URL || '/',
   stylesheets: [
     {
       href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap',
