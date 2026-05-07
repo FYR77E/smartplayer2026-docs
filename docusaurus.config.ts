@@ -49,6 +49,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           routeBasePath: '/',
+          exclude: ['**/README.md', '**/AGENTS.md'],
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: undefined,
