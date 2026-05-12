@@ -20,6 +20,18 @@ const config: Config = {
   // the same repo — env vars let each target inject the right base.
   url: process.env.SITE_URL || 'https://smartplayer2026-docs.vercel.app',
   baseUrl: process.env.BASE_URL || '/',
+  // preconnect to font CDN so DNS+TLS handshake happens in parallel with
+  // HTML parsing — knocks ~200-400ms off FCP/LCP on cold connections.
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
+    },
+    {
+      tagName: 'link',
+      attributes: {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous'},
+    },
+  ],
   stylesheets: [
     {
       href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap',
