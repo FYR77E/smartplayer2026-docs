@@ -32,9 +32,13 @@ const config: Config = {
       attributes: {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous'},
     },
   ],
+  // Only request the font weights actually rendered (audit of src + docs):
+  //   Manrope: 400 (body/default) · 600 · 700 · 800
+  //   IBM Plex Mono: 400 (code only)
+  // Previously requested 8 weights → now 5, ~35% fewer font files.
   stylesheets: [
     {
-      href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Manrope:wght@400;600;700;800&display=swap',
       type: 'text/css',
     },
   ],
