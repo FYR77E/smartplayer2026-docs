@@ -19,6 +19,15 @@ type ManualCalloutProps = {
   tone?: 'note' | 'tip';
 };
 
+type ManualTextProps = {
+  text: string;
+};
+
+type ManualListProps = {
+  items: string[];
+  ordered?: boolean;
+};
+
 function ManualShell({
   className,
   children,
@@ -52,5 +61,21 @@ export function ManualCallout({text, title, tone = 'note'}: ManualCalloutProps) 
       {title ? <strong className={styles.calloutTitle}>{title}</strong> : null}
       <p>{text}</p>
     </ManualShell>
+  );
+}
+
+export function ManualText({text}: ManualTextProps) {
+  return <p>{text}</p>;
+}
+
+export function ManualList({items, ordered = false}: ManualListProps) {
+  const ListTag = ordered ? 'ol' : 'ul';
+
+  return (
+    <ListTag>
+      {items.map((item, index) => (
+        <li key={`${index}-${item.slice(0, 32)}`}>{item}</li>
+      ))}
+    </ListTag>
   );
 }
