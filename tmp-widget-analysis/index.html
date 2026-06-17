@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <title>SmartPlayer Signage Widget</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script id="widget_settings" type="application/json" src="settings.json"></script>
+    <script src="./data.js"></script>
+  </head>
+  <body>
+    <main class="screen" aria-label="SmartPlayer signage widget">
+      <div class="glow glow-blue"></div>
+      <div class="glow glow-cyan"></div>
+
+      <header class="header">
+        <div class="brand">
+          <span class="logo-mark" aria-hidden="true">
+            <img id="logoImg" src="./images/logo.svg" alt="" />
+          </span>
+          <div>
+            <span class="overline" id="brandOverline">SmartPlayer Pulse</span>
+            <strong id="brandName">Showroom Live</strong>
+          </div>
+        </div>
+
+        <div class="header-meta">
+          <span id="dateLong">Сегодня</span>
+          <span class="online-pill"><i></i>Online display</span>
+        </div>
+      </header>
+
+      <section class="layout layout-a" aria-label="Вариант A: триптих">
+        <article class="card weather-card">
+          <div class="card-head">
+            <span class="label"><i></i>Погода</span>
+            <span id="cityA">Москва</span>
+          </div>
+
+          <div class="weather-main">
+            <div class="weather-icon" id="weatherIconA" aria-hidden="true">
+              <span class="sun"></span>
+              <span class="cloud cloud-one"></span>
+              <span class="cloud cloud-two"></span>
+              <span class="rain rain-one"></span>
+              <span class="rain rain-two"></span>
+              <span class="snow snow-one"></span>
+              <span class="snow snow-two"></span>
+            </div>
+            <div>
+              <strong id="tempA">+21°</strong>
+              <p id="conditionA">Переменная облачность</p>
+            </div>
+          </div>
+
+          <div class="weather-facts">
+            <div><span>Ощущается</span><strong id="feelsA">+19°</strong></div>
+            <div><span>Влажность</span><strong id="humidityA">58%</strong></div>
+            <div><span>Ветер</span><strong id="windA">3 м/с</strong></div>
+          </div>
+          <p class="debug-line" id="weatherDebugA"></p>
+        </article>
+
+        <article class="card clock-card">
+          <div class="card-head">
+            <span class="label"><i></i>Время</span>
+            <span>МСК</span>
+          </div>
+
+          <div class="clock-block">
+            <span class="clock-prefix" data-seconds-spacer></span>
+            <span class="hh">00</span>
+            <span class="colon">:</span>
+            <span class="mm">00</span>
+            <span class="ss">00</span>
+          </div>
+
+          <div class="clock-note">
+            <strong id="dateShortA">Сегодня</strong>
+            <span>Europe/Moscow</span>
+          </div>
+        </article>
+
+        <article class="card traffic-card">
+          <div class="card-head">
+            <span class="label"><i></i>Пробки</span>
+            <span id="trafficCityA">Москва</span>
+          </div>
+
+          <div class="traffic-score-row">
+            <strong id="trafficScoreA">5</strong>
+            <div>
+              <span>/ 10</span>
+              <b id="trafficStatusA">Средне</b>
+            </div>
+          </div>
+
+          <div class="traffic-progress" aria-hidden="true">
+            <span id="trafficBarA"></span>
+          </div>
+
+          <div class="traffic-legend">
+            <span><i class="free"></i>Свободно</span>
+            <span><i class="middle"></i>Средне</span>
+            <span><i class="jam"></i>Затор</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="layout layout-b" aria-label="Вариант B: часы-герой">
+        <div class="hero-time">
+          <span id="heroCity">Москва · локальное время</span>
+          <div class="hero-clock">
+            <span class="hero-prefix" data-seconds-spacer></span>
+            <span class="hh">00</span>
+            <span class="colon">:</span>
+            <span class="mm">00</span>
+            <span class="ss">00</span>
+          </div>
+          <strong id="dateShortB">Сегодня</strong>
+        </div>
+
+        <div class="bottom-cards">
+          <article class="card weather-wide">
+            <div class="weather-icon small" id="weatherIconB" aria-hidden="true">
+              <span class="sun"></span>
+              <span class="cloud cloud-one"></span>
+              <span class="cloud cloud-two"></span>
+              <span class="rain rain-one"></span>
+              <span class="rain rain-two"></span>
+              <span class="snow snow-one"></span>
+              <span class="snow snow-two"></span>
+            </div>
+            <div class="wide-main">
+              <span class="overline">Погода · <span id="cityB">Москва</span></span>
+              <strong id="tempB">+21°</strong>
+              <p id="conditionB">Переменная облачность</p>
+            </div>
+            <div class="wide-facts">
+              <div><span>Ощущ.</span><strong id="feelsB">+19°</strong></div>
+              <div><span>Влажн.</span><strong id="humidityB">58%</strong></div>
+              <div><span>Ветер</span><strong id="windB">3 м/с</strong></div>
+            </div>
+            <p class="debug-line" id="weatherDebugB"></p>
+          </article>
+
+          <article class="card traffic-wide">
+            <div class="traffic-mini">
+              <span class="overline">Пробки · <span id="trafficCityB">Москва</span></span>
+              <div>
+                <strong id="trafficScoreB">5</strong>
+                <span>/ 10</span>
+              </div>
+            </div>
+            <div class="traffic-wide-body">
+              <b id="trafficStatusB">Средне</b>
+              <div class="traffic-progress wide" aria-hidden="true">
+                <span id="trafficBarB"></span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="layout layout-c" aria-label="Вариант C: КорпТВ Bento">
+        <div class="content-zone">
+          <div class="content-slot" id="cContent"></div>
+        </div>
+
+        <aside class="info-column">
+          <section class="col-sec col-time">
+            <span class="col-label">Время · <span id="cTimeCity">Москва</span></span>
+            <div class="col-clock">
+              <span class="hh">00</span><span class="colon">:</span><span class="mm">00</span><span class="ss">00</span>
+            </div>
+            <span class="col-sub" id="cTimeDate">Сегодня</span>
+          </section>
+
+          <section class="col-sec col-weather">
+            <span class="col-label">Погода · <span id="cWeatherCity">Москва</span></span>
+            <div class="col-weather-row">
+              <div class="weather-icon col" id="cWeatherIcon" aria-hidden="true">
+                <span class="sun"></span>
+                <span class="cloud cloud-one"></span>
+                <span class="cloud cloud-two"></span>
+                <span class="rain rain-one"></span>
+                <span class="rain rain-two"></span>
+                <span class="snow snow-one"></span>
+                <span class="snow snow-two"></span>
+              </div>
+              <div>
+                <strong id="cTemp">+21°</strong>
+                <p id="cCondition">Переменная облачность</p>
+              </div>
+            </div>
+            <div class="col-facts">
+              <div><span>Ощущ.</span><strong id="cFeels">+19°</strong></div>
+              <div><span>Влажн.</span><strong id="cHumidity">58%</strong></div>
+              <div><span>Ветер</span><strong id="cWind">3 м/с</strong></div>
+            </div>
+          </section>
+
+          <section class="col-sec col-traffic">
+            <span class="col-label">Пробки · <span id="cTrafficCity">Москва</span></span>
+            <div class="col-traffic-row">
+              <strong id="cTrafficScore">6</strong>
+              <div>
+                <span>/ 10</span>
+                <b id="cTrafficStatus">Средне</b>
+              </div>
+            </div>
+            <div class="equalizer" id="cTrafficEq" aria-hidden="true"></div>
+          </section>
+        </aside>
+      </section>
+
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./smartplayer-widget-editor.js"></script>
+    <script src="./widget.js"></script>
+  </body>
+</html>
