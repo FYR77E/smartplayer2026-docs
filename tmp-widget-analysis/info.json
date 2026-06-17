@@ -1,0 +1,6 @@
+{
+  "type": "signage-weather-traffic",
+  "showSettingsOnMobile": true,
+  "dynamicDurationQ": false,
+  "settingsFormat": "json"
+}

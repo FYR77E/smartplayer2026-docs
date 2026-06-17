@@ -1,0 +1,120 @@
+{
+  "settings": {
+    "type": "signage-weather-traffic",
+    "localisation": "ru",
+    "layout": "b",
+    "headerTitle": "SmartPlayer Pulse",
+    "headerSubtitle": "Showroom Live",
+    "showLogo": true,
+    "logo": "./images/logo.svg",
+    "backgroundColor": "",
+    "cBackgroundColor": "#15120d",
+    "cPanelColor": "#17130d",
+    "accentColor": "#37e6c8",
+    "fontColor": "#eaf2f2",
+    "fontFamily": "onest",
+    "city": "Москва",
+    "serviceCity": "moscow",
+    "weatherCity": "moscow",
+    "lat": 55.7558,
+    "lon": 37.6173,
+    "timeZone": "Europe/Moscow",
+    "showSeconds": true,
+    "liveWeather": true,
+    "debugWeather": true,
+    "apiServiceName": "auto",
+    "apiKey": "",
+    "weatherRequestInterval": 300,
+    "liveTraffic": true,
+    "trafficRegionId": "",
+    "trafficRequestInterval": 300,
+    "tempC": 21,
+    "feelsC": 19,
+    "humidity": 58,
+    "windMs": 3,
+    "condition": "partly-cloudy",
+    "trafficScore": 5,
+    "cmsData": {
+      "distributiveType": "common",
+      "version": "0.4.5",
+      "type": "signage-weather-traffic",
+      "title": {
+        "ru": "Часы, погода и пробки",
+        "en": "Clock, weather and traffic"
+      },
+      "shortDescription": {
+        "ru": "Тестовый digital signage виджет с часами, погодой и пробками.",
+        "en": "Digital signage widget with clock, weather and traffic."
+      },
+      "description": {
+        "ru": "Виджет показывает время Москвы, текущую погоду Open-Meteo с резервом wttr.in без API-ключа и загруженность дорог Yandex Traffic.",
+        "en": "Widget displays Moscow time, current no-key Open-Meteo weather with wttr.in fallback and Yandex Traffic congestion."
+      },
+      "resources": [
+        {
+          "name": {
+            "ru": "Получение погоды Open-Meteo",
+            "en": "Getting weather from Open-Meteo"
+          },
+          "method": "GET",
+          "authorization": false,
+          "host": "https://api.open-meteo.com/",
+          "path": "v1/forecast"
+        },
+        {
+          "name": {
+            "ru": "Резервное получение погоды wttr.in",
+            "en": "Fallback weather from wttr.in"
+          },
+          "method": "GET",
+          "authorization": false,
+          "host": "https://wttr.in/",
+          "path": ""
+        },
+        {
+          "name": {
+            "ru": "Получение погоды OpenWeatherMap",
+            "en": "Getting weather from OpenWeatherMap"
+          },
+          "method": "GET",
+          "authorization": true,
+          "host": "https://api.openweathermap.org/",
+          "path": "data/2.5/weather"
+        },
+        {
+          "name": {
+            "ru": "Получение погоды WeatherAPI",
+            "en": "Getting weather from WeatherAPI"
+          },
+          "method": "GET",
+          "authorization": true,
+          "host": "https://api.weatherapi.com/",
+          "path": "v1/current.json"
+        },
+        {
+          "name": {
+            "ru": "Получение пробок Yandex Traffic",
+            "en": "Getting Yandex Traffic"
+          },
+          "method": "GET",
+          "authorization": false,
+          "host": "https://api-maps.yandex.ru/",
+          "path": "services/traffic/v1/info"
+        },
+        {
+          "name": {
+            "ru": "Определение геопозиции по IP",
+            "en": "Detecting geolocation by IP"
+          },
+          "method": "GET",
+          "authorization": false,
+          "host": "https://api.sypexgeo.net/",
+          "path": ""
+        }
+      ]
+    },
+    "targetPlatform": "windows-x64-qtwebengine",
+    "targetResolution": "3840x2160",
+    "targetUserAgent": "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/6.5.3 Chrome/108.0.5359.220 Safari/537.36"
+  }
+}
